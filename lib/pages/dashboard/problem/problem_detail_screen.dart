@@ -1,3 +1,4 @@
+import 'package:election/api/data/sample_data.dart';
 import 'package:election/components/colored_button.dart';
 import 'package:election/components/comment_item.dart';
 import 'package:election/components/enter_text_box.dart';
@@ -21,6 +22,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   var _commentList = [];
   bool _showSolutionRemark = false;
   bool _isCommentSubmitting = false;
+  var _requirement_list = [];
 
   final _controllerComment = TextEditingController();
 
@@ -28,39 +30,50 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   void initState() {
     super.initState();
     initCommentList(widget.problem['id']);
-    print('problemList :${widget.problem['id']}');
+    initRequirementList(widget.problem['id']);
+    print('problemList :${widget.problem}');
+  }
+
+  initRequirementList(int id) {
+    _requirement_list = DATA_PROBLEM_REQUIREMENT;
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return SafeArea(
       child: Scaffold(
         body: Container(
           child: Column(
             children: [
-              ScreenActionBar(title: widget.problem['title'],),
+              ScreenActionBar(
+                title: widget.problem['title'],
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      
                       Center(
                         child: Container(
                             height: UI_IMAGE_HEIGHT,
                             child: Hero(
                               tag: 'problem-title-image${widget.problem['id']}',
-                              child: FadeInImage(
-                                image: Image.network(
-                                widget.problem['image_url'],
-                              ).image,
-                                placeholder: Image.network(
-                                widget.problem['thumbnail_url'],
-                              ).image,
-                              fadeInDuration: Duration(milliseconds: 200),
-                              fit: BoxFit.contain,
+                              child: PageView(
+                                controller: PageController(),
+                                children: widget.problem['images'].map((imageElement) {
+                                  return FadeInImage(
+                                    image: Image.network(
+                                      imageElement['image_url'],
+                                    ).image,
+                                    placeholder: Image.network(
+                                      imageElement['thumbnail_url'],
+                                    ).image,
+                                    fadeInDuration: Duration(milliseconds: 200),
+                                    fit: BoxFit.contain,
+                                  );
+                                }).toList(),
                               ),
-                              
                             )),
                       ),
                       Container(
@@ -78,7 +91,42 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                               widget.problem['description'],
                               style: CUSTOM_TEXT_THEME.bodySmall,
                             ),
-                            addVerticalSpace(30),
+                            addVerticalSpace(10),
+                            Text(
+                              'Requirements:',
+                              style: CUSTOM_TEXT_THEME.titleSmall,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _requirement_list.map((skill) {
+                                return Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(skill['name']),
+                                        Spacer(),
+                                        Container(
+                                          margin: EdgeInsets.all(1),
+                                          padding: EdgeInsets.all(1),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              color: Colors.green),
+                                          child: Text(
+                                            skill['status'],
+                                            style: TextStyle(color: COLOR_BASE),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Divider(),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                            addHorizontalSpace(50),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -89,7 +137,8 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                 ColoredButton(
                                   onPressed: () {
                                     setState(() {
-                                      _showSolutionRemark = !_showSolutionRemark;
+                                      _showSolutionRemark =
+                                          !_showSolutionRemark;
                                     });
                                   },
                                   child: _showSolutionRemark
@@ -100,16 +149,22 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                               .headlineMedium?.fontSize,
                                         )
                                       : Row(
-                                        children: [
-                                          Text('Post Solution', style: TextStyle(color: COLOR_BASE, fontSize:14, fontWeight: FontWeight.bold),),
-                                          Icon(
+                                          children: [
+                                            Text(
+                                              'Post Solution',
+                                              style: TextStyle(
+                                                  color: COLOR_BASE,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Icon(
                                               Icons.arrow_drop_down,
                                               color: COLOR_BASE,
                                               size: CUSTOM_TEXT_THEME
                                                   .headlineMedium?.fontSize,
                                             ),
-                                        ],
-                                      ),
+                                          ],
+                                        ),
                                 ),
                               ],
                             ),
@@ -143,16 +198,14 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                               ),
                             addVerticalSpace(20),
                             Column(
-                              children: _commentList
-                                  .map((comment) {
-                                    return Column(
-                                      children: [
-                                        CommentItem(comment: comment),
-                                        addVerticalSpace(15),
-                                      ],
-                                    );
-                                  })
-                                  .toList(),
+                              children: _commentList.map((comment) {
+                                return Column(
+                                  children: [
+                                    CommentItem(comment: comment),
+                                    addVerticalSpace(15),
+                                  ],
+                                );
+                              }).toList(),
                             )
                           ],
                         ),
@@ -205,4 +258,6 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
       });
     }
   }
+
+  void applyOn(skill) {}
 }

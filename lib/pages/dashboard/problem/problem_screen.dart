@@ -1,11 +1,10 @@
+import 'package:election/api/data/sample_data.dart';
 import 'package:election/components/image_with_title.dart';
 import 'package:election/components/screen_action_bar.dart';
 import 'package:election/constants/theme_constant.dart';
-import 'package:election/constants/url_constant.dart';
 import 'package:election/pages/dashboard/acount/profile_screen.dart';
 import 'package:election/pages/dashboard/problem/post_problem_screen.dart';
 import 'package:election/pages/dashboard/problem/problem_detail_screen.dart';
-import 'package:election/utils/api_service.dart';
 import 'package:election/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
@@ -27,13 +26,17 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getList() async {
-    ApiResponse response = await getService(URL_PROBLEM_LIST);
-
-    print(response.body);
-
     setState(() {
-      _problemList = response.body;
+      _problemList = PROBLEM_LIST;
     });
+
+    // ApiResponse response = await getService(URL_PROBLEM_LIST);
+
+    // print(response.body);
+
+    // setState(() {
+    //   _problemList = response.body;
+    // });
   }
 
   @override
@@ -51,14 +54,12 @@ class _ProblemScreenState extends State<ProblemScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ScreenActionBar(title: 'Problems'),
-                    
                     Row(
                       children: [
                         Stack(
                           children: [
-                            
                             InkWell(
-                              onTap: (){},
+                              onTap: () {},
                               child: Icon(
                                 Icons.notifications_outlined,
                                 size: CUSTOM_TEXT_THEME.headlineLarge?.fontSize,
@@ -87,7 +88,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                         ),
                         addHorizontalSpace(6),
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             getList();
                           },
                           child: Icon(
@@ -102,7 +103,6 @@ class _ProblemScreenState extends State<ProblemScreen> {
                           size: CUSTOM_TEXT_THEME.headlineLarge?.fontSize,
                           color: COLOR_PRIMARY,
                         ),
-                        
                       ],
                     ),
                   ],
@@ -118,35 +118,35 @@ class _ProblemScreenState extends State<ProblemScreen> {
                     return Column(
                       children: [
                         ImageWithTitle(
-                            onImagePressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (builder) => ProblemDetailScreen(
-                                            problem: _problemList[index],
-                                          )));
-                            },
-                            container: Hero(
-                              tag: 'problem-title-image${_problemList[index]['id']}',
-                              child: FadeInImage(
-                                image: Image.network(
+                          onImagePressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => ProblemDetailScreen(
+                                          problem: _problemList[index],
+                                        )));
+                          },
+                          container: Hero(
+                            tag:
+                                'problem-title-image${_problemList[index]['id']}',
+                            child: FadeInImage(
+                              image: Image.network(
                                 _problemList[index]['image_url'],
                               ).image,
-                                placeholder: Image.network(
+                              placeholder: Image.network(
                                 _problemList[index]['thumbnail_url'],
                               ).image,
                               fadeInDuration: Duration(milliseconds: 20),
                               fit: BoxFit.contain,
-                              ),
-                              
-                              
                             ),
-                            avatarUrl: _problemList[index]['avatar_url'],
-                            title: _problemList[index]['title'],
-                            description: _problemList[index]['description'],
-                            onInfoPressed: () => showAlert(context, "Info", _problemList[index].toString()),
-                            onAvatarPressed: () => showProfile(),
-                            ),
+                          ),
+                          avatarUrl: _problemList[index]['avatar_url'],
+                          title: _problemList[index]['title'],
+                          description: _problemList[index]['description'],
+                          onInfoPressed: () => showAlert(
+                              context, "Info", _problemList[index].toString()),
+                          onAvatarPressed: () => showProfile(),
+                        ),
                         addVerticalSpace(60)
                       ],
                     );
@@ -171,8 +171,9 @@ class _ProblemScreenState extends State<ProblemScreen> {
     );
   }
 
-  showProfile(){
+  showProfile() {
     print('Profile');
-    Navigator.push(context, MaterialPageRoute(builder: (builder)=>ProfileScreen()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (builder) => ProfileScreen()));
   }
 }

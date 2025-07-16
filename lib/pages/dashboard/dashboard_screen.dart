@@ -16,8 +16,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   int _pageIndex = 0;
 
-
-
   final List<Widget> _pages = [ProblemScreen(), IdeaScreen(), PlanScreen(), AccountScreen()];
 
   @override
