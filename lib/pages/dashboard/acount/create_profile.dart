@@ -1,6 +1,5 @@
 import 'package:election/components/screen_action_bar.dart';
 import 'package:election/constants/theme_constant.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CreateProfile extends StatefulWidget {

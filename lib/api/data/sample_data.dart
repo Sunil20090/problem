@@ -111,3 +111,11 @@ const DATA_PROBLEM_REQUIREMENT = [
     "can_apply": true,
   },
 ];
+
+const DATA_ACCOUNT_DETAILS = {
+  "id" : 0,
+  "name": "Sunil",
+  "description": "Skilled in various languages ",
+  "profile_url":
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsWWIZ0ZbQUNgOOkXgV3IDzhkO1IlMlpRFuA&s"
+};

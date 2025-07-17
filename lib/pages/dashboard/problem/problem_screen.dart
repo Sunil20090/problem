@@ -56,6 +56,11 @@ class _ProblemScreenState extends State<ProblemScreen> {
                     ScreenActionBar(title: 'Problems'),
                     Row(
                       children: [
+                        Icon(
+                          Icons.search,
+                          size: CUSTOM_TEXT_THEME.headlineLarge?.fontSize,
+                          color: COLOR_PRIMARY,
+                        ),
                         Stack(
                           children: [
                             InkWell(
@@ -92,17 +97,12 @@ class _ProblemScreenState extends State<ProblemScreen> {
                             getList();
                           },
                           child: Icon(
-                            Icons.sync,
+                            Icons.person,
                             size: CUSTOM_TEXT_THEME.headlineLarge?.fontSize,
                             color: COLOR_PRIMARY,
                           ),
                         ),
-                        addHorizontalSpace(6),
-                        Icon(
-                          Icons.search,
-                          size: CUSTOM_TEXT_THEME.headlineLarge?.fontSize,
-                          color: COLOR_PRIMARY,
-                        ),
+                        
                       ],
                     ),
                   ],
