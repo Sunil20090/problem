@@ -23,6 +23,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   bool _showSolutionRemark = false;
   bool _isCommentSubmitting = false;
   var _requirement_list = [];
+  List<dynamic> _images = [];
 
   final _controllerComment = TextEditingController();
 
@@ -36,11 +37,11 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
 
   initRequirementList(int id) {
     _requirement_list = DATA_PROBLEM_REQUIREMENT;
+    _images = widget.problem['images'];
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -61,7 +62,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                               tag: 'problem-title-image${widget.problem['id']}',
                               child: PageView(
                                 controller: PageController(),
-                                children: widget.problem['images'].map((imageElement) {
+                                children: _images.map((imageElement) {
                                   return FadeInImage(
                                     image: Image.network(
                                       imageElement['image_url'],
@@ -108,8 +109,9 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                         Text(skill['name']),
                                         Spacer(),
                                         Container(
-                                          margin: EdgeInsets.all(1),
-                                          padding: EdgeInsets.all(1),
+                                          // margin: EdgeInsets.all(1),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 6),
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(4),
@@ -121,12 +123,14 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                         ),
                                       ],
                                     ),
-                                    Divider(),
+                                    addVerticalSpace(4),
+
+                                    // Divider(),
                                   ],
                                 );
                               }).toList(),
                             ),
-                            addHorizontalSpace(50),
+                            addVerticalSpace(30),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -188,11 +192,15 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                             'Submit',
                                             style: TextStyle(
                                                 color: COLOR_BASE,
-                                                fontSize: 20,
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold),
                                           )
-                                        : CircularProgressIndicator(
-                                            color: COLOR_BASE),
+                                        : SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(
+                                                color: COLOR_BASE),
+                                          ),
                                   )
                                 ],
                               ),
