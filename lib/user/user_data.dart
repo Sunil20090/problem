@@ -1,4 +1,4 @@
-const USER_ID = 1;
+var USER_ID = 1;
 
 var USER_NAME = "";
 var USER_TYPE = "GUEST";
