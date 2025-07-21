@@ -19,7 +19,9 @@ class ApiResponse{
 
 Future<ApiResponse> postService(String url, dynamic body) async {
     var request_body = jsonEncode(body);
-    http.Response response = await http.post(Uri.parse(url), body: request_body);
+    http.Response response = await http.post(Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+     body: request_body);
 
     var reponseBody = response.statusCode == 200 ? jsonDecode(response.body) : response.body;
     return ApiResponse(body: reponseBody, isSuccess: response.statusCode == 200,response: response);

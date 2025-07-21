@@ -2,7 +2,9 @@ import 'package:election/api/data/sample_data.dart';
 import 'package:election/components/colored_button.dart';
 import 'package:election/components/screen_action_bar.dart';
 import 'package:election/constants/theme_constant.dart';
+import 'package:election/constants/url_constant.dart';
 import 'package:election/user/user_data.dart';
+import 'package:election/utils/api_service.dart';
 import 'package:election/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
@@ -52,22 +54,30 @@ class _AccountScreenState extends State<AccountScreen> {
                                 shape: BoxShape.circle,
                                 border: Border.all(color: COLOR_BASE, width: 4),
                                 image: DecorationImage(
-                                  image: NetworkImage(USER_AVATAR_URL),
+                                  image: NetworkImage(
+                                      _accountDetails['thumbnail']),
                                   fit: BoxFit.contain,
                                 ),
                               ),
                             ),
                             addHorizontalSpace(),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _accountDetails['name'],
-                                  style: CUSTOM_TEXT_THEME.headlineMedium,
-                                ),
-                                addVerticalSpace(2),
-                                Text(_accountDetails['description'])
-                              ],
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _accountDetails['username'],
+                                    style: CUSTOM_TEXT_THEME.headlineSmall,
+                                  ),
+                                  addVerticalSpace(2),
+                                  Text(
+                                    softWrap: true,
+                                    maxLines: 5,
+                                    _accountDetails['description'],
+                                    style: CUSTOM_TEXT_THEME.bodySmall,
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -90,7 +100,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                           EdgeInsets.symmetric(horizontal: 12),
                                       color: COLOR_BASE_DARKER,
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             element['skill'],
@@ -105,7 +116,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                                   color: COLOR_WHITE,
                                                 ),
                                                 Container(
-                                                  width: (element['competency_level'] as double) * 100,
+                                                  width: (element[
+                                                              'competency_level']
+                                                          as double) *
+                                                      100,
                                                   color: COLOR_PRIMARY,
                                                 ),
                                               ],
@@ -130,9 +144,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                     Expanded(
                                       child: Container(
                                         padding: EdgeInsets.all(8),
-                                      
                                         child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(4),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
                                             child: Image.network(
                                               _achievements[index]['image_url'],
                                               fit: BoxFit.contain,
@@ -143,7 +157,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                       _achievements[index]['title'],
                                       style: CUSTOM_TEXT_THEME.headlineSmall,
                                     ),
-                                    
                                   ],
                                 ),
                               );
@@ -155,12 +168,21 @@ class _AccountScreenState extends State<AccountScreen> {
                       ],
                     ),
                   )
-                : Text('data')));
+                : Text('No profile found')));
   }
 
   void initAccountDetails() {
-    _accountDetails = DATA_ACCOUNT_DETAILS;
-    _skills = _accountDetails['skills'];
-    _achievements = _accountDetails['achievements'];
+    postService(URL_GET_PROFILE, {"user_id": USER_ID}).then((response) {
+      print('status code profile: ${response.response.body}');
+      if (response.isSuccess && response.body['description'] != null) {
+        setState(() {
+          _accountDetails = response.body;
+        });
+      }
+    });
+
+    // _accountDetails = DATA_ACCOUNT_DETAILS;
+    // _skills = _accountDetails['skills'];
+    // _achievements = _accountDetails['achievements'];
   }
 }

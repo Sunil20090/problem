@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 
 class CommentItem extends StatefulWidget {
   dynamic comment;
-  CommentItem({super.key, required this.comment});
+  VoidCallback? onLikedClicked;
+  
+  CommentItem({super.key, required this.comment, this.onLikedClicked});
 
   @override
   State<CommentItem> createState() => _CommentItemState();
@@ -19,9 +21,9 @@ class _CommentItemState extends State<CommentItem> {
   void initState() {
     super.initState();
 
-    print('Comment item init: ${widget.comment['user_url']}');
+    print('Comment item init: ${widget.comment['thumbnail']}');
 
-    isSameUser = widget.comment['user_name'] == USER_ID;
+    isSameUser = widget.comment['username'] == USER_ID;
   }
 
   @override
@@ -30,13 +32,13 @@ class _CommentItemState extends State<CommentItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if(isSameUser) Text("@${widget.comment['user_name']}", style: TextStyle(color: COLOR_PRIMARY, fontWeight: FontWeight.bold),),
+          if(isSameUser) Text("@${widget.comment['username']}", style: TextStyle(color: COLOR_PRIMARY, fontWeight: FontWeight.bold),),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipOval(
                   child: Image.network(
-                widget.comment['user_url'],
+                widget.comment['thumbnail'],
                 width: 40,
                 height: 40,
                 fit: BoxFit.contain,
@@ -58,9 +60,14 @@ class _CommentItemState extends State<CommentItem> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Icon(Icons.favorite_outline),
+              InkWell(
+                onTap: widget.onLikedClicked,
+                child: widget.comment['isLiked'] == 0
+                ? Icon(Icons.favorite_outline)
+                : Icon(Icons.favorite, color: const Color.fromARGB(255, 241, 140, 140),)
+                ),
               addHorizontalSpace(4),
-              Text('4'),
+              Text('${widget.comment['likeCount']}'),
               addHorizontalSpace(),
             ],
           )

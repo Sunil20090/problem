@@ -1,6 +1,6 @@
 const dynamic PROBLEM_LIST = [
   {
-    "id": 0,
+    "id": 4,
     "title": "Communication!",
     "description":
         "Not able to talk or communicate to the other floors or room for any thing",
@@ -112,7 +112,7 @@ const DATA_PROBLEM_REQUIREMENT = [
   },
 ];
 
-const DATA_ACCOUNT_DETAILS = {
+var DATA_ACCOUNT_DETAILS = {
   "id": 0,
   "name": "Sunil",
   "description": "Skilled in various languages",
