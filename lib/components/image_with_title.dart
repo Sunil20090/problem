@@ -1,4 +1,5 @@
 import 'package:election/constants/theme_constant.dart';
+import 'package:election/user/user_data.dart';
 import 'package:election/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +45,7 @@ class _ImageWithTitleState extends State<ImageWithTitle> {
                 onTap: widget.onAvatarPressed,
                 child: CircleAvatar(
                   radius: 25,
-                  child: ClipOval(child: Image.network(widget.avatarUrl, width: 50, height: 50,  fit: BoxFit.cover, )),
+                  child: ClipOval(child: Image.network(USER_AVATAR_URL, width: 50, height: 50,  fit: BoxFit.cover, )),
                 ),
               ),
              addHorizontalSpace(20),

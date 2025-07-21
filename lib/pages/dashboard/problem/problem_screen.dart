@@ -1,10 +1,11 @@
-import 'package:election/api/data/sample_data.dart';
 import 'package:election/components/image_with_title.dart';
 import 'package:election/components/screen_action_bar.dart';
 import 'package:election/constants/theme_constant.dart';
+import 'package:election/constants/url_constant.dart';
 import 'package:election/pages/dashboard/acount/profile_screen.dart';
 import 'package:election/pages/dashboard/problem/post_problem_screen.dart';
 import 'package:election/pages/dashboard/problem/problem_detail_screen.dart';
+import 'package:election/utils/api_service.dart';
 import 'package:election/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
@@ -26,17 +27,17 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getList() async {
-    setState(() {
-      _problemList = PROBLEM_LIST;
-    });
-
-    // ApiResponse response = await getService(URL_PROBLEM_LIST);
-
-    // print(response.body);
-
     // setState(() {
-    //   _problemList = response.body;
+    //   _problemList = PROBLEM_LIST;
     // });
+
+    ApiResponse response = await getService(URL_PROBLEM_LIST);
+
+    print(response.body);
+
+    setState(() {
+      _problemList = response.body;
+    });
   }
 
   @override
@@ -172,7 +173,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   showProfile() {
-    print('Profile');
+    // print('Profile');
     Navigator.push(
         context, MaterialPageRoute(builder: (builder) => ProfileScreen()));
   }

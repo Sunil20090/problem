@@ -35,7 +35,8 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   }
 
   initRequirementList(int id) {
-    _requirement_list = DATA_PROBLEM_REQUIREMENT;
+    // _requirement_list = DATA_PROBLEM_REQUIREMENT;
+
   }
 
   @override
@@ -59,23 +60,10 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                             height: UI_IMAGE_HEIGHT,
                             child: Hero(
                               tag: 'problem-title-image${widget.problem['id']}',
-                              child: PageView(
-                                controller: PageController(),
-                                children: widget.problem['images'].map((imageElement) {
-                                  return FadeInImage(
-                                    image: Image.network(
-                                      imageElement['image_url'],
-                                    ).image,
-                                    placeholder: Image.network(
-                                      imageElement['thumbnail_url'],
-                                    ).image,
-                                    fadeInDuration: Duration(milliseconds: 200),
-                                    fit: BoxFit.contain,
-                                  );
-                                }).toList(),
+                              child: Text('${widget.problem['title']}',)
                               ),
                             )),
-                      ),
+                      
                       Container(
                         padding: SCREEN_PADDING,
                         child: Column(
@@ -92,7 +80,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                               style: CUSTOM_TEXT_THEME.bodySmall,
                             ),
                             addVerticalSpace(10),
-                            Text(
+                            if(_requirement_list.length > 0) Text(
                               'Requirements:',
                               style: CUSTOM_TEXT_THEME.titleSmall,
                             ),

@@ -65,8 +65,10 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
                 addVerticalSpace(56),
                 InkWell(
                   onTap: (){
-                    _getImage(ImageSource.camera);
+                    print('Choose Image');
+                    _getImage(ImageSource.gallery );
                   },
+                  
                   child: Center(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
@@ -134,9 +136,8 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
     var payload = {
       "title" : _titleController.text,
       "description" : _descriptionController.text,
-      "image" : (imageBytes != null) ?  base64Encode(imageBytes) : null,
-      "avatar_url" : USER_AVATAR_URL,
-      "user_name" : USER_ID,
+      "image_data_64" : (imageBytes != null) ?  base64Encode(imageBytes) : null,
+      "user_id" : USER_ID,
     };
 
     // print(payload);
