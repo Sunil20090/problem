@@ -23,6 +23,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   bool _showSolutionRemark = false;
   bool _isCommentSubmitting = false;
   var _requirement_list = [];
+  List<dynamic> _images = [];
 
   final _controllerComment = TextEditingController();
 
@@ -31,17 +32,15 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     super.initState();
     initCommentList(widget.problem['id']);
     initRequirementList(widget.problem['id']);
-    print('problemList :${widget.problem}');
   }
 
   initRequirementList(int id) {
-    // _requirement_list = DATA_PROBLEM_REQUIREMENT;
-
+    _requirement_list = DATA_PROBLEM_REQUIREMENT;
+    // _images = widget.problem['images'];
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -60,7 +59,20 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                             height: UI_IMAGE_HEIGHT,
                             child: Hero(
                               tag: 'problem-title-image${widget.problem['id']}',
-                              child: Text('${widget.problem['title']}',)
+                              child: PageView(
+                                controller: PageController(),
+                                children: _images.map((imageElement) {
+                                  return FadeInImage(
+                                    image: Image.network(
+                                      imageElement['image_url'],
+                                    ).image,
+                                    placeholder: Image.network(
+                                      imageElement['thumbnail_url'],
+                                    ).image,
+                                    fadeInDuration: Duration(milliseconds: 200),
+                                    fit: BoxFit.contain,
+                                  );
+                                }).toList(),
                               ),
                             )),
                       
@@ -96,8 +108,9 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                         Text(skill['name']),
                                         Spacer(),
                                         Container(
-                                          margin: EdgeInsets.all(1),
-                                          padding: EdgeInsets.all(1),
+                                          // margin: EdgeInsets.all(1),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 6),
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(4),
@@ -109,12 +122,14 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                         ),
                                       ],
                                     ),
-                                    Divider(),
+                                    addVerticalSpace(4),
+
+                                    // Divider(),
                                   ],
                                 );
                               }).toList(),
                             ),
-                            addHorizontalSpace(50),
+                            addVerticalSpace(30),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -176,11 +191,15 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                             'Submit',
                                             style: TextStyle(
                                                 color: COLOR_BASE,
-                                                fontSize: 20,
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold),
                                           )
-                                        : CircularProgressIndicator(
-                                            color: COLOR_BASE),
+                                        : SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(
+                                                color: COLOR_BASE),
+                                          ),
                                   )
                                 ],
                               ),
@@ -189,7 +208,12 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                               children: _commentList.map((comment) {
                                 return Column(
                                   children: [
-                                    CommentItem(comment: comment),
+                                    CommentItem(
+                                      comment: comment,
+                                      onLikedClicked: () {
+                                        updateLike(comment);
+                                      },
+                                    ),
                                     addVerticalSpace(15),
                                   ],
                                 );
@@ -209,15 +233,17 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     );
   }
 
-  void initCommentList(id) async {
-    ApiResponse response =
-        await getService(URL_GET_COMMENT_LIST + '?problem_id=${id}');
-
-    if (response.isSuccess) {
-      setState(() {
-        _commentList = response.body;
-      });
-    }
+  void initCommentList(id) {
+    postService(
+            URL_GET_COMMENT_LIST, {"problem_id": id, "user_id": USER_ID})
+        .then((response) {
+          if (response.isSuccess) {
+        setState(() {
+          _commentList = response.body;
+          
+        });
+      }
+        });
   }
 
   submitComment() async {
@@ -230,10 +256,9 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
       _isCommentSubmitting = true;
     });
     var body = {
-      'user_name': USER_ID,
+      'user_id': USER_ID,
       'content': _controllerComment.text,
       'problem_id': widget.problem['id'],
-      'user_url': USER_AVATAR_URL,
     };
 
     ApiResponse response = await postService(URL_POST_COMMENT, body);
@@ -248,4 +273,20 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   }
 
   void applyOn(skill) {}
+
+  void updateLike(comment)  {
+    var body = {"comment_id": comment['id'], "liked_by": USER_ID};
+
+    postService(URL_LIKE_A_COMMENT, body).then((response){
+      if (response.isSuccess) {
+      setState(() {
+        initCommentList(widget.problem['id']);
+      });
+      }
+    });
+
+    
+      // showAboutDialog(context: context);R
+    
+  }
 }

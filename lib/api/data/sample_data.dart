@@ -1,6 +1,6 @@
 const dynamic PROBLEM_LIST = [
   {
-    "id": 0,
+    "id": 4,
     "title": "Communication!",
     "description":
         "Not able to talk or communicate to the other floors or room for any thing",
@@ -112,10 +112,47 @@ const DATA_PROBLEM_REQUIREMENT = [
   },
 ];
 
-const DATA_ACCOUNT_DETAILS = {
-  "id" : 0,
+var DATA_ACCOUNT_DETAILS = {
+  "id": 0,
   "name": "Sunil",
-  "description": "Skilled in various languages ",
+  "description": "Skilled in various languages",
   "profile_url":
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsWWIZ0ZbQUNgOOkXgV3IDzhkO1IlMlpRFuA&s"
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsWWIZ0ZbQUNgOOkXgV3IDzhkO1IlMlpRFuA&s",
+  "skills": [
+    {"skill": "JavaScript", "competency_level": 0.9},
+    {"skill": "Python", "competency_level": 0.85},
+    {"skill": "Java", "competency_level": 0.8},
+    {"skill": "C++", "competency_level": 0.75},
+    {"skill": "C#", "competency_level": 0.7},
+    {"skill": "Ruby", "competency_level": 0.6},
+    {"skill": "Go", "competency_level": 0.65},
+    {"skill": "Swift", "competency_level": 0.55}
+  ],
+  "achievements": [
+    {
+      "title": "Top Coder Award 2023",
+      "image_url":
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHnGxrPPrT2b9YeotxxENQQ28GNqXvmBOqA&s"
+    },
+    {
+      "title": "Open Source Contributor",
+      "image_url":
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb8b3uY2VQ1rppjXUlDNBXQo_yLNl7gouWxA&s"
+    },
+    {
+      "title": "Best Developer Conference Speaker",
+      "image_url":
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsfI4glYBSceITyORne4O505jJ62h_OHV7lw&s"
+    },
+    {
+      "title": "Hackathon Winner 2024",
+      "image_url":
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTv1C0J45TxrJFLQfdZ2dePeZpo8LvFHlZSQ&s"
+    },
+    {
+      "title": "Certified Cloud Architect",
+      "image_url":
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-mWSocr5glrUBbO2T8qFfGvTLuX-EQpYc2A&s"
+    }
+  ]
 };

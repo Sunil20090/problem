@@ -103,7 +103,6 @@ class _ProblemScreenState extends State<ProblemScreen> {
                             color: COLOR_PRIMARY,
                           ),
                         ),
-                        
                       ],
                     ),
                   ],
