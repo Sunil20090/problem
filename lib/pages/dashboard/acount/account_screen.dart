@@ -1,5 +1,3 @@
-import 'package:election/api/data/sample_data.dart';
-import 'package:election/components/colored_button.dart';
 import 'package:election/components/screen_action_bar.dart';
 import 'package:election/constants/theme_constant.dart';
 import 'package:election/constants/url_constant.dart';
@@ -15,17 +13,50 @@ class AccountScreen extends StatefulWidget {
   State<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _AccountScreenState extends State<AccountScreen>  with WidgetsBindingObserver{
   var _accountDetails;
   var _skills = [];
   var _achievements = [];
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // This acts like onResume
+      print('App is resumeed');
+      // Place your logic here
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     initAccountDetails();
     // initSkills();
+    // _accountDetails = ACCOUNT_DETAILS;
+    print('skills');
+    
   }
+
+  initAccountDetails() async {
+    postService(URL_GET_PROFILE, {"user_id": USER_ID}).then((response) {
+      print(response.body);
+      if (response.isSuccess && response.body['description'] != null) {
+        setState(() {
+          ACCOUNT_DETAILS = response.body;
+
+          USER_AVATAR_URL = response.body['thumbnail'];
+          // USER_AVATAR_URL = response.body['avatar'];
+        });
+      }
+    });
+  }
+
 
   // initSkills() {
   //   _skills = DATA_ACCOUNT_DETAILS;
@@ -41,7 +72,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ScreenActionBar(title: 'Profile:'),
+                        ScreenActionBar(title: 'Profile'),
                         addVerticalSpace(10),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -171,18 +202,5 @@ class _AccountScreenState extends State<AccountScreen> {
                 : Text('No profile found')));
   }
 
-  void initAccountDetails() {
-    postService(URL_GET_PROFILE, {"user_id": USER_ID}).then((response) {
-      print('status code profile: ${response.response.body}');
-      if (response.isSuccess && response.body['description'] != null) {
-        setState(() {
-          _accountDetails = response.body;
-        });
-      }
-    });
-
-    // _accountDetails = DATA_ACCOUNT_DETAILS;
-    // _skills = _accountDetails['skills'];
-    // _achievements = _accountDetails['achievements'];
-  }
+  
 }

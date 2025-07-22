@@ -32,7 +32,6 @@ class _DashboardPageState extends State<DashboardPage> {
                       right: 0,
                       child: Image.asset(IMAGE_PALM_TREE)),
                     Positioned(
-      
                       child: Container(
                       color: const Color.fromARGB(160, 122, 181, 88),
                     )),

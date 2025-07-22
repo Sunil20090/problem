@@ -36,7 +36,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
 
   initRequirementList(int id) {
     _requirement_list = DATA_PROBLEM_REQUIREMENT;
-    // _images = widget.problem['images'];
+    _images = widget.problem['images'];
   }
 
   @override
@@ -55,27 +55,18 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: Container(
-                            height: UI_IMAGE_HEIGHT,
-                            child: Hero(
-                              tag: 'problem-title-image${widget.problem['id']}',
-                              child: PageView(
-                                controller: PageController(),
-                                children: _images.map((imageElement) {
-                                  return FadeInImage(
-                                    image: Image.network(
-                                      imageElement['image_url'],
-                                    ).image,
-                                    placeholder: Image.network(
-                                      imageElement['thumbnail_url'],
-                                    ).image,
-                                    fadeInDuration: Duration(milliseconds: 200),
-                                    fit: BoxFit.contain,
-                                  );
-                                }).toList(),
-                              ),
-                            )),
-                      
+                          child: Container(
+                              height: UI_IMAGE_HEIGHT,
+                              child: Hero(
+                                tag:
+                                    'problem-title-image${widget.problem['id']}',
+                                child: PageView(
+                                  controller: PageController(),
+                                  children: _images.map((imageElement) {
+                                    return Image.network(imageElement);
+                                  }).toList(),
+                                ),
+                              ))),
                       Container(
                         padding: SCREEN_PADDING,
                         child: Column(
@@ -92,10 +83,11 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                               style: CUSTOM_TEXT_THEME.bodySmall,
                             ),
                             addVerticalSpace(10),
-                            if(_requirement_list.length > 0) Text(
-                              'Requirements:',
-                              style: CUSTOM_TEXT_THEME.titleSmall,
-                            ),
+                            if (_requirement_list.length > 0)
+                              Text(
+                                'Requirements:',
+                                style: CUSTOM_TEXT_THEME.titleSmall,
+                              ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: _requirement_list.map((skill) {
@@ -234,16 +226,14 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   }
 
   void initCommentList(id) {
-    postService(
-            URL_GET_COMMENT_LIST, {"problem_id": id, "user_id": USER_ID})
+    postService(URL_GET_COMMENT_LIST, {"problem_id": id, "user_id": USER_ID})
         .then((response) {
-          if (response.isSuccess) {
+      if (response.isSuccess) {
         setState(() {
           _commentList = response.body;
-          
         });
       }
-        });
+    });
   }
 
   submitComment() async {
@@ -274,19 +264,17 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
 
   void applyOn(skill) {}
 
-  void updateLike(comment)  {
+  void updateLike(comment) {
     var body = {"comment_id": comment['id'], "liked_by": USER_ID};
 
-    postService(URL_LIKE_A_COMMENT, body).then((response){
+    postService(URL_LIKE_A_COMMENT, body).then((response) {
       if (response.isSuccess) {
-      setState(() {
-        initCommentList(widget.problem['id']);
-      });
+        setState(() {
+          initCommentList(widget.problem['id']);
+        });
       }
     });
 
-    
-      // showAboutDialog(context: context);R
-    
+    // showAboutDialog(context: context);R
   }
 }

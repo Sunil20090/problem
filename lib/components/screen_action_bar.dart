@@ -11,14 +11,13 @@ class ScreenActionBar extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Row(
           children: [
             addHorizontalSpace(),
             Text(
               title,
               style: TextStyle(
-                  fontSize: CUSTOM_TEXT_THEME.headlineLarge?.fontSize,
+                  fontSize: CUSTOM_TEXT_THEME.headlineMedium?.fontSize,
                   color: COLOR_PRIMARY),
             ),
           ],

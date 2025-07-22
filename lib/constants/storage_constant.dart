@@ -1,1 +1,1 @@
-const STORAGE_KEY_USER = 'user';
+const STORAGE_KEY_USER = 'user_data';
