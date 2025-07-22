@@ -1,9 +1,13 @@
+import 'package:election/components/colored_button.dart';
 import 'package:election/components/screen_action_bar.dart';
+import 'package:election/constants/storage_constant.dart';
 import 'package:election/constants/theme_constant.dart';
 import 'package:election/constants/url_constant.dart';
+import 'package:election/pages/dashboard/acount/auth/login_screen.dart';
 import 'package:election/user/user_data.dart';
 import 'package:election/utils/api_service.dart';
 import 'package:election/utils/common_function.dart';
+import 'package:election/utils/storage_service.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -13,34 +17,53 @@ class AccountScreen extends StatefulWidget {
   State<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen>  with WidgetsBindingObserver{
+class _AccountScreenState extends State<AccountScreen>
+    with WidgetsBindingObserver {
   var _accountDetails;
   var _skills = [];
   var _achievements = [];
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // This acts like onResume
-      print('App is resumeed');
-      // Place your logic here
-    }
-  }
-
-  @override
   void initState() {
     super.initState();
-    initAccountDetails();
+
+    initUser();
     // initSkills();
     // _accountDetails = ACCOUNT_DETAILS;
     print('skills');
-    
+  }
+
+  initUser() async {
+    var obj = await loadJson(STORAGE_KEY_USER);
+
+    print('localstorage $obj');
+
+    if (obj == null) {
+      ApiResponse response = await getService(URL_GUEST_USER);
+      if (response.isSuccess) {
+        print(response.body);
+        await saveJson(STORAGE_KEY_USER, {
+          'username': response.body['username'],
+          'user_id': response.body['user_id'],
+          'type': response.body['type'],
+          'is_signed_in': response.body['is_signed_in']
+        });
+
+        USER_ID = response.body['user_id'];
+        USER_NAME = response.body['username'];
+        USER_TYPE = response.body['type'];
+        USER_SIGNED_IN = response.body['is_signed_in'];
+
+        print(USER_NAME);
+      }
+    } else {
+      USER_ID = obj['user_id'];
+      USER_NAME = obj['username'];
+      USER_TYPE = obj['type'];
+      USER_SIGNED_IN = obj['is_signed_in'];
+    }
+
+    await initAccountDetails();
   }
 
   initAccountDetails() async {
@@ -49,6 +72,7 @@ class _AccountScreenState extends State<AccountScreen>  with WidgetsBindingObser
       if (response.isSuccess && response.body['description'] != null) {
         setState(() {
           ACCOUNT_DETAILS = response.body;
+          _accountDetails = response.body;
 
           USER_AVATAR_URL = response.body['thumbnail'];
           // USER_AVATAR_URL = response.body['avatar'];
@@ -56,7 +80,6 @@ class _AccountScreenState extends State<AccountScreen>  with WidgetsBindingObser
       }
     });
   }
-
 
   // initSkills() {
   //   _skills = DATA_ACCOUNT_DETAILS;
@@ -72,7 +95,10 @@ class _AccountScreenState extends State<AccountScreen>  with WidgetsBindingObser
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ScreenActionBar(title: 'Profile'),
+                        ScreenActionBar(
+                          title: 'Profile',
+                          child: Icon(Icons.sync),
+                        ),
                         addVerticalSpace(10),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,7 +123,7 @@ class _AccountScreenState extends State<AccountScreen>  with WidgetsBindingObser
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    _accountDetails['username'],
+                                    _accountDetails['name'],
                                     style: CUSTOM_TEXT_THEME.headlineSmall,
                                   ),
                                   addVerticalSpace(2),
@@ -195,12 +221,24 @@ class _AccountScreenState extends State<AccountScreen>  with WidgetsBindingObser
                             controller: PageController(viewportFraction: 0.85),
                             scrollDirection: Axis.horizontal,
                           ),
-                        )
+                        ),
+                       
                       ],
                     ),
                   )
-                : Text('No profile found')));
+                : Column(
+                  children: [
+                    Text('No profile found'),
+                    ColoredButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => LoginScreen()));
+                          },
+                          child: Text('Sign In'))
+                  ],
+                  
+                )));
   }
-
-  
 }

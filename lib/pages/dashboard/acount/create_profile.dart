@@ -1,5 +1,7 @@
+import 'package:election/components/floating_label_edit_box.dart';
 import 'package:election/components/screen_action_bar.dart';
 import 'package:election/constants/theme_constant.dart';
+import 'package:election/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class CreateProfile extends StatefulWidget {
@@ -19,6 +21,12 @@ class _CreateProfileState extends State<CreateProfile> {
           child: Column(
             children: [
               ScreenActionBar(title: 'Create Profile'),
+
+              addVerticalSpace(40),
+            
+                
+
+              
             ],
           )
         ),
