@@ -2,7 +2,6 @@ import 'package:election/constants/theme_constant.dart';
 import 'package:election/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
-
 class ScreenActionBar extends StatelessWidget {
   String title;
   Widget? child;
@@ -10,26 +9,31 @@ class ScreenActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: CONTENT_PADDING_VALUE, right: CONTENT_PADDING_VALUE, top: CONTENT_PADDING_VALUE),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            addHorizontalSpace(),
-            Text(
-              title,
-              style: TextStyle(
-                  fontSize: CUSTOM_TEXT_THEME.headlineMedium?.fontSize,
-                  color: COLOR_PRIMARY),
+            Row(
+              children: [
+                Text(
+                  title,
+                  style: getTextTheme().headlineMedium,
+                ),
+                Spacer(),
+                Container(
+                  child: child,
+                )
+              ],
             ),
-            if(child != null) child!
-          ],
+            addVerticalSpace(),
+            Divider(
+              height: 1,
+            )
+          ],  
         ),
-        Divider(
-          height:  1,
-        )
-      ],
+      ),
     );
   }
 }

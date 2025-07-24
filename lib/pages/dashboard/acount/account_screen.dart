@@ -7,7 +7,6 @@ import 'package:election/pages/dashboard/acount/auth/login_screen.dart';
 import 'package:election/user/user_data.dart';
 import 'package:election/utils/api_service.dart';
 import 'package:election/utils/common_function.dart';
-import 'package:election/utils/storage_service.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -23,49 +22,13 @@ class _AccountScreenState extends State<AccountScreen>
   var _skills = [];
   var _achievements = [];
 
-
   @override
   void initState() {
     super.initState();
-
-    initUser();
-    // initSkills();
-    // _accountDetails = ACCOUNT_DETAILS;
     print('skills');
   }
 
-  initUser() async {
-    var obj = await loadJson(STORAGE_KEY_USER);
-
-    print('localstorage $obj');
-
-    if (obj == null) {
-      ApiResponse response = await getService(URL_GUEST_USER);
-      if (response.isSuccess) {
-        print(response.body);
-        await saveJson(STORAGE_KEY_USER, {
-          'username': response.body['username'],
-          'user_id': response.body['user_id'],
-          'type': response.body['type'],
-          'is_signed_in': response.body['is_signed_in']
-        });
-
-        USER_ID = response.body['user_id'];
-        USER_NAME = response.body['username'];
-        USER_TYPE = response.body['type'];
-        USER_SIGNED_IN = response.body['is_signed_in'];
-
-        print(USER_NAME);
-      }
-    } else {
-      USER_ID = obj['user_id'];
-      USER_NAME = obj['username'];
-      USER_TYPE = obj['type'];
-      USER_SIGNED_IN = obj['is_signed_in'];
-    }
-
-    await initAccountDetails();
-  }
+  
 
   initAccountDetails() async {
     postService(URL_GET_PROFILE, {"user_id": USER_ID}).then((response) {
@@ -127,14 +90,14 @@ class _AccountScreenState extends State<AccountScreen>
                                 children: [
                                   Text(
                                     _accountDetails['name'],
-                                    style: CUSTOM_TEXT_THEME.headlineSmall,
+                                    style: getTextTheme().headlineSmall,
                                   ),
                                   addVerticalSpace(2),
                                   Text(
                                     softWrap: true,
                                     maxLines: 5,
                                     _accountDetails['description'],
-                                    style: CUSTOM_TEXT_THEME.bodySmall,
+                                    style: getTextTheme().bodySmall,
                                   )
                                 ],
                               ),
@@ -144,7 +107,7 @@ class _AccountScreenState extends State<AccountScreen>
                         addVerticalSpace(30),
                         Text(
                           'Skills:',
-                          style: CUSTOM_TEXT_THEME.bodySmall,
+                          style: getTextTheme().bodySmall,
                         ),
                         Divider(
                           height: 1,
@@ -165,7 +128,7 @@ class _AccountScreenState extends State<AccountScreen>
                                         children: [
                                           Text(
                                             element['skill'],
-                                            style: CUSTOM_TEXT_THEME.titleSmall,
+                                            style: getTextTheme().titleSmall,
                                           ),
                                           SizedBox(
                                             height: 10,
@@ -215,7 +178,7 @@ class _AccountScreenState extends State<AccountScreen>
                                     ),
                                     Text(
                                       _achievements[index]['title'],
-                                      style: CUSTOM_TEXT_THEME.headlineSmall,
+                                      style: getTextTheme().headlineSmall,
                                     ),
                                   ],
                                 ),
@@ -225,14 +188,13 @@ class _AccountScreenState extends State<AccountScreen>
                             scrollDirection: Axis.horizontal,
                           ),
                         ),
-                       
                       ],
                     ),
                   )
                 : Column(
-                  children: [
-                    Text('No profile found'),
-                    ColoredButton(
+                    children: [
+                      Text('No profile found'),
+                      ColoredButton(
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -240,8 +202,7 @@ class _AccountScreenState extends State<AccountScreen>
                                     builder: (builder) => LoginScreen()));
                           },
                           child: Text('Sign In'))
-                  ],
-                  
-                )));
+                    ],
+                  )));
   }
 }

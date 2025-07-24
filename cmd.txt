@@ -1,0 +1,26 @@
+
+
+
+use Sunil20090$gov;
+
+select * from users;
+select * from problems;
+select * from comments;
+select * from images_of_problems;
+select * from profiles_of_users;
+select * from likes_of_comments;
+select * from requirements_of_problems;
+
+
+
+
+delete from requirements_of_problems;delete from likes_of_comments;delete from profiles_of_users;delete from images_of_problems;delete from problems;delete from comments;
+
+
+
+
+
+alter table problems auto_increment = 1; alter table users auto_increment = 1; alter table profiles_of_users auto_increment = 1; alter table likes_of_comments auto_increment = 1;
+
+
+

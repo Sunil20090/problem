@@ -16,7 +16,6 @@ class NominationApplyPage extends StatefulWidget {
 }
 
 class _NominationApplyPageState extends State<NominationApplyPage> {
-
   final double padding = 20;
   final List<String> positions = ["CR", "Vice-CR"];
   String selectedOption = "CR";
@@ -24,24 +23,21 @@ class _NominationApplyPageState extends State<NominationApplyPage> {
   final TextEditingController _rollNumberController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
 
-   @override
+  @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: Container(
         padding: SCREEN_PADDING,
         decoration: getAppDecoration(),
-        
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             addVerticalSpace(40),
-            const PageHeading(title: 'Apply Nomination', description: 'You can apply for nomination for yourself to stand out as a perticular position'),
+            const PageHeading(
+                title: 'Apply Nomination',
+                description:
+                    'You can apply for nomination for yourself to stand out as a perticular position'),
             addVerticalSpace(20),
-
-            
-            
-
             EnterTextBox(
               hintText: 'Full Name',
               controller: _fullNameController,
@@ -51,65 +47,63 @@ class _NominationApplyPageState extends State<NominationApplyPage> {
               hintText: 'Roll number  ',
               controller: _rollNumberController,
             ),
-
             addVerticalSpace(40),
-
-            Text("Nominate for: ", style: CUSTOM_TEXT_THEME.headlineSmall,),
+            Text(
+              "Nominate for: ",
+              style: getTextTheme().headlineSmall,
+            ),
             SizedBox(
               height: 160,
               child: ListView(
-              
-                children: positions.map((toElement)=>RadioListTile(
-                  title: Text(toElement),
-                  value: toElement, groupValue: selectedOption, onChanged: (selectedValue){
-                  setState(() {
-                    selectedOption = selectedValue!; 
-                  });
-                })).toList(),
+                children: positions
+                    .map((toElement) => RadioListTile(
+                        title: Text(toElement),
+                        value: toElement,
+                        groupValue: selectedOption,
+                        onChanged: (selectedValue) {
+                          setState(() {
+                            selectedOption = selectedValue!;
+                          });
+                        }))
+                    .toList(),
               ),
             ),
-
             TextButton(
-              onPressed: (){
-                applyForNomination();
-              },
-              style: ButtonStyle(
-                foregroundColor: WidgetStateProperty.all(Colors.white),
-                backgroundColor: WidgetStateProperty.all(Colors.blue)),
-             child: Text('Nominate'))
-
+                onPressed: () {
+                  applyForNomination();
+                },
+                style: ButtonStyle(
+                    foregroundColor: WidgetStateProperty.all(Colors.white),
+                    backgroundColor: WidgetStateProperty.all(Colors.blue)),
+                child: Text('Nominate'))
           ],
         ),
       ),
     );
   }
 
-
-  bool isValid(){
-
-    if(_rollNumberController.text.trim().isEmpty){
+  bool isValid() {
+    if (_rollNumberController.text.trim().isEmpty) {
       return false;
     }
     return true;
   }
 
-
   void applyForNomination() async {
-    
-    if(!isValid()){
+    if (!isValid()) {
       informDialog(context, 'Error!', "Please enter the valid roll number");
       return;
     }
 
     var body = {
-      "rollNumber" : _rollNumberController.text.toUpperCase(),
-      "fullName" : _fullNameController.text.toUpperCase(),
-      "position" : selectedOption,
-      "formId" : widget.form_id
+      "rollNumber": _rollNumberController.text.toUpperCase(),
+      "fullName": _fullNameController.text.toUpperCase(),
+      "position": selectedOption,
+      "formId": widget.form_id
     };
     final ApiResponse response = await postService(URL_APPLY_NOMINATION, body);
 
-    if(response.isSuccess){
+    if (response.isSuccess) {
       // Navigator.pop(context);
       informDialog(context, 'Success', response.body['message']);
     }

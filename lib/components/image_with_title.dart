@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ImageWithTitle extends StatefulWidget {
   final Widget container;
-  final String? avatarUrl;
+  final String? avatarUrl, avatarThumnailUrl;
   final String title, description;
   final int solutionCount = 0, ideaCount = 0;
   final VoidCallback? onImagePressed, onAvatarPressed, onInfoPressed;
@@ -14,16 +14,18 @@ class ImageWithTitle extends StatefulWidget {
       {super.key,
       required this.container,
       required this.avatarUrl,
+      required this.avatarThumnailUrl,
       required this.title,
-      required this.description, this.onImagePressed, this.onAvatarPressed, this.onInfoPressed});
+      required this.description,
+      this.onImagePressed,
+      this.onAvatarPressed,
+      this.onInfoPressed});
 
   @override
   State<ImageWithTitle> createState() => _ImageWithTitleState();
 }
 
 class _ImageWithTitleState extends State<ImageWithTitle> {
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,29 +38,35 @@ class _ImageWithTitleState extends State<ImageWithTitle> {
               color: COLOR_BASE_DARKER,
               height: UI_IMAGE_HEIGHT,
               width: double.infinity,
-              child: widget.container,),
+              child: widget.container,
+            ),
           ),
           addVerticalSpace(),
           Row(
             children: [
               addHorizontalSpace(),
               InkWell(
-                onTap: widget.onAvatarPressed,
-                child: ProfileThumbnail(imageUrl: widget.avatarUrl)
-              ),
-             addHorizontalSpace(20),
+                  onTap: widget.onAvatarPressed,
+                  child: ProfileThumbnail(thumnail_url: widget.avatarThumnailUrl, imageUrl: widget.avatarUrl,)),
+              addHorizontalSpace(20),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      Text(widget.title, style: CUSTOM_TEXT_THEME.headlineSmall,),
-                      Text(widget.description, softWrap: true, maxLines: 1, overflow: TextOverflow.ellipsis,)
+                    Text(
+                      widget.title,
+                      style: getTextTheme().headlineSmall,
+                    ),
+                    Text(
+                      widget.description,
+                      softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )
                   ],
                 ),
               ),
-              InkWell(
-                onTap: widget.onInfoPressed,
-                child: Icon(Icons.info)),
+              InkWell(onTap: widget.onInfoPressed, child: Icon(Icons.info)),
               addHorizontalSpace()
             ],
           ),

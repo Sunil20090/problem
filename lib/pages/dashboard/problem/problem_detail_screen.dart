@@ -75,18 +75,18 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                             Text(
                               softWrap: true,
                               'Details:',
-                              style: CUSTOM_TEXT_THEME.titleSmall,
+                              style: getTextTheme().titleSmall,
                             ),
                             Text(
                               softWrap: true,
                               widget.problem['description'],
-                              style: CUSTOM_TEXT_THEME.bodySmall,
+                              style: getTextTheme().bodySmall,
                             ),
                             addVerticalSpace(10),
                             if (_requirement_list.length > 0)
                               Text(
                                 'Requirements:',
-                                style: CUSTOM_TEXT_THEME.titleSmall,
+                                style: getTextTheme().titleSmall,
                               ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +127,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                               children: [
                                 Text(
                                   'Solutions:',
-                                  style: CUSTOM_TEXT_THEME.headlineMedium,
+                                  style: getTextTheme().headlineMedium,
                                 ),
                                 ColoredButton(
                                   onPressed: () {
@@ -140,8 +140,9 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                       ? Icon(
                                           Icons.remove,
                                           color: COLOR_BASE,
-                                          size: CUSTOM_TEXT_THEME
-                                              .headlineMedium?.fontSize,
+                                          size: getTextTheme()
+                                              .headlineMedium
+                                              ?.fontSize,
                                         )
                                       : Row(
                                           children: [
@@ -155,8 +156,9 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                             Icon(
                                               Icons.arrow_drop_down,
                                               color: COLOR_BASE,
-                                              size: CUSTOM_TEXT_THEME
-                                                  .headlineMedium?.fontSize,
+                                              size: getTextTheme()
+                                                  .headlineMedium
+                                                  ?.fontSize,
                                             ),
                                           ],
                                         ),
