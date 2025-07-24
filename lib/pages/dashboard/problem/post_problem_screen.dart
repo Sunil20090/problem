@@ -156,8 +156,11 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
             content: Container(
               height: 60,
               child: Center(
-                child: Stack(
+                child: _uploadCount/_uploadTotal > 0.98 
+                    ?
+                Stack(
                   children: [
+                    
                     Positioned(
                       left: 0,
                       child: Container(
@@ -175,7 +178,7 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
                       ),
                     )
                   ],
-                ),
+                ) : CircularProgressIndicator()
               ),
             )
            

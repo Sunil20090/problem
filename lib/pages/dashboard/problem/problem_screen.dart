@@ -30,7 +30,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getList() async {
-    await initUser();
+    //  await initUser();
 
 
     ApiResponse response = await getService(URL_PROBLEM_LIST);
@@ -46,36 +46,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
     // _accountDetails = DATA_ACCOUNT_DETAILS;
     // _skills = _accountDetails['skills'];
     // _achievements = _accountDetails['achievements'];
-  
 
-  initUser() async {
-    // await deleteJson(STORAGE_KEY_USER);
-    var obj = await loadJson(STORAGE_KEY_USER);
-
-    print('localstorage $obj');
-
-    if (obj == null) {
-      ApiResponse response = await getService(URL_GUEST_USER);
-      if (response.isSuccess) {
-        print(response.body);
-        await saveJson(STORAGE_KEY_USER, {
-          'username': response.body['username'],
-          'user_id': response.body['user_id'],
-          'type': response.body['type']
-        });
-
-        USER_ID = response.body['user_id'];
-        USER_NAME = response.body['username'];
-        USER_TYPE = response.body['type'];
-
-        print(USER_NAME);
-      }
-    } else {
-      USER_ID = obj['user_id'];
-      USER_NAME = obj['username'];
-      USER_TYPE = obj['type'];
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
