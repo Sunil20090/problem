@@ -14,7 +14,7 @@ class _ProfileThumbnailState extends State<ProfileThumbnail> {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-                  radius: 25,
+                  radius: widget.radius,
                   child: ClipOval(
                     child: widget.imageUrl == null 
                       ? Image.asset(IMAGE_PROFILE, width: widget.width, height: widget.height,  fit: BoxFit.cover)

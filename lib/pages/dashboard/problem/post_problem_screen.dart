@@ -25,22 +25,13 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
   final TextEditingController _descriptionController = TextEditingController();
 
   File? _image;
-  final picker = ImagePicker();
+  
 
   bool _loading = false;
 
    int _uploadCount = 0;
     int _uploadTotal = 1; 
 
-  Future<void> _getImage(ImageSource source) async {
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }  
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +55,13 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
                 
                 addVerticalSpace(56),
                 InkWell(
-                  onTap: (){
+                  onTap: () async {
                     print('Choose Image');
-                    _getImage(ImageSource.gallery );
+                    final file =  await getLocalImage(ImageSource.gallery);
+                    setState(() {
+                          _image = file;
+                        });
+
                   },
                   
                   child: Center(

@@ -18,20 +18,6 @@ class _AccountScreenState extends State<AccountScreen>  with WidgetsBindingObser
   var _skills = [];
   var _achievements = [];
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // This acts like onResume
-      print('App is resumeed');
-      // Place your logic here
-    }
-  }
 
   @override
   void initState() {
@@ -51,6 +37,8 @@ class _AccountScreenState extends State<AccountScreen>  with WidgetsBindingObser
           ACCOUNT_DETAILS = response.body;
 
           USER_AVATAR_URL = response.body['thumbnail'];
+
+          _accountDetails = response.body;
           // USER_AVATAR_URL = response.body['avatar'];
         });
       }
