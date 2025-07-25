@@ -3,7 +3,7 @@ import 'package:election/constants/theme_constant.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
-  String? profile_user_id;
+  final String? profile_user_id;
   ProfileScreen({super.key, this.profile_user_id});
 
   @override

@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateProfile extends StatefulWidget {
-  dynamic profile;
+  final dynamic profile;
   CreateProfile({super.key, this.profile});
 
   @override

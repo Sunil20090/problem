@@ -20,7 +20,7 @@ class ElectionPage extends StatefulWidget {
 
 class _ElectionPageState extends State<ElectionPage> {
 
-  var _nominationList = [];
+  // var _nominationList = [];
 
   final TextEditingController _rollNumberController = TextEditingController();
   @override
