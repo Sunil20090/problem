@@ -164,159 +164,161 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
     if (!formValid()) {
       showAlert(context, 'Error!', 'Complete the form to post the problem.',
           isError: true);
-    if (!formValid()) {
-      showAlert(context, 'Error!', 'Complete the form to post the problem.',
-          isError: true);
-      return;
-    }
-    var image_base_64_list = [];
-    for (var image_item in _imageList) {
-      final Uint8List? imageBytes = await image_item?.readAsBytes();
-      if (imageBytes != null) {
-        image_base_64_list.add(base64Encode(imageBytes));
+      if (!formValid()) {
+        showAlert(context, 'Error!', 'Complete the form to post the problem.',
+            isError: true);
+        return;
       }
+      var image_base_64_list = [];
+      for (var image_item in _imageList) {
+        final Uint8List? imageBytes = await image_item?.readAsBytes();
+        if (imageBytes != null) {
+          image_base_64_list.add(base64Encode(imageBytes));
+        }
+      }
+
+      var payload = {
+        "title": _titleController.text,
+        "description": _descriptionController.text,
+        "image_data_64": image_base_64_list,
+        "user_id": USER_ID,
+      };
+
+      // print(payload);
+      setState(() {
+        _loading = true;
+        _loading = true;
+      });
+
+      late StateSetter dialogSetState;
+
+      // final ApiResponse response = await postService(URL_POST_PROBLEM, payload);
+
+      showDialog(
+          context: context,
+          builder: (builder) {
+            return StatefulBuilder(builder: (builder, setState) {
+              showDialog(
+                  context: context,
+                  builder: (builder) {
+                    return StatefulBuilder(builder: (builder, setState) {
+                      dialogSetState = setState;
+                      return AlertDialog(
+                          title: Text('Uploading...'),
+                          content: Container(
+                            height: 60,
+                            child: Center(
+                                child: _uploadCount / _uploadTotal > 0.98
+                                    ? Stack(
+                                        children: [
+                                          Positioned(
+                                            left: 0,
+                                            child: Container(
+                                              width: 320,
+                                              height: 20,
+                                              color: COLOR_BASE,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            left: 0,
+                                            child: Container(
+                                              width: _uploadCount /
+                                                  _uploadTotal *
+                                                  320,
+                                              height: 20,
+                                              color: COLOR_PRIMARY,
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    : CircularProgressIndicator()),
+                          ));
+                    });
+                  });
+              return AlertDialog(
+                  title: Text('Uploading...'),
+                  content: Container(
+                    height: 60,
+                    child: Center(
+                        child: _uploadCount / _uploadTotal > 0.98
+                            ? Stack(
+                                children: [
+                                  Positioned(
+                                    left: 0,
+                                    child: Container(
+                                      width: 320,
+                                      height: 20,
+                                      color: COLOR_BASE,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    left: 0,
+                                    child: Container(
+                                      width: _uploadCount / _uploadTotal * 320,
+                                      height: 20,
+                                      color: COLOR_PRIMARY,
+                                    ),
+                                  )
+                                ],
+                              )
+                            : CircularProgressIndicator()),
+                  ));
+            });
+          });
+
+      await postWithProgress(
+          url: URL_POST_PROBLEM,
+          body: payload,
+          progressCallback: (count, total) {
+            dialogSetState(() {
+              _uploadTotal = total;
+              _uploadCount = count;
+              // print('PRogress: $uploadCount/$uploadTotal');
+            });
+          },
+          onComplete: (reponse) {
+            Navigator.pop(context);
+            showAlert(
+                context, 'Success!', 'Problem has been posted successfully.',
+                isError: false, onDismiss: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            });
+            emptyAllField();
+          });
+      await postWithProgress(
+          url: URL_POST_PROBLEM,
+          body: payload,
+          progressCallback: (count, total) {
+            dialogSetState(() {
+              _uploadTotal = total;
+              _uploadCount = count;
+              // print('PRogress: $uploadCount/$uploadTotal');
+            });
+          },
+          onComplete: (reponse) {
+            Navigator.pop(context);
+            showAlert(
+                context, 'Success!', 'Problem has been posted successfully.',
+                isError: false, onDismiss: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            });
+            emptyAllField();
+          });
+
+      setState(() {
+        _loading = false;
+        _loading = false;
+      });
     }
 
-    var payload = {
-      "title": _titleController.text,
-      "description": _descriptionController.text,
-      "image_data_64": image_base_64_list,
-      "user_id": USER_ID,
-    };
+    emptyAllField() {
+      _titleController.clear();
+      _descriptionController.clear();
 
-    // print(payload);
-    setState(() {
-      _loading = true;
-      _loading = true;
-    });
-
-    late StateSetter dialogSetState;
-
-    // final ApiResponse response = await postService(URL_POST_PROBLEM, payload);
-
-    showDialog(
-        context: context,
-        builder: (builder) {
-          return StatefulBuilder(builder: (builder, setState) {
-    showDialog(
-        context: context,
-        builder: (builder) {
-          return StatefulBuilder(builder: (builder, setState) {
-            dialogSetState = setState;
-            return AlertDialog(
-                title: Text('Uploading...'),
-                content: Container(
-                  height: 60,
-                  child: Center(
-                      child: _uploadCount / _uploadTotal > 0.98
-                          ? Stack(
-                              children: [
-                                Positioned(
-                                  left: 0,
-                                  child: Container(
-                                    width: 320,
-                                    height: 20,
-                                    color: COLOR_BASE,
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  child: Container(
-                                    width: _uploadCount / _uploadTotal * 320,
-                                    height: 20,
-                                    color: COLOR_PRIMARY,
-                                  ),
-                                )
-                              ],
-                            )
-                          : CircularProgressIndicator()),
-                ));
-          });
-        });
-            return AlertDialog(
-                title: Text('Uploading...'),
-                content: Container(
-                  height: 60,
-                  child: Center(
-                      child: _uploadCount / _uploadTotal > 0.98
-                          ? Stack(
-                              children: [
-                                Positioned(
-                                  left: 0,
-                                  child: Container(
-                                    width: 320,
-                                    height: 20,
-                                    color: COLOR_BASE,
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  child: Container(
-                                    width: _uploadCount / _uploadTotal * 320,
-                                    height: 20,
-                                    color: COLOR_PRIMARY,
-                                  ),
-                                )
-                              ],
-                            )
-                          : CircularProgressIndicator()),
-                ));
-          });
-        });
-
-    await postWithProgress(
-        url: URL_POST_PROBLEM,
-        body: payload,
-        progressCallback: (count, total) {
-          dialogSetState(() {
-            _uploadTotal = total;
-            _uploadCount = count;
-            // print('PRogress: $uploadCount/$uploadTotal');
-          });
-        },
-        onComplete: (reponse) {
-          Navigator.pop(context);
-          showAlert(
-              context, 'Success!', 'Problem has been posted successfully.',
-              isError: false, onDismiss: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          });
-          emptyAllField();
-        });
-    await postWithProgress(
-        url: URL_POST_PROBLEM,
-        body: payload,
-        progressCallback: (count, total) {
-          dialogSetState(() {
-            _uploadTotal = total;
-            _uploadCount = count;
-            // print('PRogress: $uploadCount/$uploadTotal');
-          });
-        },
-        onComplete: (reponse) {
-          Navigator.pop(context);
-          showAlert(
-              context, 'Success!', 'Problem has been posted successfully.',
-              isError: false, onDismiss: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          });
-          emptyAllField();
-        });
-
-    setState(() {
-      _loading = false;
-      _loading = false;
-    });
-  }
-
-  emptyAllField() {
-    _titleController.clear();
-    _descriptionController.clear();
-
-    _imageList = [];
-    setState(() {});
+      _imageList = [];
+      setState(() {});
+    }
   }
 }
-
