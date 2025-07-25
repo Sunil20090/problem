@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class EnterTextBox extends StatefulWidget {
 
-  TextEditingController? controller;
-  TextInputType? type;
-  String? hintText;
+  final TextEditingController? controller;
+  final TextInputType? type;
+  final String? hintText;
   bool obscureText = false;
-  int maxLines;
+  final int maxLines;
   EnterTextBox({super.key, this.controller, this.hintText, this.type, this.obscureText=false, this.maxLines = 1});
 
   @override

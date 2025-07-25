@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 
 class ScreenTemplate extends StatelessWidget {
 
-  Widget? child;
-  String title, description;
+  final Widget? child;
+  final String title, description;
   ScreenTemplate({super.key, this.child, required this.title, required this.description});
 
   @override
