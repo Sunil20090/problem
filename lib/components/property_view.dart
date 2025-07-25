@@ -2,7 +2,6 @@ import 'package:election/constants/theme_constant.dart';
 import 'package:flutter/material.dart';
 
 class PropertyView extends StatelessWidget {
-
   final String property, value;
   PropertyView({super.key, required this.property, required this.value});
 
@@ -12,11 +11,11 @@ class PropertyView extends StatelessWidget {
       children: [
         Text(
           '${property} ',
-          style: CUSTOM_TEXT_THEME.bodyMedium,
+          style: getTextTheme().bodyMedium,
         ),
         Text(
           value,
-          style: CUSTOM_TEXT_THEME.headlineSmall,
+          style: getTextTheme().headlineSmall,
         )
       ],
     );

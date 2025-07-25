@@ -51,7 +51,7 @@ class _CommentItemState extends State<CommentItem> {
                     maxLines: 5,
                     overflow: TextOverflow.ellipsis,
                     widget.comment['content'],
-                    style: CUSTOM_TEXT_THEME.bodySmall,
+                    style: getTextTheme().bodySmall,
                   ),
                 ),
               ),

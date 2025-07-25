@@ -30,6 +30,8 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
 
   int _uploadCount = 0;
   int _uploadTotal = 1;
+  int _uploadCount = 0;
+  int _uploadTotal = 1;
 
   Future<void> _getImage(ImageSource source, int index) async {
     final pickedFile = await picker.pickImage(source: source);
@@ -162,6 +164,9 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
     if (!formValid()) {
       showAlert(context, 'Error!', 'Complete the form to post the problem.',
           isError: true);
+    if (!formValid()) {
+      showAlert(context, 'Error!', 'Complete the form to post the problem.',
+          isError: true);
       return;
     }
     var image_base_64_list = [];
@@ -182,6 +187,7 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
     // print(payload);
     setState(() {
       _loading = true;
+      _loading = true;
     });
 
     late StateSetter dialogSetState;
@@ -192,7 +198,41 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
         context: context,
         builder: (builder) {
           return StatefulBuilder(builder: (builder, setState) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return StatefulBuilder(builder: (builder, setState) {
             dialogSetState = setState;
+            return AlertDialog(
+                title: Text('Uploading...'),
+                content: Container(
+                  height: 60,
+                  child: Center(
+                      child: _uploadCount / _uploadTotal > 0.98
+                          ? Stack(
+                              children: [
+                                Positioned(
+                                  left: 0,
+                                  child: Container(
+                                    width: 320,
+                                    height: 20,
+                                    color: COLOR_BASE,
+                                  ),
+                                ),
+                                Positioned(
+                                  left: 0,
+                                  child: Container(
+                                    width: _uploadCount / _uploadTotal * 320,
+                                    height: 20,
+                                    color: COLOR_PRIMARY,
+                                  ),
+                                )
+                              ],
+                            )
+                          : CircularProgressIndicator()),
+                ));
+          });
+        });
             return AlertDialog(
                 title: Text('Uploading...'),
                 content: Container(
@@ -244,8 +284,29 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
           });
           emptyAllField();
         });
+    await postWithProgress(
+        url: URL_POST_PROBLEM,
+        body: payload,
+        progressCallback: (count, total) {
+          dialogSetState(() {
+            _uploadTotal = total;
+            _uploadCount = count;
+            // print('PRogress: $uploadCount/$uploadTotal');
+          });
+        },
+        onComplete: (reponse) {
+          Navigator.pop(context);
+          showAlert(
+              context, 'Success!', 'Problem has been posted successfully.',
+              isError: false, onDismiss: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
+          emptyAllField();
+        });
 
     setState(() {
+      _loading = false;
       _loading = false;
     });
   }
@@ -258,3 +319,4 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
     setState(() {});
   }
 }
+

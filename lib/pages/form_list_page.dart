@@ -29,9 +29,8 @@ class _FormListPageState extends State<FormListPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             InkWell(
-              onTap: (){
+              onTap: () {
                 openCreatePage();
               },
               child: SizedBox(
@@ -56,10 +55,10 @@ class _FormListPageState extends State<FormListPage> {
                           clipBehavior: Clip.none,
                           children: [
                             InkWell(
-                              onTap: (){
-                                if(_list[index]['mode'] == 'nomination'){
+                              onTap: () {
+                                if (_list[index]['mode'] == 'nomination') {
                                   openNominationScreen(_list[index]['form_id']);
-                                }else if(_list[index]['mode'] == 'election'){
+                                } else if (_list[index]['mode'] == 'election') {
                                   openElectionScreen(_list[index]['form_id']);
                                 }
                               },
@@ -69,16 +68,21 @@ class _FormListPageState extends State<FormListPage> {
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(15),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
-                                            TextButton(
-                                              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue)),
-                                              child:   Text(_list[index]['mode'], style: TextStyle(color: Colors.white)),
-                                              onPressed: (){
-                                          
-                                            }, )
+                                          TextButton(
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    WidgetStateProperty.all(
+                                                        Colors.blue)),
+                                            child: Text(_list[index]['mode'],
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                            onPressed: () {},
+                                          )
                                         ],
                                       ),
                                       Row(
@@ -86,17 +90,27 @@ class _FormListPageState extends State<FormListPage> {
                                           Text(
                                             _list[index]['form_title'],
                                             style:
-                                                CUSTOM_TEXT_THEME.headlineMedium,
+                                                getTextTheme().headlineMedium,
                                           )
                                         ],
-                                      ),                                    
-                                      
-                                      PropertyView(property: 'College:', value:  _list[index]['college_name']),
-                                      PropertyView(property: 'Year of admission:', value:  _list[index]['year_of_admission']),
-                                      PropertyView(property: 'Branch:', value:  _list[index]['branch']),
-                                      PropertyView(property: 'Semester:', value:  _list[index]['semester']),
-                                      if (_list[index]['count'] != null) PropertyView(property: 'Current Nomination:', value:  '${_list[index]['count']}')
-                                          
+                                      ),
+                                      PropertyView(
+                                          property: 'College:',
+                                          value: _list[index]['college_name']),
+                                      PropertyView(
+                                          property: 'Year of admission:',
+                                          value: _list[index]
+                                              ['year_of_admission']),
+                                      PropertyView(
+                                          property: 'Branch:',
+                                          value: _list[index]['branch']),
+                                      PropertyView(
+                                          property: 'Semester:',
+                                          value: _list[index]['semester']),
+                                      if (_list[index]['count'] != null)
+                                        PropertyView(
+                                            property: 'Current Nomination:',
+                                            value: '${_list[index]['count']}')
                                     ],
                                   ),
                                 ),
@@ -120,16 +134,14 @@ class _FormListPageState extends State<FormListPage> {
   }
 
   void initList() async {
-
     ApiResponse response = await getService(URL_GET_ELECTION_LIST);
     print(response.body);
 
-    if(response.isSuccess){
+    if (response.isSuccess) {
       setState(() {
-      _list = response.body;
+        _list = response.body;
       });
     }
- 
   }
 
   @override
@@ -139,16 +151,25 @@ class _FormListPageState extends State<FormListPage> {
   }
 
   void openNominationScreen(String form_id) {
-      Navigator.push(context, MaterialPageRoute(builder: (builder) => NominationApplyPage(form_id: form_id,)));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (builder) => NominationApplyPage(
+                  form_id: form_id,
+                )));
   }
 
-  openCreatePage(){
-    Navigator.push(context, MaterialPageRoute(builder: (builder) => FormCreatePage()));
+  openCreatePage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (builder) => FormCreatePage()));
   }
-  
+
   void openElectionScreen(String form_id) {
-      Navigator.push(context, MaterialPageRoute(builder: (builder) => ElectionPage(form_id: form_id,)));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (builder) => ElectionPage(
+                  form_id: form_id,
+                )));
   }
-
 }
-

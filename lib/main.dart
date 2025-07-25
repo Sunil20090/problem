@@ -1,4 +1,3 @@
-import 'package:election/pages/dashboard/acount/auth/login_screen.dart';
 import 'package:election/pages/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

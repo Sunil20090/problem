@@ -2,9 +2,9 @@ import 'package:election/constants/theme_constant.dart';
 import 'package:flutter/material.dart';
 
 class PageHeading extends StatelessWidget {
-
   final String title, description;
-  const PageHeading({super.key, required this.title, required this.description});
+  const PageHeading(
+      {super.key, required this.title, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,11 @@ class PageHeading extends StatelessWidget {
         children: [
           Text(
             title,
-            style: CUSTOM_TEXT_THEME.headlineLarge,
+            style: getTextTheme().headlineLarge,
           ),
           Text(
             description,
-            style: CUSTOM_TEXT_THEME.bodyLarge,
+            style: getTextTheme().bodyLarge,
           )
         ],
       ),

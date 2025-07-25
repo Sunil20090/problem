@@ -25,13 +25,12 @@ class _ProblemScreenState extends State<ProblemScreen> {
   @override
   void initState() {
     super.initState();
-
+ 
     getList();
   }
 
   getList() async {
-    //  await initUser();
-
+     
 
     ApiResponse response = await getService(URL_PROBLEM_LIST);
 
@@ -43,10 +42,10 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   
-    // _accountDetails = DATA_ACCOUNT_DETAILS;
-    // _skills = _accountDetails['skills'];
-    // _achievements = _accountDetails['achievements'];
 
+  // _accountDetails = DATA_ACCOUNT_DETAILS;
+  // _skills = _accountDetails['skills'];
+  // _achievements = _accountDetails['achievements'];
 
   @override
   Widget build(BuildContext context) {
@@ -57,67 +56,58 @@ class _ProblemScreenState extends State<ProblemScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                padding: SCREEN_PADDING,
+              ScreenActionBar(
+                title: 'Problem',
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ScreenActionBar(title: 'Problems'),
-                    Row(
+                    Icon(
+                      Icons.search,
+                      size: getTextTheme().headlineLarge?.fontSize,
+                      color: COLOR_PRIMARY,
+                    ),
+                    Stack(
+                      clipBehavior: Clip.none,
                       children: [
-                        Icon(
-                          Icons.search,
-                          size: CUSTOM_TEXT_THEME.headlineLarge?.fontSize,
-                          color: COLOR_PRIMARY,
-                        ),
-                        Stack(
-                          children: [
-                            InkWell(
-                              onTap: () {},
-                              child: Icon(
-                                Icons.notifications_outlined,
-                                size: CUSTOM_TEXT_THEME.headlineLarge?.fontSize,
-                                color: COLOR_PRIMARY,
-                              ),
-                            ),
-                            Positioned(
-                              top: -1,
-                              right: -1,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Center(
-                                  child: Container(
-                                    color: Colors.red,
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Text(
-                                      '67',
-                                      style: TextStyle(
-                                          fontSize: 8, color: COLOR_BASE),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        addHorizontalSpace(6),
                         InkWell(
-                          onTap: () {
-                            getList();
-                          },
+                          onTap: () {},
                           child: Icon(
-                            Icons.mail_outline,
-                            size: CUSTOM_TEXT_THEME.headlineLarge?.fontSize,
+                            Icons.notifications_outlined,
+                            size: getTextTheme().headlineLarge?.fontSize,
                             color: COLOR_PRIMARY,
+                          ),
+                        ),
+                        Positioned(
+                          top: -1,
+                          right: -1,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Container(
+                              height: 22,
+                              width: 22,
+                              alignment: Alignment.center,
+                              color: Colors.red,
+                              child: Text(
+                                '9',
+                                style: TextStyle(color: COLOR_BASE),
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
+                    addHorizontalSpace(6),
+                    InkWell(
+                      onTap: () {
+                        getList();
+                      },
+                      child: Icon(
+                        Icons.mail_outline,
+                        size: getTextTheme().headlineLarge?.fontSize,
+                        color: COLOR_PRIMARY,
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              Divider(
-                height: 1,
               ),
               Expanded(
                 child: ListView.builder(
@@ -149,6 +139,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
                             ),
                           ),
                           avatarUrl: _problemList[index]
+                              ['user_avatar_url'],
+                          avatarThumnailUrl:  _problemList[index]
                               ['user_avatar_thumbnail'],
                           title: _problemList[index]['title'],
                           description: _problemList[index]['description'],
