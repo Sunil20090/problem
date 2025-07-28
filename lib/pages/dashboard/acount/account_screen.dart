@@ -34,7 +34,7 @@ class _AccountScreenState extends State<AccountScreen>
       print(response.body);
       if (response.isSuccess && response.body['description'] != null) {
         setState(() {
-          ACCOUNT_DETAILS = response.body;
+          // ACCOUNT_DETAILS = response.body;
           _accountDetails = response.body;
 
           USER_AVATAR_URL = response.body['thumbnail'];
