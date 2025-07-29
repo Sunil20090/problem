@@ -16,8 +16,12 @@ const URL_GET_PROFILE = '$_domain${_baseUrl}getProfile';
 const URL_GUEST_USER = '$_domain${_baseUrl}createGuestUser';
 const URL_PROBLEM_LIST = '$_domain${_baseUrl}getProblems';
 const URL_POST_PROBLEM = '$_domain${_baseUrl}createProblem';
+const URL_IMAGES_OF_PROBLEM = '$_domain${_baseUrl}getImagesOfProblem';
 
 const URL_CREATE_DATA_PROFILE = '$_domain${_baseUrl}createProfile';
 const URL_CREATE_IMAGE_PROFILE = '$_domain${_baseUrl}createImageProfile';
+
+
+const URL_CREATE_OTP_VERIFICATION = '$_domain${_baseUrl}optVerification';
 
 

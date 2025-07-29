@@ -2,11 +2,11 @@ import 'package:election/constants/theme_constant.dart';
 import 'package:flutter/material.dart';
 
 class ColoredButton extends StatefulWidget {
-  VoidCallback? onPressed;
-  Widget child;
-  Color backgroundColor;
-  double radius;
-  ColoredButton({super.key, this.onPressed, required this.child, this.backgroundColor = COLOR_PRIMARY, this.radius = 10});
+  final VoidCallback? onPressed;
+  final Widget child;
+  final Color backgroundColor;
+  final double radius;
+  ColoredButton({super.key, this.onPressed, required this.child, this.backgroundColor = COLOR_PRIMARY, this.radius = 18});
 
   @override
   State<ColoredButton> createState() => _ColoredButtonState();

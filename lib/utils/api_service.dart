@@ -32,7 +32,8 @@ Future<ApiResponse> postService(String url, dynamic body) async {
   Future<ApiResponse> getService(String url) async {
     
     http.Response response = await http.get(Uri.parse(url));
-    return ApiResponse(body: jsonDecode(response.body), isSuccess: response.statusCode == 200,response: response);
+    var reponseBody = response.statusCode == 200 ? jsonDecode(response.body) : response.body;
+    return ApiResponse(body: reponseBody, isSuccess: response.statusCode == 200,response: response);
     
   }
 
@@ -58,7 +59,6 @@ Future<ApiResponse> postService(String url, dynamic body) async {
         data: request_body,
         options: Options(
           headers: {'Content-Type': 'application/json'},
-
         ),
         onSendProgress: (count, total) {
            progressCallback(count, total);

@@ -27,7 +27,6 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getList() async {
-     
 
     ApiResponse response = await getService(URL_PROBLEM_LIST);
 

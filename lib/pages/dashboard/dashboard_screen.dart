@@ -36,8 +36,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     if (obj == null) {
       ApiResponse response = await getService(URL_GUEST_USER);
-      if (response.isSuccess) {
         print(response.body);
+      if (response.isSuccess) {
         await saveJson(STORAGE_KEY_USER, {
           'username': response.body['username'],
           'user_id': response.body['user_id'],
