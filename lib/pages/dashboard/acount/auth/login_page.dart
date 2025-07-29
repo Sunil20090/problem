@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return ScreenTemplate(
       title: 'Login!',
-      description: 'login here with your email id or create password!',
+      description: 'Login here with your email id or create password!',
       child: Column(
         children: [
           addVerticalSpace(UI_PADDING * 3),
@@ -45,7 +45,6 @@ class _LoginPageState extends State<LoginPage> {
           ColoredButton(
             backgroundColor: Colors.blue,
             onPressed: (){
-              
               moveToCreateFormPage();
             },
             child: Row(

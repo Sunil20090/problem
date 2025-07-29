@@ -2,7 +2,7 @@ import 'package:election/components/profile_thumbnail.dart';
 import 'package:election/constants/storage_constant.dart';
 import 'package:election/constants/theme_constant.dart';
 import 'package:election/constants/url_constant.dart';
-import 'package:election/pages/dashboard/acount/create_profile.dart';
+import 'package:election/pages/dashboard/acount/auth/create_profile.dart';
 import 'package:election/pages/dashboard/idea_screen.dart';
 import 'package:election/pages/dashboard/plan_screen.dart';
 import 'package:election/pages/dashboard/problem/problem_screen.dart';
@@ -32,7 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // await deleteJson(STORAGE_KEY_USER);
     var obj = await loadJson(STORAGE_KEY_USER);
 
-    print('localstorage $obj');
+    // print('localstorage $obj');
 
     if (obj == null) {
       ApiResponse response = await getService(URL_GUEST_USER);
@@ -44,20 +44,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           'type': response.body['type'],
           'is_signed_in': response.body['is_signed_in']
         });
-
-        USER_ID = response.body['user_id'];
-        USER_NAME = response.body['username'];
-        USER_TYPE = response.body['type'];
-        USER_SIGNED_IN = response.body['is_signed_in'];
-
-        print(USER_NAME);
+        obj = response.body;
       }
-    } else {
-      USER_ID = obj['user_id'];
-      USER_NAME = obj['username'];
-      USER_TYPE = obj['type'];
-      USER_SIGNED_IN = obj['is_signed_in'];
-    }
+    } 
+
+    USER_ID = obj['user_id'];
+    USER_NAME = obj['username'];
+    USER_TYPE = obj['type'];
+    USER_SIGNED_IN = obj['is_signed_in'];
+    
 
     setState(() {});
   }
