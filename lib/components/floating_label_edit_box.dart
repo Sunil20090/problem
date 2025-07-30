@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FloatingLabelEditBox extends StatefulWidget {
-  TextEditingController? controller;
+  final TextEditingController? controller;
   final String labelText;
   final int maxLines;
   final bool hideText;

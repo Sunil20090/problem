@@ -3,8 +3,8 @@ import 'package:election/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class ScreenActionBar extends StatelessWidget {
-  String title;
-  Widget? child;
+  final String title;
+  final Widget? child;
   ScreenActionBar({super.key, required this.title, this.child});
 
   @override

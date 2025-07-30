@@ -24,3 +24,5 @@ alter table problems auto_increment = 1; alter table users auto_increment = 1; a
 
 
 
+flutter run -d chrome --web-browser-flag "--disable-web-security" --web-browser-flag "--user-data-dir=/tmp/flutter_cors"
+

@@ -36,7 +36,6 @@ class _PostIdeaScreenState extends State<PostIdeaScreen> {
             EnterTextBox(
               maxLines: 6,
               hintText: 'Enter text',
-              
               controller: _solutionRemarkController,
             ), 
             addVerticalSpace(),

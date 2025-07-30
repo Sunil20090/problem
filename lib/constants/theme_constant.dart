@@ -14,7 +14,7 @@ const Color COLOR_WHITE = Colors.white;
 const Color COLOR_BLACK = Color.fromARGB(255, 34, 34, 34);
 const Color COLOR_GREY = Color.fromARGB(255, 102, 102, 102);
 
-const COLOR_PRIMARY = Color.fromARGB(255, 168, 75, 255);
+const COLOR_PRIMARY = Color.fromARGB(255, 177, 103, 247);
 const COLOR_SECONDARY = Color.fromARGB(255, 192, 124, 255);
 const COLOR_BASE = Color.fromARGB(255, 229, 217, 241);
 const COLOR_BASE_DARKER = Color.fromARGB(255, 226, 226, 226);

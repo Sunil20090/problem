@@ -1,15 +1,12 @@
-import 'dart:io';
 import 'package:election/components/colored_button.dart';
 import 'package:election/components/floating_label_edit_box.dart';
-import 'package:election/components/profile_thumbnail.dart';
 import 'package:election/components/screen_action_bar.dart';
 import 'package:election/constants/theme_constant.dart';
 import 'package:election/constants/url_constant.dart';
-import 'package:election/user/user_data.dart';
+import 'package:election/pages/dashboard/acount/auth/otp_verification.dart';
 import 'package:election/utils/api_service.dart';
 import 'package:election/utils/common_function.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CreateProfile extends StatefulWidget {
   final dynamic profile;
@@ -20,9 +17,6 @@ class CreateProfile extends StatefulWidget {
 }
 
 class _CreateProfileState extends State<CreateProfile> {
-  File? _image;
-
-  String? _image_url;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -43,53 +37,25 @@ class _CreateProfileState extends State<CreateProfile> {
                 title: 'Create Profile',
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.edit_outlined,
-                      color: COLOR_PRIMARY,
-                      size: UI_ICON_SIZE_MEDIUM,
-                    ),
+                    ColoredButton(
+                      radius: 18,
+                        onPressed: () {
+                          postProfile();
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Update',
+                                style:
+                                    getTextTheme(color: COLOR_BASE).titleSmall),
+                                    Icon(Icons.update, color: COLOR_BASE,),
+                          ],
+                        )),
                   ],
                 ),
               ),
               // addVerticalSpace(),
-              Stack(
-                children: [
-                  ProfileThumbnail(
-                      width: 300,
-                      height: 300,
-                      radius: 80,
-                      file: _image,
-                      imageUrl: _image_url),
-                  Positioned(
-                      bottom: 10,
-                      right: 10,
-                      child: InkWell(
-                        onTap: () async {
-                          getLocalImage(ImageSource.gallery).then((file) async {
-                            if (USER_TYPE == 'GUEST') {
-                              setState(() {
-                                _image = file;
-                              });
-                            } else {
-                              publishProfile(await fileToBase64(file!));
-                            }
-                          });
-                        },
-                        child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: COLOR_BASE,
-                            ),
-                            child: Icon(
-                              Icons.edit_outlined,
-                              color: COLOR_PRIMARY,
-                              size: UI_ICON_SIZE_MEDIUM,
-                            )),
-                      ))
-                ],
-              ),
+              
               addVerticalSpace(),
 
               Container(
@@ -123,18 +89,7 @@ class _CreateProfileState extends State<CreateProfile> {
                       controller: _emailController,
                     ),
                     addVerticalSpace(DEFAULT_LARGE_SPACE),
-                    ColoredButton(
-                        onPressed: () {
-                          postToProfile();
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Update',
-                                style:
-                                    getTextTheme(color: COLOR_BASE).titleLarge),
-                          ],
-                        )),
+                    
                   ],
                 ),
               )
@@ -153,19 +108,7 @@ class _CreateProfileState extends State<CreateProfile> {
         _descriptionController.text.isEmpty);
   }
 
-  publishProfile(String base64Data) {
-    var body = {"user_id": USER_ID, "image_base_64": base64Data};
-
-    postService(URL_CREATE_IMAGE_PROFILE, body).then((response) {
-      if (response.isSuccess) {
-        setState(() {
-          _image_url = response.body['thumnail_url'];
-        });
-      }
-    });
-  }
-
-  postToProfile() async {
+  postProfile() async {
     if (!formIsValid()) {
       showAlert(context, 'Alert!', "Complete the form", isError: true);
       return;
@@ -179,20 +122,19 @@ class _CreateProfileState extends State<CreateProfile> {
       "description": _descriptionController.text,
       "mail_id": _emailController.text,
       "password": _passwordController.text,
-      "image_base_64": _image == null ? null : await fileToBase64(_image!)
     };
 
     ApiResponse response = await postService(URL_CREATE_DATA_PROFILE, payload);
 
     if (response.isSuccess) {
-      showAlert(context, 'Success!', response.body['message']);
+      //showAlert(context, 'Success!', response.body['message']);
       openOTPScreen();
     } else {
-      showAlert(context, 'Failed!', "the response is failed!");
+      showAlert(context, 'Failed!', "The response is failed!");
     }
   }
 
   openOTPScreen(){
-    
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder)=>OtpVerification()));
   }
 }

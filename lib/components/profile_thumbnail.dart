@@ -4,9 +4,9 @@ import 'package:election/constants/image_constant.dart';
 import 'package:flutter/material.dart';
 
 class ProfileThumbnail extends StatefulWidget {
-  String? imageUrl, thumnail_url;
-  File? file;
-  double radius, width, height;
+  final String? imageUrl, thumnail_url;
+  final File? file;
+  final double radius, width, height;
   ProfileThumbnail(
       {super.key,
       this.imageUrl,

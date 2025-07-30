@@ -26,17 +26,37 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   List<dynamic> _images = [];
 
   final _controllerComment = TextEditingController();
+  final _pageController = PageController(
+    viewportFraction: 0.95,
+    
+  );
+  
 
   @override
   void initState() {
     super.initState();
+    
     initCommentList(widget.problem['id']);
     initRequirementList(widget.problem['id']);
+    initImageList(widget.problem['id']);
   }
 
   initRequirementList(int id) {
     _requirement_list = DATA_PROBLEM_REQUIREMENT;
-    _images = widget.problem['images'];
+    
+  }
+
+  initImageList(int id) async {
+    var body = {
+      "problem_id" : id
+    };
+    ApiResponse response = await postService(URL_IMAGES_OF_PROBLEM, body);
+
+    if(response.isSuccess){
+      setState(() {
+      _images = response.body;
+      });
+    }
   }
 
   @override
@@ -54,19 +74,24 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                          child: Container(
-                              height: UI_IMAGE_HEIGHT,
-                              child: Hero(
-                                tag:
-                                    'problem-title-image${widget.problem['id']}',
-                                child: PageView(
-                                  controller: PageController(),
-                                  children: _images.map((imageElement) {
-                                    return Image.network(imageElement);
-                                  }).toList(),
-                                ),
-                              ))),
+                      Container(
+                        height: UI_IMAGE_HEIGHT,
+                        child: Expanded(
+                          child: Hero(
+                              tag:
+                                  'problem-title-image${widget.problem['id']}',
+                              child: PageView(
+                                controller: _pageController,
+                                
+                                children: _images.map((imageElement) {
+                                  return FadeInImage(
+                                    placeholder: Image.network(imageElement['thumbnail_url'], fit: BoxFit.fill, height: UI_IMAGE_HEIGHT,).image,
+                                    image: Image.network(imageElement['image_url'], fit: BoxFit.fill, height: UI_IMAGE_HEIGHT,).image);
+                                }).toList(),
+                              ),
+                            ),
+                        ),
+                      ),
                       Container(
                         padding: SCREEN_PADDING,
                         child: Column(
