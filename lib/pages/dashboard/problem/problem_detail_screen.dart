@@ -23,19 +23,19 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   bool _showSolutionRemark = false;
   bool _isCommentSubmitting = false;
   var _requirement_list = [];
+
   List<dynamic> _images = [];
 
   final _controllerComment = TextEditingController();
   final _pageController = PageController(
-    viewportFraction: 0.95,
-    
+    viewportFraction: 0.9,
   );
-  
 
   @override
   void initState() {
     super.initState();
-    
+
+    _images.add(widget.problem);
     initCommentList(widget.problem['id']);
     initRequirementList(widget.problem['id']);
     initImageList(widget.problem['id']);
@@ -43,18 +43,15 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
 
   initRequirementList(int id) {
     _requirement_list = DATA_PROBLEM_REQUIREMENT;
-    
   }
 
   initImageList(int id) async {
-    var body = {
-      "problem_id" : id
-    };
+    var body = {"problem_id": id};
     ApiResponse response = await postService(URL_IMAGES_OF_PROBLEM, body);
 
-    if(response.isSuccess){
+    if (response.isSuccess) {
       setState(() {
-      _images = response.body;
+        _images = response.body;
       });
     }
   }
@@ -76,20 +73,25 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                     children: [
                       Container(
                         height: UI_IMAGE_HEIGHT,
-                        child: Expanded(
-                          child: Hero(
-                              tag:
-                                  'problem-title-image${widget.problem['id']}',
-                              child: PageView(
-                                controller: _pageController,
-                                
-                                children: _images.map((imageElement) {
-                                  return FadeInImage(
-                                    placeholder: Image.network(imageElement['thumbnail_url'], fit: BoxFit.fill, height: UI_IMAGE_HEIGHT,).image,
-                                    image: Image.network(imageElement['image_url'], fit: BoxFit.fill, height: UI_IMAGE_HEIGHT,).image);
-                                }).toList(),
-                              ),
-                            ),
+                        child: Hero(
+                          tag: 'problem-title-image${widget.problem['id']}',
+                          child: PageView(
+                            controller: _pageController,
+                            children: _images.map((imageElement) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: FadeInImage(
+                                    placeholder: Image.network(
+                                      imageElement['thumbnail_url'],
+                                      fit: BoxFit.cover,
+                                    ).image,
+                                    image: Image.network(
+                                      imageElement['image_url'],
+                                      fit: BoxFit.cover,
+                                    ).image),
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ),
                       Container(

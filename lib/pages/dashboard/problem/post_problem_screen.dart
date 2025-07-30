@@ -172,11 +172,13 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
     var payload = {
       "title": _titleController.text,
       "description": _descriptionController.text,
-      "image_data_64": image_base_64_list,
+      "image_base_64_list": image_base_64_list,
       "user_id": USER_ID,
     };
 
-    // print(payload);
+
+
+    print(payload);
     setState(() {
       _loading = true;
     });

@@ -135,9 +135,9 @@ class _ProblemScreenState extends State<ProblemScreen> {
                             ),
                           ),
                           avatarUrl: _problemList[index]
-                              ['user_avatar_url'],
+                              ['user_url'],
                           avatarThumnailUrl:  _problemList[index]
-                              ['user_avatar_thumbnail'],
+                              ['user_thumbnail_url'],
                           title: _problemList[index]['title'],
                           description: _problemList[index]['description'],
                           onInfoPressed: () => showAlert(
