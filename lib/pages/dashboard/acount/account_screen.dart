@@ -27,8 +27,6 @@ class _AccountScreenState extends State<AccountScreen>
     print('skills');
   }
 
-  
-
   initAccountDetails() async {
     postService(URL_GET_PROFILE, {"user_id": USER_ID}).then((response) {
       print(response.body);
