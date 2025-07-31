@@ -10,6 +10,7 @@ select * from images_of_problems;
 select * from profiles_of_users;
 select * from likes_of_comments;
 select * from requirements_of_problems;
+select * from notifications_for_comments;
 
 
 delete from requirements_of_problems;delete from likes_of_comments; delete from notifications_for_comments; delete from profiles_of_users;delete from images_of_problems;delete from problems;delete from comments;

@@ -5,6 +5,7 @@ import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/dashboard/acount/profile_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/post_problem_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/problem_detail_screen.dart';
+import 'package:Problem/user/user_data.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +19,26 @@ class ProblemScreen extends StatefulWidget {
 
 class _ProblemScreenState extends State<ProblemScreen> {
   List<dynamic> _problemList = [];
+  var _notificationCount = 0;
 
   @override
   void initState() {
     super.initState();
 
     getList();
+
+    getNotificationCount();
+  }
+
+  getNotificationCount() async {
+    ApiResponse response =
+        await postService(URL_NOTIFICATION_COUNT, {"user_id": USER_ID});
+
+    if (response.isSuccess) {
+      setState(() {
+        _notificationCount = response.body;
+      });
+    }
   }
 
   getList() async {
@@ -74,16 +89,16 @@ class _ProblemScreenState extends State<ProblemScreen> {
                           right: -1,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Container(
+                            child: (_notificationCount != 0) ? Container(
                               height: 22,
                               width: 22,
                               alignment: Alignment.center,
                               color: Colors.red,
                               child: Text(
-                                '9',
+                                '$_notificationCount',
                                 style: TextStyle(color: COLOR_BASE),
                               ),
-                            ),
+                            ) : Container(),
                           ),
                         ),
                       ],
@@ -128,7 +143,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                                 _problemList[index]['thumbnail_url'],
                               ).image,
                               fadeInDuration: Duration(milliseconds: 20),
-                              fit: BoxFit.contain,
+                              fit: BoxFit.cover,
                             ),
                           ),
                           avatarUrl: _problemList[index]['user_url'],

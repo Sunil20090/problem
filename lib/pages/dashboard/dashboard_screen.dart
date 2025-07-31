@@ -68,9 +68,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ];
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('User: ${USER_ID}, USER TYPE $USER_TYPE'),
-        ),
+        
         body: IndexedStack(index: _pageIndex, children: _pages),
         bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: COLOR_PRIMARY,

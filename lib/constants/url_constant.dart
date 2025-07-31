@@ -25,3 +25,9 @@ const URL_CREATE_IMAGE_PROFILE = '$_domain${_baseUrl}createImageProfile';
 const URL_CREATE_OTP_VERIFICATION = '$_domain${_baseUrl}optVerification';
 
 
+
+const URL_NOTIFICATION_COUNT = '$_domain${_baseUrl}notificationCount';
+
+
+
+
