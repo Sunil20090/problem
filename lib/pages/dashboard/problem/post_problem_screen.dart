@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:election/components/colored_button.dart';
-import 'package:election/components/floating_label_edit_box.dart';
-import 'package:election/constants/theme_constant.dart';
-import 'package:election/constants/url_constant.dart';
-import 'package:election/user/user_data.dart';
-import 'package:election/utils/api_service.dart';
-import 'package:election/utils/common_function.dart';
+import 'package:Problem/components/colored_button.dart';
+import 'package:Problem/components/floating_label_edit_box.dart';
+import 'package:Problem/constants/theme_constant.dart';
+import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/user/user_data.dart';
+import 'package:Problem/utils/api_service.dart';
+import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -175,8 +175,6 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
       "image_base_64_list": image_base_64_list,
       "user_id": USER_ID,
     };
-
-
 
     print(payload);
     setState(() {

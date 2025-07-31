@@ -1,0 +1,10 @@
+# Simple GET request
+GET https://sunil20090.pythonanywhere.com/getProblems
+
+###
+POST https://sunil20090.pythonanywhere.com/getComments
+Content-Type: application/json
+
+{
+    "problem_id" : 1    
+}

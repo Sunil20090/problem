@@ -1,4 +1,4 @@
-var USER_ID;
+int USER_ID = 0;
 
 var USER_NAME = "";
 var USER_TYPE = "GUEST";

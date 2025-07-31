@@ -1,10 +1,10 @@
-import 'package:election/components/colored_button.dart';
-import 'package:election/components/screen_action_bar.dart';
-import 'package:election/constants/theme_constant.dart';
-import 'package:election/constants/url_constant.dart';
-import 'package:election/user/user_data.dart';
-import 'package:election/utils/api_service.dart';
-import 'package:election/utils/common_function.dart';
+import 'package:Problem/components/colored_button.dart';
+import 'package:Problem/components/screen_action_bar.dart';
+import 'package:Problem/constants/theme_constant.dart';
+import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/user/user_data.dart';
+import 'package:Problem/utils/api_service.dart';
+import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class OtpVerification extends StatefulWidget {
@@ -22,7 +22,6 @@ class _OtpVerificationState extends State<OtpVerification> {
   void _verifyOtp() {
     String otp = _controllers.map((c) => c.text).join();
 
-    
     checkFromApi(otp);
 
     if (otp.length == 6) {
@@ -36,19 +35,16 @@ class _OtpVerificationState extends State<OtpVerification> {
   }
 
   checkFromApi(String otp) async {
-    final Map<String, dynamic> body = {
-      'otp': otp,
-      'user_id': USER_ID
-    };
+    final Map<String, dynamic> body = {'otp': otp, 'user_id': USER_ID};
     ApiResponse response = await postService(URL_CREATE_OTP_VERIFICATION, body);
 
-    if(response.isSuccess){
+    if (response.isSuccess) {
       showAlert(context, 'Success!', response.body['message'], onDismiss: () {
         Navigator.pop(context);
         Navigator.pop(context);
       });
-    }else {
-      showAlert(context, 'Error!','Error: ');
+    } else {
+      showAlert(context, 'Error!', 'Error: ');
     }
   }
 
@@ -64,7 +60,7 @@ class _OtpVerificationState extends State<OtpVerification> {
     _focusNodes.forEach((node) => node.dispose());
     super.dispose();
   }
-  
+
   Widget _buildOtpBox(int index) {
     return Container(
       width: 45,
@@ -91,22 +87,19 @@ class _OtpVerificationState extends State<OtpVerification> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        
         body: Column(
           children: [
-              ScreenActionBar(title: 'Otp Verification'),
+            ScreenActionBar(title: 'Otp Verification'),
             Container(
               padding: SCREEN_PADDING,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  
                   Text("Enter the 6-digit code sent to your number",
                       style: TextStyle(fontSize: 16)),
                   addVerticalSpace(30),
@@ -115,15 +108,18 @@ class _OtpVerificationState extends State<OtpVerification> {
                     children: List.generate(6, _buildOtpBox),
                   ),
                   addVerticalSpace(30),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ColoredButton(
-                        onPressed: (){
+                        onPressed: () {
                           _verifyOtp();
                         },
-                        child: Text("Verify", style: getTextTheme(color: COLOR_BASE).titleMedium,),),
+                        child: Text(
+                          "Verify",
+                          style: getTextTheme(color: COLOR_BASE).titleMedium,
+                        ),
+                      ),
                     ],
                   ),
                   addVerticalSpace(30),
@@ -131,14 +127,11 @@ class _OtpVerificationState extends State<OtpVerification> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
-                    onPressed: _resendOtp,
-                    child: Text("Resend OTP"),
-                  ),
+                        onPressed: _resendOtp,
+                        child: Text("Resend OTP"),
+                      ),
                     ],
                   ),
-                  
-                
-                  
                 ],
               ),
             ),

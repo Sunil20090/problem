@@ -1,5 +1,5 @@
-import 'package:election/constants/theme_constant.dart';
-import 'package:election/utils/common_function.dart';
+import 'package:Problem/constants/theme_constant.dart';
+import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class ScreenActionBar extends StatelessWidget {
@@ -11,7 +11,10 @@ class ScreenActionBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.only(left: CONTENT_PADDING_VALUE, right: CONTENT_PADDING_VALUE, top: CONTENT_PADDING_VALUE),
+        padding: const EdgeInsets.only(
+            left: CONTENT_PADDING_VALUE,
+            right: CONTENT_PADDING_VALUE,
+            top: CONTENT_PADDING_VALUE),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -31,7 +34,7 @@ class ScreenActionBar extends StatelessWidget {
             Divider(
               height: 1,
             )
-          ],  
+          ],
         ),
       ),
     );

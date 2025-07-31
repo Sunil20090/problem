@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:election/components/colored_button.dart';
-import 'package:election/constants/theme_constant.dart';
+import 'package:Problem/components/colored_button.dart';
+import 'package:Problem/constants/theme_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

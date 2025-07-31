@@ -1,11 +1,11 @@
-import 'package:election/components/colored_button.dart';
-import 'package:election/components/floating_label_edit_box.dart';
-import 'package:election/components/screen_action_bar.dart';
-import 'package:election/constants/theme_constant.dart';
-import 'package:election/constants/url_constant.dart';
-import 'package:election/pages/dashboard/acount/auth/otp_verification.dart';
-import 'package:election/utils/api_service.dart';
-import 'package:election/utils/common_function.dart';
+import 'package:Problem/components/colored_button.dart';
+import 'package:Problem/components/floating_label_edit_box.dart';
+import 'package:Problem/components/screen_action_bar.dart';
+import 'package:Problem/constants/theme_constant.dart';
+import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/dashboard/acount/auth/otp_verification.dart';
+import 'package:Problem/utils/api_service.dart';
+import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class CreateProfile extends StatefulWidget {
@@ -17,7 +17,6 @@ class CreateProfile extends StatefulWidget {
 }
 
 class _CreateProfileState extends State<CreateProfile> {
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -38,7 +37,7 @@ class _CreateProfileState extends State<CreateProfile> {
                 child: Row(
                   children: [
                     ColoredButton(
-                      radius: 18,
+                        radius: 18,
                         onPressed: () {
                           postProfile();
                         },
@@ -48,14 +47,17 @@ class _CreateProfileState extends State<CreateProfile> {
                             Text('Update',
                                 style:
                                     getTextTheme(color: COLOR_BASE).titleSmall),
-                                    Icon(Icons.update, color: COLOR_BASE,),
+                            Icon(
+                              Icons.update,
+                              color: COLOR_BASE,
+                            ),
                           ],
                         )),
                   ],
                 ),
               ),
               // addVerticalSpace(),
-              
+
               addVerticalSpace(),
 
               Container(
@@ -89,7 +91,6 @@ class _CreateProfileState extends State<CreateProfile> {
                       controller: _emailController,
                     ),
                     addVerticalSpace(DEFAULT_LARGE_SPACE),
-                    
                   ],
                 ),
               )
@@ -134,7 +135,8 @@ class _CreateProfileState extends State<CreateProfile> {
     }
   }
 
-  openOTPScreen(){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder)=>OtpVerification()));
+  openOTPScreen() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (builder) => OtpVerification()));
   }
 }

@@ -1,13 +1,13 @@
-import 'package:election/api/data/sample_data.dart';
-import 'package:election/components/colored_button.dart';
-import 'package:election/components/comment_item.dart';
-import 'package:election/components/enter_text_box.dart';
-import 'package:election/components/screen_action_bar.dart';
-import 'package:election/constants/theme_constant.dart';
-import 'package:election/constants/url_constant.dart';
-import 'package:election/user/user_data.dart';
-import 'package:election/utils/api_service.dart';
-import 'package:election/utils/common_function.dart';
+import 'package:Problem/api/data/sample_data.dart';
+import 'package:Problem/components/colored_button.dart';
+import 'package:Problem/components/comment_item.dart';
+import 'package:Problem/components/enter_text_box.dart';
+import 'package:Problem/components/screen_action_bar.dart';
+import 'package:Problem/constants/theme_constant.dart';
+import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/user/user_data.dart';
+import 'package:Problem/utils/api_service.dart';
+import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class ProblemDetailScreen extends StatefulWidget {
@@ -274,6 +274,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     setState(() {
       _isCommentSubmitting = true;
     });
+
     var body = {
       'user_id': USER_ID,
       'content': _controllerComment.text,

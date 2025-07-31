@@ -1,4 +1,4 @@
-import 'package:election/pages/student.dart';
+import 'package:Problem/pages/student.dart';
 import 'package:flutter/material.dart';
 
 class CardListScreen extends StatelessWidget {
@@ -25,8 +25,9 @@ class CardListScreen extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (builder) => Student()));
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (builder) => Student()));
               },
               child: Card(
                 elevation: 4,

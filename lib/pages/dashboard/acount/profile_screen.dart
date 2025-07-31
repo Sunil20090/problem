@@ -1,5 +1,5 @@
-import 'package:election/components/screen_action_bar.dart';
-import 'package:election/constants/theme_constant.dart';
+import 'package:Problem/components/screen_action_bar.dart';
+import 'package:Problem/constants/theme_constant.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -18,9 +18,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: Container(
           padding: SCREEN_PADDING,
           child: Column(
-            children: [
-              ScreenActionBar(title: 'Profile')
-            ],
+            children: [ScreenActionBar(title: 'Profile')],
           ),
         ),
       ),

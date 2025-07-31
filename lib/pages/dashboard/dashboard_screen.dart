@@ -1,14 +1,14 @@
-import 'package:election/components/profile_thumbnail.dart';
-import 'package:election/constants/storage_constant.dart';
-import 'package:election/constants/theme_constant.dart';
-import 'package:election/constants/url_constant.dart';
-import 'package:election/pages/dashboard/acount/auth/create_profile.dart';
-import 'package:election/pages/dashboard/idea_screen.dart';
-import 'package:election/pages/dashboard/plan_screen.dart';
-import 'package:election/pages/dashboard/problem/problem_screen.dart';
-import 'package:election/user/user_data.dart';
-import 'package:election/utils/api_service.dart';
-import 'package:election/utils/storage_service.dart';
+import 'package:Problem/components/profile_thumbnail.dart';
+import 'package:Problem/constants/storage_constant.dart';
+import 'package:Problem/constants/theme_constant.dart';
+import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/dashboard/acount/auth/create_profile.dart';
+import 'package:Problem/pages/dashboard/idea_screen.dart';
+import 'package:Problem/pages/dashboard/plan_screen.dart';
+import 'package:Problem/pages/dashboard/Problem/problem_screen.dart';
+import 'package:Problem/user/user_data.dart';
+import 'package:Problem/utils/api_service.dart';
+import 'package:Problem/utils/storage_service.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -36,7 +36,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     if (obj == null) {
       ApiResponse response = await getService(URL_GUEST_USER);
-        print(response.body);
+      print(response.body);
       if (response.isSuccess) {
         await saveJson(STORAGE_KEY_USER, {
           'username': response.body['username'],
@@ -46,13 +46,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
         obj = response.body;
       }
-    } 
+    }
 
     USER_ID = obj['user_id'];
     USER_NAME = obj['username'];
     USER_TYPE = obj['type'];
     USER_SIGNED_IN = obj['is_signed_in'];
-    
 
     setState(() {});
   }

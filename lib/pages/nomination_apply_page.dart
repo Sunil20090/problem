@@ -1,10 +1,10 @@
-import 'package:election/components/enter_text_box.dart';
-import 'package:election/components/page_heading.dart';
-import 'package:election/constants/local_constant.dart';
-import 'package:election/constants/theme_constant.dart';
-import 'package:election/constants/url_constant.dart';
-import 'package:election/utils/api_service.dart';
-import 'package:election/utils/common_function.dart';
+import 'package:Problem/components/enter_text_box.dart';
+import 'package:Problem/components/page_heading.dart';
+import 'package:Problem/constants/local_constant.dart';
+import 'package:Problem/constants/theme_constant.dart';
+import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/utils/api_service.dart';
+import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class NominationApplyPage extends StatefulWidget {

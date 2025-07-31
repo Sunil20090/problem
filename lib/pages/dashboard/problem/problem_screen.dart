@@ -1,12 +1,12 @@
-import 'package:election/components/image_with_title.dart';
-import 'package:election/components/screen_action_bar.dart';
-import 'package:election/constants/theme_constant.dart';
-import 'package:election/constants/url_constant.dart';
-import 'package:election/pages/dashboard/acount/profile_screen.dart';
-import 'package:election/pages/dashboard/problem/post_problem_screen.dart';
-import 'package:election/pages/dashboard/problem/problem_detail_screen.dart';
-import 'package:election/utils/api_service.dart';
-import 'package:election/utils/common_function.dart';
+import 'package:Problem/components/image_with_title.dart';
+import 'package:Problem/components/screen_action_bar.dart';
+import 'package:Problem/constants/theme_constant.dart';
+import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/dashboard/acount/profile_screen.dart';
+import 'package:Problem/pages/dashboard/Problem/post_problem_screen.dart';
+import 'package:Problem/pages/dashboard/Problem/problem_detail_screen.dart';
+import 'package:Problem/utils/api_service.dart';
+import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class ProblemScreen extends StatefulWidget {
@@ -22,12 +22,11 @@ class _ProblemScreenState extends State<ProblemScreen> {
   @override
   void initState() {
     super.initState();
- 
+
     getList();
   }
 
   getList() async {
-
     ApiResponse response = await getService(URL_PROBLEM_LIST);
 
     if (response.isSuccess) {
@@ -36,8 +35,6 @@ class _ProblemScreenState extends State<ProblemScreen> {
       });
     }
   }
-
-  
 
   // _accountDetails = DATA_ACCOUNT_DETAILS;
   // _skills = _accountDetails['skills'];
@@ -134,9 +131,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
                               fit: BoxFit.contain,
                             ),
                           ),
-                          avatarUrl: _problemList[index]
-                              ['user_url'],
-                          avatarThumnailUrl:  _problemList[index]
+                          avatarUrl: _problemList[index]['user_url'],
+                          avatarThumnailUrl: _problemList[index]
                               ['user_thumbnail_url'],
                           title: _problemList[index]['title'],
                           description: _problemList[index]['description'],
