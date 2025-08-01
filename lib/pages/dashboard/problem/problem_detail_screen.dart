@@ -6,6 +6,7 @@ import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/scrollable_page_view.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/common_pages/image_view_screen.dart';
 import 'package:Problem/user/user_data.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
@@ -76,9 +77,10 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                         Container(
                           height: UI_IMAGE_HEIGHT,
                           child: Hero(
-                            tag: 'problem-title-image${widget.problem['id']}',
-                            child: ScrollablePageView(images:_images,)
-                          ),
+                              tag: 'problem-title-image${widget.problem['id']}',
+                              child: ScrollablePageView(
+                                images: _images,
+                                                              )),
                         ),
                         Container(
                           padding: SCREEN_PADDING,
@@ -122,13 +124,14 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                                 color: Colors.green),
                                             child: Text(
                                               skill['status'],
-                                              style: TextStyle(color: COLOR_BASE),
+                                              style:
+                                                  TextStyle(color: COLOR_BASE),
                                             ),
                                           ),
                                         ],
                                       ),
                                       addVerticalSpace(4),
-                    
+
                                       // Divider(),
                                     ],
                                   );
@@ -136,7 +139,8 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                               ),
                               addVerticalSpace(30),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Solutions:',
@@ -164,7 +168,8 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                                 style: TextStyle(
                                                     color: COLOR_BASE,
                                                     fontSize: 14,
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                               Icon(
                                                 Icons.arrow_drop_down,
@@ -293,5 +298,13 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     });
 
     // showAboutDialog(context: context);R
+  }
+
+  void openImageView(title, provider) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (builder) =>
+                ImageViewScreen(title: title, imageProvider: provider)));
   }
 }

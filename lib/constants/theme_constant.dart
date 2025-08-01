@@ -21,6 +21,7 @@ const COLOR_BASE_DARKER = Color.fromARGB(255, 226, 226, 226);
 
 const COLOR_BASE_SUCCESS = Color.fromARGB(255, 2, 117, 60);
 const COLOR_BASE_ERROR = Color.fromARGB(255, 136, 0, 0);
+const COLOR_RED = Color.fromARGB(255, 245, 109, 109);
 
 
 const EdgeInsets CONTENT_PADDING = EdgeInsets.all(8);

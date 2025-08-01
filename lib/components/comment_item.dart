@@ -31,7 +31,7 @@ class _CommentItemState extends State<CommentItem> {
   Widget build(BuildContext context) {
     return Container(
         child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ProfileThumbnail(
             width: 40,
@@ -39,52 +39,56 @@ class _CommentItemState extends State<CommentItem> {
             thumnail_url: widget.comment['thumnail_url'],
             imageUrl: widget.comment['image_url']),
         addHorizontalSpace(),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "@${widget.comment['username']}",
-              style:
-                  TextStyle(color: COLOR_PRIMARY, fontWeight: FontWeight.bold),
-            ),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  breakLongWords(widget.comment['content']),
-                  softWrap: true,
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
-                  style: getTextTheme().bodySmall,
-                )),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "${widget.comment['username']}",
+                    style:
+                        getTextTheme(color: COLOR_PRIMARY).titleSmall),
+                  addHorizontalSpace(),
+                  Text(
+                    "@${timeAgo(widget.comment['created_on'], timezoneOffset: Duration(hours: 5, minutes: 30))}",
+                    style:getTextTheme(color: COLOR_BLACK).bodySmall),
+                ],
+              ),
+              Text(
+                widget.comment['content'],
+                softWrap: true,
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
+                style: getTextTheme().bodySmall,
+              ),
+            ],
+          ),
         ),
-        Spacer(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+        
+        Column(
           children: [
-            InkWell(
-                onTap: widget.onLikedClicked,
-                child: widget.comment['isLiked'] == 0
-                    ? Icon(Icons.favorite_outline)
-                    : Icon(
-                        Icons.favorite,
-                        color: const Color.fromARGB(255, 241, 140, 140),
-                      )),
-            addHorizontalSpace(4),
-            Text('${widget.comment['likeCount']}'),
-            addHorizontalSpace(),
+            addVerticalSpace(20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              
+              children: [
+                InkWell(
+                    onTap: widget.onLikedClicked,
+                    child: widget.comment['isLiked'] == 0
+                        ? Icon(Icons.favorite_outline)
+                        : Icon(
+                            Icons.favorite,
+                            color: const Color.fromARGB(255, 241, 140, 140),
+                          )),
+                addHorizontalSpace(4),
+                Text('${widget.comment['likeCount']}'),
+                addHorizontalSpace(),
+              ],
+            ),
           ],
         )
       ],
     ));
-  }
-
-  String breakLongWords(String text, {int maxWordLength = 20}) {
-    final regex = RegExp('.{1,$maxWordLength}');
-    return text.replaceAllMapped(
-      RegExp(r'\S{' + maxWordLength.toString() + ',}'),
-      (match) =>
-          match.group(0)!.replaceAllMapped(regex, (m) => '${m.group(0)}\u200B'),
-    );
   }
 }

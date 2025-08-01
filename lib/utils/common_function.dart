@@ -45,6 +45,68 @@ showAlert(BuildContext context, String title, String message,
       });
 }
 
+String formatNumber(num number) {
+  if (number < 1000) {
+    return number.toString();
+  } else if (number < 1000000) {
+    double result = number / 1000;
+    return result.toStringAsFixed(result.truncateToDouble() == result ? 0 : 1) +
+        'K';
+  } else if (number < 1000000000) {
+    double result = number / 1000000;
+    return result.toStringAsFixed(result.truncateToDouble() == result ? 0 : 1) +
+        'M';
+  } else {
+    double result = number / 1000000000;
+    return result.toStringAsFixed(result.truncateToDouble() == result ? 0 : 1) +
+        'B';
+  }
+}
+
+String timeAgo(String isoTimestamp, {Duration? timezoneOffset}) {
+  // Parse datetime from string
+  DateTime dateTime = DateTime.parse(isoTimestamp);
+
+  if (timezoneOffset != null) {
+    dateTime = dateTime.toUtc().add(timezoneOffset);
+  } else if (!dateTime.isUtc && dateTime.timeZoneOffset != Duration.zero) {
+    dateTime = dateTime.toUtc();
+  } else {
+    dateTime = dateTime.toUtc();
+  }
+
+  final now = DateTime.now().toUtc();
+  final diff = now.difference(dateTime);
+
+  if (diff.isNegative) return "in the future";
+
+  final seconds = diff.inSeconds;
+  final minutes = diff.inMinutes;
+  final hours = diff.inHours;
+  final days = diff.inDays;
+
+  if (seconds < 60) {
+    return seconds <= 5 ? "just now" : "$seconds secs ago";
+  } else if (minutes < 60) {
+    return minutes == 1 ? "1 min ago" : "$minutes mins ago";
+  } else if (hours < 24) {
+    return hours == 1 ? "1 hour ago" : "$hours hours ago";
+  } else if (days < 7) {
+    return days == 1 ? "1 day ago" : "$days days ago";
+  } else if (days < 30) {
+    final weeks = (days / 7).floor();
+    return weeks == 1 ? "1 week ago" : "$weeks weeks ago";
+  } else if (days < 365) {
+    final months = (days / 30).floor();
+    return months == 1 ? "1 month ago" : "$months months ago";
+  } else {
+    final years = (days / 365).floor();
+    return years == 1 ? "1 year ago" : "$years years ago";
+  }
+}
+
+
+
 Future<File?> getLocalImage(ImageSource source) async {
   final picker = ImagePicker();
   final pickedFile = await picker.pickImage(source: source);

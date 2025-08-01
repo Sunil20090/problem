@@ -1,11 +1,8 @@
-
 import 'dart:async';
-
-import 'package:Problem/components/round_it.dart';
+import 'package:Problem/pages/common_pages/image_view_screen.dart';
 import 'package:flutter/material.dart';
 
 class ScrollablePageView extends StatefulWidget {
-
   List<dynamic> images;
   ScrollablePageView({super.key, required this.images});
 
@@ -14,15 +11,12 @@ class ScrollablePageView extends StatefulWidget {
 }
 
 class _ScrollablePageViewState extends State<ScrollablePageView> {
-
- 
-
   late PageController _pageController;
   late Timer _timer;
   int _currentPage = 0;
+  late var _imageProvider = [];
 
-
-@override
+  @override
   void dispose() {
     super.dispose();
     _timer.cancel();
@@ -32,37 +26,41 @@ class _ScrollablePageViewState extends State<ScrollablePageView> {
   @override
   void initState() {
     super.initState();
+    _imageProvider = widget.images.map((image) {
+      return NetworkImage(image['image_url']);
+    }).toList();
     _pageController = PageController(
-        viewportFraction: 0.97,
-        initialPage: _currentPage,
-        
-      );
-    _timer = Timer.periodic(Duration(seconds: 3), (timer){
+      viewportFraction: 0.97,
+      initialPage: _currentPage,
+    );
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       if (_currentPage < widget.images.length - 1) {
         _currentPage++;
       } else {
         _currentPage = 0;
       }
-    _pageController.animateToPage(_currentPage, duration: Durations.extralong1, curve: Curves.easeIn);
+      _pageController.animateToPage(_currentPage,
+          duration: Durations.extralong1, curve: Curves.easeIn);
     });
-
-    
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: PageView(
+      child: PageView.builder(
+        itemBuilder: (context, index) {
+      return FadeInImage(
+          fit: BoxFit.contain,
+          placeholder:
+              Image.network(widget.images[index]['thumbnail_url'])
+                  .image,
+          image:
+              Image.network(widget.images[index]['image_url']).image);
+        },
         controller: _pageController,
         allowImplicitScrolling: true,
-      children: widget.images.map((img){
-        return FadeInImage(
-          fit: BoxFit.contain,
-          
-          placeholder: Image.network(img['thumbnail_url']).image, 
-          image: Image.network(img['image_url']).image);
-      }).toList(),
-          ),
+       
+      ),
     );
   }
 }
