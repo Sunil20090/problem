@@ -22,7 +22,7 @@ class ScreenActionBar extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: getTextTheme().headlineMedium,
+                  style: getTextTheme(color: COLOR_PRIMARY).headlineMedium,
                 ),
                 Spacer(),
                 Container(

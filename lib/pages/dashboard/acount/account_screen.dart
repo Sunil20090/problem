@@ -1,8 +1,10 @@
-import 'package:Problem/components/colored_button.dart';
+import 'dart:io';
+
+import 'package:Problem/components/profile_thumbnail.dart';
 import 'package:Problem/components/screen_action_bar.dart';
+import 'package:Problem/constants/image_constant.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
-import 'package:Problem/pages/dashboard/acount/auth/login_screen.dart';
 import 'package:Problem/user/user_data.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
@@ -18,188 +20,163 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen>
     with WidgetsBindingObserver {
   var _accountDetails;
-  var _skills = [];
+  var _skills = [
+    {"name": "JAVA", "value": 9},
+    {"name": "Android", "value": 9}
+  ];
   var _achievements = [];
 
   @override
   void initState() {
     super.initState();
-    print('skills');
+
+    initAccountDetails();
+
+    initSkills();
+
+    initHistory();
   }
 
   initAccountDetails() async {
-    postService(URL_GET_PROFILE, {"user_id": USER_ID}).then((response) {
-      print(response.body);
-      if (response.isSuccess && response.body['description'] != null) {
-        setState(() {
-          // ACCOUNT_DETAILS = response.body;
-          _accountDetails = response.body;
-
-          USER_AVATAR_URL = response.body['thumbnail'];
-
-          _accountDetails = response.body;
-          // USER_AVATAR_URL = response.body['avatar'];
-        });
-      }
-    });
+    var response =
+        await postService(URL_GET_PROFILE, {"user_id": 9});
+    print(response.body);
+    if (response.isSuccess) {
+      setState(() {
+        _accountDetails = response.body;
+      });
+    }
   }
 
-  // initSkills() {
-  //   _skills = DATA_ACCOUNT_DETAILS;
-  // }
+  initSkills() {}
+
+  initHistory() {}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-            padding: SCREEN_PADDING,
-            child: _accountDetails != null
-                ? SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        body: (_accountDetails != null)
+            ? Container(
+                padding: SCREEN_PADDING,
+                child: Column(
+                  children: [
+                    ScreenActionBar(title: 'Account'),
+                    addVerticalSpace(),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ScreenActionBar(
-                          title: 'Profile',
-                          child: Icon(Icons.sync),
+                        ProfileThumbnail(
+                          width: 80,
+                          height: 80,
+                          radius: 40,
+                          thumnail_url: _accountDetails['thumbnail_url'],
+                          imageUrl: _accountDetails['image_url'],
                         ),
-                        addVerticalSpace(10),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        addHorizontalSpace(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              width: 80,
-                              height: 80,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: COLOR_BASE, width: 4),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                      _accountDetails['thumbnail']),
-                                  fit: BoxFit.contain,
+                            Text(
+                              _accountDetails['name'],
+                              style: getTextTheme().titleMedium,
+                            ),
+                            addVerticalSpace(8),
+                            Text(
+                              '${_accountDetails['username']}',
+                              style: getTextTheme(color: COLOR_GREY).titleSmall,
+                            ),
+                            addVerticalSpace(8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.lightbulb_circle_outlined,
+                                  color: COLOR_PRIMARY,
                                 ),
-                              ),
-                            ),
-                            addHorizontalSpace(),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _accountDetails['name'],
-                                    style: getTextTheme().headlineSmall,
-                                  ),
-                                  addVerticalSpace(2),
-                                  Text(
-                                    softWrap: true,
-                                    maxLines: 5,
-                                    _accountDetails['description'],
-                                    style: getTextTheme().bodySmall,
-                                  )
-                                ],
-                              ),
-                            ),
+                                Text(
+                                  formatNumber(
+                                      _accountDetails['solution_posted']),
+                                  style: getTextTheme(color: COLOR_BLACK)
+                                      .titleSmall,
+                                ),
+                                addHorizontalSpace(16),
+                                Icon(
+                                  Icons.check_circle_outline,
+                                  color: COLOR_PRIMARY,
+                                ),
+                                Text(
+                                  formatNumber(43),
+                                  style: getTextTheme(color: COLOR_BLACK)
+                                      .titleSmall,
+                                ),
+                                addHorizontalSpace(16),
+                                Icon(
+                                  Icons.extension,
+                                  color: COLOR_PRIMARY,
+                                ),
+                                Text(
+                                  formatNumber(34),
+                                  style: getTextTheme(color: COLOR_BLACK)
+                                      .titleSmall,
+                                ),
+                                addHorizontalSpace(16)
+                              ],
+                            )
                           ],
-                        ),
-                        addVerticalSpace(30),
-                        Text(
-                          'Skills:',
-                          style: getTextTheme().bodySmall,
-                        ),
-                        Divider(
-                          height: 1,
-                          thickness: 1,
-                        ),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: _skills
-                                .map((element) => Container(
-                                      margin: EdgeInsets.all(1),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 12),
-                                      color: COLOR_BASE_DARKER,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            element['skill'],
-                                            style: getTextTheme().titleSmall,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                            child: Stack(
-                                              children: [
-                                                Container(
-                                                  width: 100,
-                                                  color: COLOR_WHITE,
-                                                ),
-                                                Container(
-                                                  width: (element[
-                                                              'competency_level']
-                                                          as double) *
-                                                      100,
-                                                  color: COLOR_PRIMARY,
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                        addVerticalSpace(),
-                        Text('Achievements:'),
-                        SizedBox(
-                          height: 300,
-                          child: PageView.builder(
-                            itemCount: _achievements.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        padding: EdgeInsets.all(8),
-                                        child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            child: Image.network(
-                                              _achievements[index]['image_url'],
-                                              fit: BoxFit.contain,
-                                            )),
-                                      ),
-                                    ),
-                                    Text(
-                                      _achievements[index]['title'],
-                                      style: getTextTheme().headlineSmall,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            controller: PageController(viewportFraction: 0.85),
-                            scrollDirection: Axis.horizontal,
-                          ),
-                        ),
+                        )
                       ],
                     ),
-                  )
-                : Column(
-                    children: [
-                      Text('No profile found'),
-                      ColoredButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (builder) => LoginScreen()));
-                          },
-                          child: Text('Sign In'))
-                    ],
-                  )));
+                    addVerticalSpace(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Description:',
+                                style: getTextTheme().titleSmall,
+                              ),
+                              Container(
+                                child: Text(
+                                  _accountDetails['description'],
+                                  softWrap: true,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              addVerticalSpace(),
+                              Text(
+                                'Skills:',
+                                style: getTextTheme().titleSmall,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: _skills.map((skill) {
+                                  return Text('${skill['name']}');
+                                }).toList(),
+                              ),
+                              addVerticalSpace(),
+                              Text(
+                                'Posts:',
+                                style: getTextTheme().titleSmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+            : Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Please create your profile', style: getTextTheme().headlineMedium,),
+                    TextButton(onPressed: () {}, child: Text('Update'))
+                  ],
+                ),
+              ));
   }
 }
