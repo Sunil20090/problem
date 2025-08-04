@@ -48,6 +48,7 @@ class _ScrollablePageViewState extends State<ScrollablePageView> {
   Widget build(BuildContext context) {
     return Container(
       child: PageView.builder(
+        itemCount: widget.images.length,
         itemBuilder: (context, index) {
       return FadeInImage(
           fit: BoxFit.contain,

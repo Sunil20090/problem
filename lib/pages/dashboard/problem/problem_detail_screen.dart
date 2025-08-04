@@ -36,7 +36,6 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   @override
   void initState() {
     super.initState();
-
     _images.add(widget.problem);
     initCommentList(widget.problem['id']);
     initRequirementList(widget.problem['id']);
@@ -83,7 +82,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                                               )),
                         ),
                         Container(
-                          padding: SCREEN_PADDING,
+                          padding:SCREEN_PADDING,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
