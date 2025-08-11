@@ -169,7 +169,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                                         ),
                                         addHorizontalSpace(2),
                                         Text(
-                                          "${formatNumber(0)}",
+                                          "${formatNumber(_problemList[index]['like_count'])}",
                                           style:
                                               getTextTheme(color: COLOR_WHITE)
                                                   .titleSmall,
@@ -195,7 +195,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                             ],
                           ),
                           avatarUrl: _problemList[index]['user_url'],
-                          avatarThumnailUrl: _problemList[index]
+                          avatarThumbnailUrl: _problemList[index]
                               ['user_thumbnail_url'],
                           title: _problemList[index]['title'],
                           description: _problemList[index]['description'],

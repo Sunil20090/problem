@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ImageWithTitle extends StatefulWidget {
   final Widget container;
-  final String? avatarUrl, avatarThumnailUrl;
+  final String? avatarUrl, avatarThumbnailUrl;
   final String title, description;
   final int solutionCount = 0, ideaCount = 0;
   final VoidCallback? onImagePressed, onAvatarPressed, onInfoPressed;
@@ -14,7 +14,7 @@ class ImageWithTitle extends StatefulWidget {
       {super.key,
       required this.container,
       required this.avatarUrl,
-      required this.avatarThumnailUrl,
+      required this.avatarThumbnailUrl,
       required this.title,
       required this.description,
       this.onImagePressed,
@@ -48,7 +48,7 @@ class _ImageWithTitleState extends State<ImageWithTitle> {
               InkWell(
                   onTap: widget.onAvatarPressed,
                   child: ProfileThumbnail(
-                    thumnail_url: widget.avatarThumnailUrl,
+                    thumnail_url: widget.avatarThumbnailUrl,
                     imageUrl: widget.avatarUrl,
                   )),
               addHorizontalSpace(20),

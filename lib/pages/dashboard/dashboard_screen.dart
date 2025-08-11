@@ -21,7 +21,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _pageIndex = 3;
+  int _pageIndex = 0;
 
   @override
   void initState() {
