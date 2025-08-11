@@ -26,7 +26,6 @@ class _CreateProfileState extends State<CreateProfile> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _nameController.dispose();
     _descriptionController.dispose();
