@@ -36,7 +36,6 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   @override
   void initState() {
     super.initState();
-
     _images.add(widget.problem);
     initCommentList(widget.problem['id']);
     initRequirementList(widget.problem['id']);
@@ -80,7 +79,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                               tag: 'problem-title-image${widget.problem['id']}',
                               child: ScrollablePageView(
                                 images: _images,
-                                                              )),
+                              )),
                         ),
                         Container(
                           padding: SCREEN_PADDING,
@@ -287,7 +286,11 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   void applyOn(skill) {}
 
   void updateLike(comment) {
-    var body = {"comment_id": comment['id'], "liked_by": USER_ID};
+    var body = {
+      "comment_id": comment['id'],
+      "liked_by": USER_ID,
+      "problem_id": widget.problem['id']
+    };
 
     postService(URL_LIKE_A_COMMENT, body).then((response) {
       if (response.isSuccess) {

@@ -25,6 +25,16 @@ class _CreateProfileState extends State<CreateProfile> {
       TextEditingController();
 
   @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _descriptionController.dispose();
+    _confirmPasswordController.dispose();
+    _passwordController.dispose();
+    _emailController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(

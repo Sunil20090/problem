@@ -48,19 +48,27 @@ class _ScrollablePageViewState extends State<ScrollablePageView> {
   Widget build(BuildContext context) {
     return Container(
       child: PageView.builder(
-        itemCount: _imageProvider.length,
+        itemCount: widget.images.length,
         itemBuilder: (context, index) {
-      return FadeInImage(
-          fit: BoxFit.contain,
-          placeholder:
-              Image.network(widget.images[index]['thumbnail_url'])
-                  .image,
-          image:
-              Image.network(widget.images[index]['image_url']).image);
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (builder) => ImageViewScreen(
+                          title: 'Image',
+                          imageProvider: NetworkImage(
+                              widget.images[index]['image_url']))));
+            },
+            child: FadeInImage(
+                fit: BoxFit.contain,
+                placeholder:
+                    Image.network(widget.images[index]['thumbnail_url']).image,
+                image: Image.network(widget.images[index]['image_url']).image),
+          );
         },
         controller: _pageController,
         allowImplicitScrolling: true,
-       
       ),
     );
   }

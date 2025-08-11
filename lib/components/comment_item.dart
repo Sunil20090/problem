@@ -22,8 +22,6 @@ class _CommentItemState extends State<CommentItem> {
   void initState() {
     super.initState();
 
-    print('Comment item init: ${widget.comment['thumbnail']}');
-
     isSameUser = widget.comment['commented_by'] == USER_ID;
   }
 
