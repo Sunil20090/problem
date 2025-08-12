@@ -20,6 +20,7 @@ const URL_IMAGES_OF_PROBLEM = '$_domain${_baseUrl}getImagesOfProblem';
 
 const URL_CREATE_DATA_PROFILE = '$_domain${_baseUrl}createProfile';
 const URL_CREATE_IMAGE_PROFILE = '$_domain${_baseUrl}createImageProfile';
+const URL_EDIT_PROFILE = '$_domain${_baseUrl}editProfile';
 
 const URL_CREATE_OTP_VERIFICATION = '$_domain${_baseUrl}optVerification';
 

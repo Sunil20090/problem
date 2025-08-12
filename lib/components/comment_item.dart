@@ -34,7 +34,7 @@ class _CommentItemState extends State<CommentItem> {
         ProfileThumbnail(
             width: 40,
             height: 40,
-            thumnail_url: widget.comment['thumnail_url'],
+            thumnail_url: widget.comment['thumbnail_url'],
             imageUrl: widget.comment['image_url']),
         addHorizontalSpace(),
         Expanded(
@@ -56,7 +56,7 @@ class _CommentItemState extends State<CommentItem> {
               Text(
                 widget.comment['content'],
                 softWrap: true,
-                maxLines: 5,
+                maxLines: 4,
                 overflow: TextOverflow.ellipsis,
                 style: getTextTheme().bodySmall,
               ),

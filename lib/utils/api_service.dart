@@ -15,12 +15,14 @@ class ApiResponse {
 
 Future<ApiResponse> postService(String url, dynamic body) async {
   var request_body = jsonEncode(body);
+
   http.Response response = await http.post(Uri.parse(url),
       headers: {"Content-Type": "application/json"}, body: request_body);
 
   var reponseBody =
       response.statusCode == 200 ? jsonDecode(response.body) : response.body;
-  print('$url \n Body:\n \t$reponseBody');
+  print(
+      'URL: $url \n Payload:\n  \n Response Body:\n \t$reponseBody');
   return ApiResponse(
       body: reponseBody,
       isSuccess: response.statusCode == 200,

@@ -4,7 +4,9 @@ import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/dashboard/acount/account_screen.dart';
 import 'package:Problem/pages/dashboard/acount/auth/otp_verification.dart';
+import 'package:Problem/user/user_data.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,8 @@ class _CreateProfileState extends State<CreateProfile> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
+  bool isLoading = false;
+
   @override
   void dispose() {
     super.dispose();
@@ -42,22 +46,28 @@ class _CreateProfileState extends State<CreateProfile> {
         title: 'Create Profile',
         child: Row(
           children: [
-            ColoredButton(
-                radius: 18,
-                onPressed: () {
-                  postProfile();
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Update',
-                        style: getTextTheme(color: COLOR_BASE).titleSmall),
-                    Icon(
-                      Icons.update,
-                      color: COLOR_BASE,
-                    ),
-                  ],
-                )),
+            !isLoading
+                ? ColoredButton(
+                    radius: 18,
+                    onPressed: () {
+                      postProfile();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Create',
+                            style: getTextTheme(color: COLOR_BASE).titleSmall),
+                        Icon(
+                          Icons.update_disabled_outlined,
+                          color: COLOR_BASE,
+                        ),
+                      ],
+                    ))
+                : ColoredButton(
+                    child: SizedBox(
+                        width: 25,
+                        height: 25,
+                        child: CircularProgressIndicator())),
           ],
         ),
       ),
@@ -85,12 +95,12 @@ class _CreateProfileState extends State<CreateProfile> {
               FloatingLabelEditBox(
                 labelText: 'Password',
                 hideText: true,
-                controller: _emailController,
+                controller: _passwordController,
               ),
               addVerticalSpace(),
               FloatingLabelEditBox(
                 labelText: 'Confirm Password',
-                controller: _emailController,
+                controller: _confirmPasswordController,
               ),
               addVerticalSpace(DEFAULT_LARGE_SPACE),
             ],
@@ -101,8 +111,6 @@ class _CreateProfileState extends State<CreateProfile> {
   }
 
   formIsValid() {
-    
-
     return !(_nameController.text.isEmpty &&
         _emailController.text.isEmpty &&
         _passwordController.text.isEmpty &&
@@ -117,36 +125,45 @@ class _CreateProfileState extends State<CreateProfile> {
     } else if (_passwordController.text != _confirmPasswordController.text) {
       showAlert(context, 'Alert!', "Password do not matched!", isError: true);
       return;
-    }else if(_emailController.text.contains(' ')){
-      showAlert(context, 'Alert!', "Email should not contain spaces", isError: true);
+    } else if (_emailController.text.contains(' ')) {
+      showAlert(context, 'Alert!', "Email should not contain spaces",
+          isError: true);
       return false;
     }
 
+    int user_id = await getUserId();
+
     var payload = {
+      "user_id": user_id,
       "name": _nameController.text,
       "description": _descriptionController.text,
       "mail_id": _emailController.text.toLowerCase(),
-      "password": _passwordController.text,
+      "password": _passwordController.text
     };
+
+    setState(() {
+      isLoading = true;
+    });
 
     ApiResponse response = await postService(URL_CREATE_DATA_PROFILE, payload);
 
+    setState(() {
+      isLoading = false;
+    });
     if (response.isSuccess) {
-      showAlert(context, 
-        response.body['heading'], 
-        response.body['message'], 
-        onDismiss: (){
-          Navigator.pop(context);
-          Navigator.pop(context);
-        });
+      showAlert(context, response.body['heading'], response.body['message'],
+          onDismiss: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (builder) => AccountScreen()));
+      });
     } else {
       showAlert(context, 'Failed!', "The response is failed!");
     }
   }
 
   openOTPScreen() {
-    
-
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (builder) => OtpVerification()));
   }

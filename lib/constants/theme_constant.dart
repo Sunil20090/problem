@@ -31,6 +31,14 @@ const EdgeInsets SCREEN_PADDING =
 
 const double CONTENT_PADDING_VALUE = 8;
 
+getTransitionBuilder(){
+  return (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: Curves.ease));
+        return SlideTransition(position: animation.drive(tween), child: child);
+      };
+}
 
 TextTheme getTextTheme({Color color=COLOR_BLACK}) {
   return TextTheme(

@@ -3,6 +3,7 @@ import 'package:Problem/components/colored_button.dart';
 import 'package:Problem/components/comment_item.dart';
 import 'package:Problem/components/enter_text_box.dart';
 import 'package:Problem/components/screen_action_bar.dart';
+import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/components/scrollable_page_view.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
@@ -59,188 +60,172 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          child: Column(
-            children: [
-              ScreenActionBar(
-                title: widget.problem['title'],
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: UI_IMAGE_HEIGHT,
-                          child: Hero(
-                              tag: 'problem-title-image${widget.problem['id']}',
-                              child: ScrollablePageView(
-                                images: _images,
-                              )),
-                        ),
-                        Container(
-                          padding: SCREEN_PADDING,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                softWrap: true,
-                                'Details:',
-                                style: getTextTheme().titleSmall,
-                              ),
-                              Text(
-                                softWrap: true,
-                                widget.problem['description'],
-                                style: getTextTheme().bodySmall,
-                              ),
-                              addVerticalSpace(10),
-                              if (_requirement_list.length > 0)
-                                Text(
-                                  'Requirements:',
-                                  style: getTextTheme().titleSmall,
-                                ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: _requirement_list.map((skill) {
-                                  return Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(skill['name']),
-                                          Spacer(),
-                                          Container(
-                                            // margin: EdgeInsets.all(1),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 6),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                                color: Colors.green),
-                                            child: Text(
-                                              skill['status'],
-                                              style:
-                                                  TextStyle(color: COLOR_BASE),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      addVerticalSpace(4),
-
-                                      // Divider(),
-                                    ],
-                                  );
-                                }).toList(),
-                              ),
-                              addVerticalSpace(30),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Solutions:',
-                                    style: getTextTheme().headlineMedium,
-                                  ),
-                                  ColoredButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _showSolutionRemark =
-                                            !_showSolutionRemark;
-                                      });
-                                    },
-                                    child: _showSolutionRemark
-                                        ? Icon(
-                                            Icons.remove,
-                                            color: COLOR_BASE,
-                                            size: getTextTheme()
-                                                .headlineMedium
-                                                ?.fontSize,
-                                          )
-                                        : Row(
-                                            children: [
-                                              Text(
-                                                'Post Solution',
-                                                style: TextStyle(
-                                                    color: COLOR_BASE,
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Icon(
-                                                Icons.arrow_drop_down,
-                                                color: COLOR_BASE,
-                                                size: getTextTheme()
-                                                    .headlineMedium
-                                                    ?.fontSize,
-                                              ),
-                                            ],
-                                          ),
-                                  ),
-                                ],
-                              ),
-                              addVerticalSpace(),
-                              if (_showSolutionRemark)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    EnterTextBox(
-                                      controller: _controllerComment,
-                                      hintText: 'write a comment...',
-                                      maxLines: 2,
-                                    ),
-                                    addVerticalSpace(),
-                                    ColoredButton(
-                                      onPressed: () async {
-                                        await submitComment();
-                                      },
-                                      child: !_isCommentSubmitting
-                                          ? Text(
-                                              'Submit',
-                                              style: TextStyle(
-                                                  color: COLOR_BASE,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            )
-                                          : SizedBox(
-                                              width: 20,
-                                              height: 20,
-                                              child: CircularProgressIndicator(
-                                                  color: COLOR_BASE),
-                                            ),
-                                    )
-                                  ],
-                                ),
-                              addVerticalSpace(20),
-                              Column(
-                                children: _commentList.map((comment) {
-                                  return Column(
-                                    children: [
-                                      CommentItem(
-                                        comment: comment,
-                                        onLikedClicked: () {
-                                          updateLike(comment);
-                                        },
-                                      ),
-                                      addVerticalSpace(15),
-                                    ],
-                                  );
-                                }).toList(),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+    return ScreenFrame(
+      titleBar: ScreenActionBar(
+              title: widget.problem['title'],
+            ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: UI_IMAGE_HEIGHT,
+            child: ScrollablePageView(
+              images: _images,
+            ),
           ),
-        ),
+          Container(
+            padding: SCREEN_PADDING,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  softWrap: true,
+                  'Details:',
+                  style: getTextTheme().titleSmall,
+                ),
+                Text(
+                  softWrap: true,
+                  widget.problem['description'],
+                  style: getTextTheme().bodySmall,
+                ),
+                addVerticalSpace(10),
+                if (_requirement_list.length > 0)
+                  Text(
+                    'Requirements:',
+                    style: getTextTheme().titleSmall,
+                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _requirement_list.map((skill) {
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment.start,
+                          children: [
+                            Text(skill['name']),
+                            Spacer(),
+                            Container(
+                              // margin: EdgeInsets.all(1),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 6),
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(4),
+                                  color: Colors.green),
+                              child: Text(
+                                skill['status'],
+                                style:
+                                    TextStyle(color: COLOR_BASE),
+                              ),
+                            ),
+                          ],
+                        ),
+                        addVerticalSpace(4),
+      
+                        // Divider(),
+                      ],
+                    );
+                  }).toList(),
+                ),
+                addVerticalSpace(30),
+                Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Solutions:',
+                      style: getTextTheme().headlineMedium,
+                    ),
+                    ColoredButton(
+                      onPressed: () {
+                        setState(() {
+                          _showSolutionRemark =
+                              !_showSolutionRemark;
+                        });
+                      },
+                      child: _showSolutionRemark
+                          ? Icon(
+                              Icons.remove,
+                              color: COLOR_BASE,
+                              size: getTextTheme()
+                                  .headlineMedium
+                                  ?.fontSize,
+                            )
+                          : Row(
+                              children: [
+                                Text(
+                                  'Post Solution',
+                                  style: TextStyle(
+                                      color: COLOR_BASE,
+                                      fontSize: 14,
+                                      fontWeight:
+                                          FontWeight.bold),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: COLOR_BASE,
+                                  size: getTextTheme()
+                                      .headlineMedium
+                                      ?.fontSize,
+                                ),
+                              ],
+                            ),
+                    ),
+                  ],
+                ),
+                addVerticalSpace(),
+                if (_showSolutionRemark)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      EnterTextBox(
+                        controller: _controllerComment,
+                        hintText: 'write a comment...',
+                        maxLines: 2,
+                      ),
+                      addVerticalSpace(),
+                      ColoredButton(
+                        onPressed: () async {
+                          await submitComment();
+                        },
+                        child: !_isCommentSubmitting
+                            ? Text(
+                                'Submit',
+                                style: TextStyle(
+                                    color: COLOR_BASE,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            : SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                    color: COLOR_BASE),
+                              ),
+                      )
+                    ],
+                  ),
+                addVerticalSpace(20),
+                Column(
+                  children: _commentList.map((comment) {
+                    return Column(
+                      children: [
+                        CommentItem(
+                          comment: comment,
+                          onLikedClicked: () {
+                            updateLike(comment);
+                          },
+                        ),
+                        addVerticalSpace(15),
+                      ],
+                    );
+                  }).toList(),
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

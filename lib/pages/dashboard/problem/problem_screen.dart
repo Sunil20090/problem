@@ -129,10 +129,11 @@ class _ProblemScreenState extends State<ProblemScreen> {
                           onImagePressed: () {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (builder) => ProblemDetailScreen(
-                                          problem: _problemList[index],
-                                        )));
+                                PageRouteBuilder(
+                                      pageBuilder: (context, animation, secondryAnimation) => ProblemDetailScreen(problem: _problemList[index]),
+                                      transitionsBuilder: getTransitionBuilder()
+                                      
+                                    ));
                           },
                           container: Stack(
                             fit: StackFit.expand,
