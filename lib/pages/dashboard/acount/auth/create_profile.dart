@@ -1,6 +1,7 @@
 import 'package:Problem/components/colored_button.dart';
 import 'package:Problem/components/floating_label_edit_box.dart';
 import 'package:Problem/components/screen_action_bar.dart';
+import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/dashboard/acount/auth/otp_verification.dart';
@@ -36,82 +37,72 @@ class _CreateProfileState extends State<CreateProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-              child: Column(
-            children: [
-              ScreenActionBar(
-                title: 'Create Profile',
+    return ScreenFrame(
+      titleBar: ScreenActionBar(
+        title: 'Create Profile',
+        child: Row(
+          children: [
+            ColoredButton(
+                radius: 18,
+                onPressed: () {
+                  postProfile();
+                },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ColoredButton(
-                        radius: 18,
-                        onPressed: () {
-                          postProfile();
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Update',
-                                style:
-                                    getTextTheme(color: COLOR_BASE).titleSmall),
-                            Icon(
-                              Icons.update,
-                              color: COLOR_BASE,
-                            ),
-                          ],
-                        )),
+                    Text('Update',
+                        style: getTextTheme(color: COLOR_BASE).titleSmall),
+                    Icon(
+                      Icons.update,
+                      color: COLOR_BASE,
+                    ),
                   ],
-                ),
-              ),
-              // addVerticalSpace(),
-
-              addVerticalSpace(),
-
-              Container(
-                padding: SCREEN_PADDING,
-                child: Column(
-                  children: [
-                    FloatingLabelEditBox(
-                      labelText: 'Name',
-                      controller: _nameController,
-                    ),
-                    addVerticalSpace(),
-                    FloatingLabelEditBox(
-                      labelText: 'Description',
-                      maxLines: 4,
-                      controller: _descriptionController,
-                    ),
-                    addVerticalSpace(),
-                    FloatingLabelEditBox(
-                      labelText: 'Email',
-                      controller: _emailController,
-                    ),
-                    addVerticalSpace(),
-                    FloatingLabelEditBox(
-                      labelText: 'Password',
-                      hideText: true,
-                      controller: _emailController,
-                    ),
-                    addVerticalSpace(),
-                    FloatingLabelEditBox(
-                      labelText: 'Confirm Password',
-                      controller: _emailController,
-                    ),
-                    addVerticalSpace(DEFAULT_LARGE_SPACE),
-                  ],
-                ),
-              )
-            ],
-          )),
+                )),
+          ],
         ),
+      ),
+      body: Column(
+        children: [
+          addVerticalSpace(),
+          Column(
+            children: [
+              FloatingLabelEditBox(
+                labelText: 'Name',
+                controller: _nameController,
+              ),
+              addVerticalSpace(),
+              FloatingLabelEditBox(
+                labelText: 'Description',
+                maxLines: 4,
+                controller: _descriptionController,
+              ),
+              addVerticalSpace(),
+              FloatingLabelEditBox(
+                labelText: 'Email',
+                controller: _emailController,
+              ),
+              addVerticalSpace(),
+              FloatingLabelEditBox(
+                labelText: 'Password',
+                hideText: true,
+                controller: _emailController,
+              ),
+              addVerticalSpace(),
+              FloatingLabelEditBox(
+                labelText: 'Confirm Password',
+                controller: _emailController,
+              ),
+              addVerticalSpace(DEFAULT_LARGE_SPACE),
+            ],
+          )
+        ],
       ),
     );
   }
 
   formIsValid() {
+    
+
     return !(_nameController.text.isEmpty &&
         _emailController.text.isEmpty &&
         _passwordController.text.isEmpty &&
@@ -126,26 +117,36 @@ class _CreateProfileState extends State<CreateProfile> {
     } else if (_passwordController.text != _confirmPasswordController.text) {
       showAlert(context, 'Alert!', "Password do not matched!", isError: true);
       return;
+    }else if(_emailController.text.contains(' ')){
+      showAlert(context, 'Alert!', "Email should not contain spaces", isError: true);
+      return false;
     }
 
     var payload = {
       "name": _nameController.text,
       "description": _descriptionController.text,
-      "mail_id": _emailController.text,
+      "mail_id": _emailController.text.toLowerCase(),
       "password": _passwordController.text,
     };
 
     ApiResponse response = await postService(URL_CREATE_DATA_PROFILE, payload);
 
     if (response.isSuccess) {
-      //showAlert(context, 'Success!', response.body['message']);
-      openOTPScreen();
+      showAlert(context, 
+        response.body['heading'], 
+        response.body['message'], 
+        onDismiss: (){
+          Navigator.pop(context);
+          Navigator.pop(context);
+        });
     } else {
       showAlert(context, 'Failed!', "The response is failed!");
     }
   }
 
   openOTPScreen() {
+    
+
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (builder) => OtpVerification()));
   }

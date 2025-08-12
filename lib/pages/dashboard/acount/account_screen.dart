@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:Problem/components/profile_thumbnail.dart';
 import 'package:Problem/components/screen_action_bar.dart';
-import 'package:Problem/constants/image_constant.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/dashboard/acount/auth/create_profile.dart';
 import 'package:Problem/user/user_data.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
@@ -38,9 +36,11 @@ class _AccountScreenState extends State<AccountScreen>
   }
 
   initAccountDetails() async {
+
+    int user_id = await getUserId();
     var response =
-        await postService(URL_GET_PROFILE, {"user_id": 9});
-    print(response.body);
+        await postService(URL_GET_PROFILE, {"user_id": user_id});
+        
     if (response.isSuccess) {
       setState(() {
         _accountDetails = response.body;
@@ -170,13 +170,31 @@ class _AccountScreenState extends State<AccountScreen>
                 ))
             : Container(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Please create your profile', style: getTextTheme().headlineMedium,),
-                    TextButton(onPressed: () {}, child: Text('Update'))
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Please create your profile', style: getTextTheme().headlineMedium,),
+
+                      ],
+                    ),
+                    addVerticalSpace(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(onPressed: () {
+                          moveToAccountForm();
+                        }, child: Text('Update'))
+                      ],
+                    ),
                   ],
                 ),
               ));
+  }
+  
+  void moveToAccountForm() {
+    Navigator.push(context, MaterialPageRoute(builder: (builder)=> CreateProfile()));
   }
 }
