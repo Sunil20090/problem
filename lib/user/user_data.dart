@@ -11,7 +11,7 @@ bool USER_SIGNED_IN = false;
 var TOKEN = "";
 
 
-getUserId() async {
+Future<int> getUserId() async {
   var obj = await loadJson(STORAGE_KEY_USER);
    return  obj['user_id'];
 }

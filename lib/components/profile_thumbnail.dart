@@ -39,14 +39,19 @@ class _ProfileThumbnailState extends State<ProfileThumbnail> {
                         fit: BoxFit.cover)
                 : FadeInImage(
                     placeholder: Image.network(
-                      width: widget.width,
-                      height: widget.height,
+              
                       widget.thumnail_url!,
-                     fit: BoxFit.cover,).image,
+                   ).image,
                     image: Image.network(
                       widget.imageUrl!, 
-                      width: widget.width,
-                      height: widget.height,
-                      fit: BoxFit.cover,).image)));
+                
+                     ).image,
+                        width: widget.width,
+                        height: widget.height,
+                        fit: BoxFit.cover,
+                      )
+                      
+                      )
+                      );
   }
 }

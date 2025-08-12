@@ -3,8 +3,6 @@ import 'package:Problem/constants/storage_constant.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/dashboard/acount/account_screen.dart';
-import 'package:Problem/pages/dashboard/acount/auth/create_profile.dart';
-import 'package:Problem/pages/dashboard/acount/profile_screen.dart';
 import 'package:Problem/pages/dashboard/idea_screen.dart';
 import 'package:Problem/pages/dashboard/plan_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/problem_screen.dart';
