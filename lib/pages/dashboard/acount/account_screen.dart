@@ -43,7 +43,7 @@ class _AccountScreenState extends State<AccountScreen>
     print(response.body);
     if (response.isSuccess) {
       setState(() {
-        _accountDetails = response.body;
+       // _accountDetails = response.body;
       });
     }
   }
