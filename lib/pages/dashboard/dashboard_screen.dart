@@ -20,12 +20,22 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _pageIndex = 0;
+  
+  final List<Widget> _pages = [
+    ProblemScreen(),
+    IdeaScreen(),
+    PlanScreen(),
+    AccountScreen(
+      
+    )
+  ];
 
   @override
   void initState() {
     super.initState();
 
     initUser();
+    //test
   }
 
   initUser() async {
@@ -58,16 +68,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
-      ProblemScreen(),
-      IdeaScreen(),
-      PlanScreen(),
-      AccountScreen()
-    ];
+    
     return SafeArea(
       child: Scaffold(
         
-        body: IndexedStack(index: _pageIndex, children: _pages),
+        body: _pages[_pageIndex],
         bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: COLOR_PRIMARY,
           unselectedItemColor: COLOR_BASE_DARKER,
@@ -79,6 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           },
           items: [
             BottomNavigationBarItem(
+
                 label: 'Problems', icon: Icon(Icons.work_outline_rounded)),
             BottomNavigationBarItem(label: 'Ideas', icon: Icon(Icons.light)),
             BottomNavigationBarItem(

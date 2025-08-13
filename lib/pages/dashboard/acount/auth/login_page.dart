@@ -1,8 +1,14 @@
 import 'package:Problem/components/colored_button.dart';
 import 'package:Problem/components/enter_text_box.dart';
+import 'package:Problem/components/floating_label_edit_box.dart';
+import 'package:Problem/components/screen_action_bar.dart';
+import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/components/screen_template.dart';
 import 'package:Problem/constants/theme_constant.dart';
+import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/dashboard/dashboard_screen.dart';
 import 'package:Problem/pages/form_create_page.dart';
+import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
@@ -14,48 +20,62 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      title: 'Login!',
-      description: 'Login here with your email id or create password!',
-      child: Column(
+    return ScreenFrame(
+      titleBar: ScreenActionBar(title: 'Login'),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          addVerticalSpace(UI_PADDING * 3),
-          SizedBox(width: 80, height: 80, child: Icon(Icons.person_2_outlined)),
-          EnterTextBox(
-            hintText: 'mail id',
-            type: TextInputType.emailAddress,
+          addVerticalSpace(DEFAULT_LARGE_SPACE),
+          FloatingLabelEditBox(
+            labelText: 'username',
+            controller: _usernameController,
           ),
-          addVerticalSpace(UI_PADDING),
-          EnterTextBox(
-            hintText: 'password',
-            obscureText: true,
+          addVerticalSpace(),
+          FloatingLabelEditBox(
+            labelText: 'password',
+            hideText: true,
+            controller: _passwordController,
           ),
-          addVerticalSpace(UI_PADDING),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              InkWell(
-                  onTap: () {},
-                  child: Text('Forget password?',
-                      style: TextStyle(color: Colors.white)))
-            ],
-          ),
-          addVerticalSpace(UI_PADDING * 2),
+          addVerticalSpace(36),
           ColoredButton(
-              backgroundColor: Colors.blue,
-              onPressed: () {
-                moveToCreateFormPage();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Login'),
-                  addHorizontalSpace(UI_SPACE),
-                  Icon(Icons.login)
-                ],
-              ))
+              onPressed: !isLoading
+                  ? () {
+                      login();
+                    }
+                  : null,
+              child: !isLoading
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Login',
+                          style: getTextTheme(color: COLOR_BASE).titleMedium,
+                        ),
+                        addHorizontalSpace(),
+                        Icon(
+                          Icons.login,
+                          color: COLOR_BASE,
+                        )
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 32,
+                          height: 32,
+                          child: CircularProgressIndicator(
+                            color: COLOR_BASE,
+                          ),
+                        )
+                      ],
+                    ))
         ],
       ),
     );
@@ -64,5 +84,40 @@ class _LoginPageState extends State<LoginPage> {
   void moveToCreateFormPage() {
     Navigator.push(
         context, MaterialPageRoute(builder: (builder) => FormCreatePage()));
+  }
+
+  void login() async {
+    if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+      showAlert(context, 'Empty!', 'Please enter both username and pasword');
+      return;
+    }
+
+    var body = {
+      "username": _usernameController.text.toLowerCase(),
+      "password": _passwordController.text
+    };
+
+    setState(() {
+      isLoading = true;
+    });
+
+    ApiResponse response = await postService(URL_USER_LOGIN, body);
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (response.isSuccess) {
+      if (response.body['status'] == 'OK') {
+        moveToDashBoardPage();
+      } else {
+        showAlert(context, response.body['heading'], response.body['message']);
+      }
+    }
+  }
+
+  void moveToDashBoardPage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (builder) => DashboardScreen()));
   }
 }

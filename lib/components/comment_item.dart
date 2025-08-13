@@ -29,7 +29,8 @@ class _CommentItemState extends State<CommentItem> {
   Widget build(BuildContext context) {
     return Container(
         child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      
       children: [
         ProfileThumbnail(
             width: 40,
@@ -41,7 +42,8 @@ class _CommentItemState extends State<CommentItem> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              Wrap(
+
                 children: [
                   Text(
                     "${widget.comment['username']}",
@@ -78,6 +80,7 @@ class _CommentItemState extends State<CommentItem> {
                         : Icon(
                             Icons.favorite,
                             color: const Color.fromARGB(255, 241, 140, 140),
+                            size: getTextTheme().headlineMedium?.fontSize,
                           )),
                 addHorizontalSpace(4),
                 Text('${widget.comment['likeCount']}'),

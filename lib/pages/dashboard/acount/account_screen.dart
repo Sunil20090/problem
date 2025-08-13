@@ -3,15 +3,18 @@ import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/common_pages/image_view_screen.dart';
 import 'package:Problem/pages/dashboard/acount/auth/create_profile.dart';
 import 'package:Problem/pages/dashboard/acount/auth/edit_profile_screen.dart';
+import 'package:Problem/pages/dashboard/acount/auth/login_page.dart';
 import 'package:Problem/user/user_data.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
+  int user_id;
+  AccountScreen({super.key, this.user_id = 0});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -28,6 +31,8 @@ class _AccountScreenState extends State<AccountScreen>
   ];
   var _achievements = [];
 
+  bool _isSelfId = false;
+
   @override
   void initState() {
     super.initState();
@@ -40,12 +45,19 @@ class _AccountScreenState extends State<AccountScreen>
   }
 
   initAccountDetails() async {
-    int user_id = await getUserId();
+    int local_user_id = await getUserId();
+    if (widget.user_id == 0) {
+      widget.user_id = local_user_id;
+    }
+
+    _isSelfId = local_user_id == widget.user_id;
+
 
     setState(() {
       isLoading = true;
     });
-    var response = await postService(URL_GET_PROFILE, {"user_id": user_id});
+    var response =
+        await postService(URL_GET_PROFILE, {"user_id": widget.user_id});
 
     setState(() {
       isLoading = false;
@@ -66,15 +78,23 @@ class _AccountScreenState extends State<AccountScreen>
     return ScreenFrame(
         titleBar: ScreenActionBar(
           title: 'Account',
-          child: (_accountDetails != null) ? InkWell(
-              onTap: () {
-                openEditingProfileScreen(_accountDetails);
-              },
-              child: Icon(
-                Icons.edit,
-                size: getTextTheme().titleMedium?.fontSize,
-                color: COLOR_PRIMARY,
-              )) : Container(),
+          child: (_accountDetails != null)
+              ? InkWell(
+                  onTap:_isSelfId ? () {
+                    openEditingProfileScreen(_accountDetails);
+                  } : null,
+                  child: Row(
+                    children: [
+                      if (_isSelfId)
+                        Icon(
+                          Icons.edit,
+                          size: getTextTheme().headlineMedium?.fontSize,
+                          color: COLOR_PRIMARY,
+                        ),
+                      addHorizontalSpace()
+                    ],
+                  ))
+              : Container(),
         ),
         body: isLoading
             ? Container(
@@ -98,9 +118,21 @@ class _AccountScreenState extends State<AccountScreen>
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             ProfileThumbnail(
-                              width: 80,
-                              height: 80,
-                              radius: 40,
+                              tag: _accountDetails['name'],
+                              onClicked: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) => ImageViewScreen(
+                                            tag: _accountDetails['name'],
+                                            title: _accountDetails['name'],
+                                            imageProvider: NetworkImage(
+                                              _accountDetails['image_url'],
+                                            ))));
+                              },
+                              width: 140,
+                              height: 140,
+                              radius: 70,
                               thumnail_url: _accountDetails['thumbnail_url'],
                               imageUrl: _accountDetails['image_url'],
                             ),
@@ -120,7 +152,7 @@ class _AccountScreenState extends State<AccountScreen>
                                 ),
                                 addVerticalSpace(8),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Icon(
                                       Icons.lightbulb_circle_outlined,
@@ -139,7 +171,8 @@ class _AccountScreenState extends State<AccountScreen>
                                       color: COLOR_PRIMARY,
                                     ),
                                     Text(
-                                      formatNumber(43),
+                                      formatNumber(_accountDetails[
+                                          'problem_posted_count']),
                                       style: getTextTheme(color: COLOR_BLACK)
                                           .titleSmall,
                                     ),
@@ -163,45 +196,39 @@ class _AccountScreenState extends State<AccountScreen>
                         addVerticalSpace(32),
                         Container(
                           alignment: Alignment.topLeft,
-                          child: Expanded(
-                            child: SingleChildScrollView(
-                              child: Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Description:',
-                                      style: getTextTheme().titleSmall,
-                                    ),
-                                    Container(
-                                      child: Text(
-                                        _accountDetails['description'],
-                                        softWrap: true,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    addVerticalSpace(),
-                                    Text(
-                                      'Skills:',
-                                      style: getTextTheme().titleSmall,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: _skills.map((skill) {
-                                        return Text('${skill['name']}');
-                                      }).toList(),
-                                    ),
-                                    addVerticalSpace(),
-                                    Text(
-                                      'Posts:',
-                                      style: getTextTheme().titleSmall,
-                                    ),
-                                  ],
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Description:',
+                                style: getTextTheme().titleSmall,
+                              ),
+                              Container(
+                                child: Text(
+                                  _accountDetails['description'],
+                                  softWrap: true,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            ),
+                              addVerticalSpace(),
+                              Text(
+                                'Skills:',
+                                style: getTextTheme().titleSmall,
+                              ),
+                              Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: _skills.map((skill) {
+                                  return Text('${skill['name']}');
+                                }).toList(),
+                              ),
+                              addVerticalSpace(),
+                              Text(
+                                'Posts:',
+                                style: getTextTheme().titleSmall,
+                              ),
+                            ],
                           ),
                         )
                       ],
@@ -215,10 +242,16 @@ class _AccountScreenState extends State<AccountScreen>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Please create your profile',
+                              'No Profile',
                               style: getTextTheme().headlineMedium,
                             ),
                           ],
+                        ),
+                        addVerticalSpace(),
+                        Icon(
+                          Icons.no_accounts,
+                          size: 54,
+                          color: COLOR_PRIMARY,
                         ),
                         addVerticalSpace(),
                         Row(
@@ -228,7 +261,18 @@ class _AccountScreenState extends State<AccountScreen>
                                 onPressed: () {
                                   moveToAccountForm();
                                 },
-                                child: Text('Update'))
+                                child: Text('Create Profile'))
+                          ],
+                        ),
+                        addVerticalSpace(30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  moveToLoginPage();
+                                },
+                                child: Text('Login'))
                           ],
                         ),
                       ],
@@ -240,9 +284,18 @@ class _AccountScreenState extends State<AccountScreen>
     Navigator.push(
         context, MaterialPageRoute(builder: (builder) => CreateProfile()));
   }
-  
+
   void openEditingProfileScreen(accountDetails) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (builder) => EditProfileScreen(accountDetails: accountDetails,)));
+        context,
+        MaterialPageRoute(
+            builder: (builder) => EditProfileScreen(
+                  accountDetails: accountDetails,
+                )));
+  }
+
+  void moveToLoginPage() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (builder) => LoginPage()));
   }
 }

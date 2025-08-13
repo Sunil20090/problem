@@ -3,10 +3,10 @@ import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
-class ImageWithTitle extends StatefulWidget {
+class ImageWithTitle extends StatelessWidget {
   final Widget container;
   final String? avatarUrl, avatarThumbnailUrl;
-  final String title, description;
+  final String title, description, tag;
   final int solutionCount = 0, ideaCount = 0;
   final VoidCallback? onImagePressed, onAvatarPressed, onInfoPressed;
 
@@ -19,13 +19,8 @@ class ImageWithTitle extends StatefulWidget {
       required this.description,
       this.onImagePressed,
       this.onAvatarPressed,
+      this.tag = 'image_with_title',
       this.onInfoPressed});
-
-  @override
-  State<ImageWithTitle> createState() => _ImageWithTitleState();
-}
-
-class _ImageWithTitleState extends State<ImageWithTitle> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,12 +28,15 @@ class _ImageWithTitleState extends State<ImageWithTitle> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
-            onTap: widget.onImagePressed,
+            onTap: onImagePressed,
             child: Container(
               color: COLOR_BASE_DARKER,
               height: UI_IMAGE_HEIGHT,
               width: double.infinity,
-              child: widget.container,
+              child: Hero(
+                child: container,
+                tag: tag,
+              ),
             ),
           ),
           addVerticalSpace(),
@@ -46,10 +44,11 @@ class _ImageWithTitleState extends State<ImageWithTitle> {
             children: [
               addHorizontalSpace(),
               InkWell(
-                  onTap: widget.onAvatarPressed,
+                  onTap: onAvatarPressed,
                   child: ProfileThumbnail(
-                    thumnail_url: widget.avatarThumbnailUrl,
-                    imageUrl: widget.avatarUrl,
+                    thumnail_url: avatarThumbnailUrl,
+                    imageUrl: avatarUrl
+                    
                   )),
               addHorizontalSpace(20),
               Expanded(
@@ -57,11 +56,11 @@ class _ImageWithTitleState extends State<ImageWithTitle> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.title,
+                      title,
                       style: getTextTheme().headlineSmall,
                     ),
                     Text(
-                      widget.description,
+                      description,
                       softWrap: true,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -69,7 +68,7 @@ class _ImageWithTitleState extends State<ImageWithTitle> {
                   ],
                 ),
               ),
-              InkWell(onTap: widget.onInfoPressed, child: Icon(Icons.info)),
+              InkWell(onTap: onInfoPressed, child: Icon(Icons.info)),
               addHorizontalSpace()
             ],
           ),
@@ -78,3 +77,4 @@ class _ImageWithTitleState extends State<ImageWithTitle> {
     );
   }
 }
+

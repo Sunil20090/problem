@@ -15,7 +15,10 @@ import 'package:flutter/material.dart';
 
 class ProblemDetailScreen extends StatefulWidget {
   final dynamic problem;
-  const ProblemDetailScreen({super.key, this.problem});
+  ProblemDetailScreen({
+    super.key,
+    this.problem,
+  });
 
   @override
   State<ProblemDetailScreen> createState() => _ProblemDetailScreenState();
@@ -23,7 +26,7 @@ class ProblemDetailScreen extends StatefulWidget {
 
 class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   var _commentList = [];
-  bool _showSolutionRemark = false;
+  bool _showSolutionRemark = true;
   bool _isCommentSubmitting = false;
   var _requirement_list = [];
 
@@ -61,9 +64,10 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenFrame(
+      backButton: true,
       titleBar: ScreenActionBar(
-              title: widget.problem['title'],
-            ),
+        title: widget.problem['title'],
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -100,29 +104,25 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                     return Column(
                       children: [
                         Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(skill['name']),
                             Spacer(),
                             Container(
                               // margin: EdgeInsets.all(1),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 6),
+                              padding: EdgeInsets.symmetric(horizontal: 6),
                               decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(4),
+                                  borderRadius: BorderRadius.circular(4),
                                   color: Colors.green),
                               child: Text(
                                 skill['status'],
-                                style:
-                                    TextStyle(color: COLOR_BASE),
+                                style: TextStyle(color: COLOR_BASE),
                               ),
                             ),
                           ],
                         ),
                         addVerticalSpace(4),
-      
+
                         // Divider(),
                       ],
                     );
@@ -130,8 +130,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                 ),
                 addVerticalSpace(30),
                 Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Solutions:',
@@ -140,17 +139,14 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                     ColoredButton(
                       onPressed: () {
                         setState(() {
-                          _showSolutionRemark =
-                              !_showSolutionRemark;
+                          _showSolutionRemark = !_showSolutionRemark;
                         });
                       },
                       child: _showSolutionRemark
                           ? Icon(
                               Icons.remove,
                               color: COLOR_BASE,
-                              size: getTextTheme()
-                                  .headlineMedium
-                                  ?.fontSize,
+                              size: getTextTheme().headlineMedium?.fontSize,
                             )
                           : Row(
                               children: [
@@ -159,15 +155,12 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                   style: TextStyle(
                                       color: COLOR_BASE,
                                       fontSize: 14,
-                                      fontWeight:
-                                          FontWeight.bold),
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Icon(
                                   Icons.arrow_drop_down,
                                   color: COLOR_BASE,
-                                  size: getTextTheme()
-                                      .headlineMedium
-                                      ?.fontSize,
+                                  size: getTextTheme().headlineMedium?.fontSize,
                                 ),
                               ],
                             ),
@@ -181,7 +174,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                     children: [
                       EnterTextBox(
                         controller: _controllerComment,
-                        hintText: 'write a comment...',
+                        hintText: 'write a solution...',
                         maxLines: 2,
                       ),
                       addVerticalSpace(),
@@ -191,7 +184,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                         },
                         child: !_isCommentSubmitting
                             ? Text(
-                                'Submit',
+                                'Post',
                                 style: TextStyle(
                                     color: COLOR_BASE,
                                     fontSize: 16,

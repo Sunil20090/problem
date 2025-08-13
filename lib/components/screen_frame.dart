@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class ScreenFrame extends StatelessWidget {
   Widget titleBar;
   Widget? body;
-  ScreenFrame({super.key, required this.titleBar, this.body});
+  bool backButton;
+  ScreenFrame({super.key, required this.titleBar, this.body, this.backButton = false});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,15 @@ class ScreenFrame extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      titleBar,
+                       (backButton) ? Row(
+                        children: [
+                          InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Icon(Icons.arrow_back, color: COLOR_PRIMARY,)),
+                          addHorizontalSpace(4),
+                          Expanded(child: titleBar),
+                        ],
+                      ) : titleBar,
                       addVerticalSpace(2),
                       (body != null)
                           ? Expanded(child: SingleChildScrollView(child: body!))

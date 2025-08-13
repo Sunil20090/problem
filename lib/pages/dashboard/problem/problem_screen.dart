@@ -3,7 +3,7 @@ import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/common_pages/notification/notification_screen.dart';
-import 'package:Problem/pages/dashboard/acount/profile_screen.dart';
+import 'package:Problem/pages/dashboard/acount/account_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/post_problem_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/problem_detail_screen.dart';
 import 'package:Problem/user/user_data.dart';
@@ -129,10 +129,9 @@ class _ProblemScreenState extends State<ProblemScreen> {
                           onImagePressed: () {
                             Navigator.push(
                                 context,
-                                PageRouteBuilder(
-                                      pageBuilder: (context, animation, secondryAnimation) => ProblemDetailScreen(problem: _problemList[index]),
-                                      transitionsBuilder: getTransitionBuilder()
-                                      
+                                MaterialPageRoute(
+                                      builder: (context) => ProblemDetailScreen(
+                                        problem: _problemList[index], )  
                                     ));
                           },
                           container: Stack(
@@ -195,14 +194,14 @@ class _ProblemScreenState extends State<ProblemScreen> {
                                   )),
                             ],
                           ),
-                          avatarUrl: _problemList[index]['user_url'],
+                          avatarUrl: _problemList[index]['user_thumbnail_url'],
                           avatarThumbnailUrl: _problemList[index]
                               ['user_thumbnail_url'],
                           title: _problemList[index]['title'],
                           description: _problemList[index]['description'],
                           onInfoPressed: () => showAlert(
                               context, "Info", _problemList[index].toString()),
-                          onAvatarPressed: () => showProfile(),
+                          onAvatarPressed: () => showProfile(_problemList[index]['posted_by']),
                         ),
                         addVerticalSpace(10)
                       ],
@@ -228,9 +227,9 @@ class _ProblemScreenState extends State<ProblemScreen> {
     );
   }
 
-  showProfile() {
+  showProfile(int id) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (builder) => ProfileScreen()));
+        context, MaterialPageRoute(builder: (builder) => AccountScreen(user_id: id,)));
   }
 
   void openNotificationScreen() {

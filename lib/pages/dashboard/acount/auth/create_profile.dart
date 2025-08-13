@@ -67,7 +67,7 @@ class _CreateProfileState extends State<CreateProfile> {
                     child: SizedBox(
                         width: 25,
                         height: 25,
-                        child: CircularProgressIndicator())),
+                        child: CircularProgressIndicator(color: COLOR_BASE,))),
           ],
         ),
       ),
@@ -152,11 +152,12 @@ class _CreateProfileState extends State<CreateProfile> {
     });
     if (response.isSuccess) {
       showAlert(context, response.body['heading'], response.body['message'],
-          onDismiss: () {
+          onDismiss: () async {
         Navigator.pop(context);
         Navigator.pop(context);
+        int user_id = await getUserId();
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (builder) => AccountScreen()));
+            context, MaterialPageRoute(builder: (builder) => AccountScreen(user_id: user_id,)));
       });
     } else {
       showAlert(context, 'Failed!', "The response is failed!");

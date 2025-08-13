@@ -12,7 +12,7 @@ select * from notifications_for_comments;
 
 delete from requirements_of_problems;delete from likes_of_comments; delete from notifications_for_comments; delete from profiles_of_users;delete from images_of_problems;delete from comments;delete from problems;
 
-alter table problems auto_increment = 1;  alter table profiles_of_users auto_increment = 1; alter table likes_of_comments auto_increment = 1;alter table comments auto_increment = 1; alter table notifications_for_comments auto_increment = 1;alter table users auto_increment = 1;
+alter table users auto_increment = 1; alter table problems auto_increment = 1;  alter table profiles_of_users auto_increment = 1; alter table likes_of_comments auto_increment = 1;alter table comments auto_increment = 1; alter table notifications_for_comments auto_increment = 1;alter table users auto_increment = 1;
 
 flutter run -d chrome --web-browser-flag "--disable-web-security" --web-browser-flag "--user-data-dir=/tmp/flutter_cors"
 

@@ -5,8 +5,9 @@ import 'package:photo_view/photo_view.dart';
 class ImageViewScreen extends StatelessWidget {
   ImageProvider imageProvider;
   String title;
+  String tag;
   ImageViewScreen(
-      {super.key, required this.title, required this.imageProvider});
+      {super.key, required this.title, required this.imageProvider, this.tag = 'image_tag'});
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +21,17 @@ class ImageViewScreen extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: PhotoView(
-                  
-                  imageProvider: imageProvider,
-                  backgroundDecoration: BoxDecoration(color: Colors.white),
-                  minScale: PhotoViewComputedScale.contained * 1,
-                  maxScale: PhotoViewComputedScale.covered * 3,
-                  enableRotation: true,
+                child: Hero(
+                  tag: tag,
+                  child: PhotoView(
+                    imageProvider: imageProvider,
+                    backgroundDecoration: BoxDecoration(color: Colors.white),
+                    minScale: PhotoViewComputedScale.contained * 1,
+                    maxScale: PhotoViewComputedScale.covered * 3,
+                    enableRotation: true,
+                  ),
                 ),
               ),
-              
             ],
           ),
         ),

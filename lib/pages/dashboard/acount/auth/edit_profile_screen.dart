@@ -6,8 +6,10 @@ import 'package:Problem/components/floating_label_edit_box.dart';
 import 'package:Problem/components/profile_thumbnail.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
+import 'package:Problem/constants/image_constant.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/common_pages/image_view_screen.dart';
 import 'package:Problem/user/user_data.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
@@ -75,7 +77,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       child: SizedBox(
                           width: 25,
                           height: 25,
-                          child: CircularProgressIndicator())),
+                          child: CircularProgressIndicator(
+                            color: COLOR_BASE,
+                          ))),
             ],
           ),
         ),
@@ -86,6 +90,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Stack(
                 children: [
                   ProfileThumbnail(
+                    tag: widget.accountDetails['name'],
+                    onClicked: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => ImageViewScreen(
+                                tag: widget.accountDetails['name'],
+                                  title: widget.accountDetails['name'],
+                                  imageProvider: 
+                                  widget.accountDetails['image_url'] != null 
+                                  ? NetworkImage(widget.accountDetails['image_url'],) 
+                                  : FileImage(_localImageFile!)
+                                  )
+                                  
+                                  ));
+                    },
                     width: 160,
                     height: 160,
                     radius: 80,
@@ -171,9 +191,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
     if (response.isSuccess) {
       if (response.body['status'] == 'OK') {
-        showAlert(context, response.body['heading'], response.body['message']);
+        // showAlert(context, response.body['heading'], response.body['message']);
         setState(() {
-          
+          if (_localImageFile != null) {
+            widget.accountDetails['thumbnail_url'] =
+                response.body['thumbnail_url'];
+            widget.accountDetails['image_url'] = response.body['image_url'];
+          }
         });
       }
     }
@@ -183,7 +207,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _localImageFile = await getLocalImage(ImageSource.gallery);
 
     if (_localImageFile != null) {
-      setState(() {});
+      setState(() {
+        widget.accountDetails['thumbnail_url'] = null;
+        widget.accountDetails['image_url'] = null;
+      });
     }
   }
 }

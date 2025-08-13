@@ -16,6 +16,8 @@ class _ScrollablePageViewState extends State<ScrollablePageView> {
   int _currentPage = 0;
   late var _imageProvider = [];
 
+  int direction = 0;
+
   @override
   void dispose() {
     super.dispose();
@@ -33,12 +35,24 @@ class _ScrollablePageViewState extends State<ScrollablePageView> {
       viewportFraction: 0.97,
       initialPage: _currentPage,
     );
+
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
-      if (_currentPage < widget.images.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
+      if (_currentPage == widget.images.length - 1) {
+        direction = -1;
       }
+
+      if (_currentPage == 0) {
+        direction = 1;
+      }
+
+      if (widget.images.length <= 1) {
+        direction = 0;
+      }
+
+      _currentPage += direction;
+
+      print('scrollingLEFT: $direction ,  $_currentPage');
+
       _pageController.animateToPage(_currentPage,
           duration: Durations.extralong1, curve: Curves.easeIn);
     });
@@ -60,11 +74,16 @@ class _ScrollablePageViewState extends State<ScrollablePageView> {
                           imageProvider: NetworkImage(
                               widget.images[index]['image_url']))));
             },
-            child: FadeInImage(
-                fit: BoxFit.contain,
-                placeholder:
-                    Image.network(widget.images[index]['thumbnail_url']).image,
-                image: Image.network(widget.images[index]['image_url']).image),
+            child: Hero(
+              tag: widget.images[index]['image_url'],
+              child: FadeInImage(
+                  fit: BoxFit.contain,
+                  placeholder:
+                      Image.network(widget.images[index]['thumbnail_url'])
+                          .image,
+                  image:
+                      Image.network(widget.images[index]['image_url']).image),
+            ),
           );
         },
         controller: _pageController,
