@@ -1,14 +1,10 @@
 import 'package:Problem/components/profile_thumbnail.dart';
-import 'package:Problem/constants/storage_constant.dart';
 import 'package:Problem/constants/theme_constant.dart';
-import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/dashboard/acount/account_screen.dart';
 import 'package:Problem/pages/dashboard/idea_screen.dart';
 import 'package:Problem/pages/dashboard/plan_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/problem_screen.dart';
-import 'package:Problem/user/user_data.dart';
-import 'package:Problem/utils/api_service.dart';
-import 'package:Problem/utils/storage_service.dart';
+
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -31,47 +27,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-
-    initUser();
-    //test
-  }
-
-  initUser() async {
-    // await deleteJson(STORAGE_KEY_USER);
-    var obj = await loadJson(STORAGE_KEY_USER);
-
-    // print('localstorage $obj');
-
-    if (obj == null) {
-      ApiResponse response = await getService(URL_GUEST_USER);
-      print(response.body);
-      if (response.isSuccess) {
-        await saveJson(STORAGE_KEY_USER, {
-          'username': response.body['username'],
-          'user_id': response.body['user_id'],
-          'type': response.body['type'],
-          'is_signed_in': response.body['is_signed_in']
-        });
-        obj = response.body;
-      }
-    }
-
-    USER_ID = obj['user_id'];
-    USER_NAME = obj['username'];
-    USER_TYPE = obj['type'];
-    USER_SIGNED_IN = obj['is_signed_in'];
-
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
     
     return SafeArea(
       child: Scaffold(
-        
         body: _pages[_pageIndex],
         bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: COLOR_PRIMARY,
@@ -92,9 +51,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             BottomNavigationBarItem(
                 label: 'Me',
                 icon: ProfileThumbnail(
-                  imageUrl: USER_AVATAR_URL,
-                  width: 42,
-                  height: 42,
+                  width: 32,
+                  height: 32,
                 )),
           ],
         ),

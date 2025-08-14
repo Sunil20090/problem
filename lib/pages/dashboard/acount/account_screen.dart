@@ -45,14 +45,12 @@ class _AccountScreenState extends State<AccountScreen>
   }
 
   initAccountDetails() async {
-    int local_user_id = await getUserId();
     if (widget.user_id == 0) {
-      widget.user_id = local_user_id;
+      widget.user_id = USER_ID;
     }
 
-    _isSelfId = local_user_id == widget.user_id;
-
-
+    _isSelfId = USER_ID == widget.user_id;
+    
     setState(() {
       isLoading = true;
     });

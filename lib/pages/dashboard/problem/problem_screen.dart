@@ -32,9 +32,9 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getNotificationCount() async {
-    var userId = await getUserId();
+    
     ApiResponse response =
-        await postService(URL_NOTIFICATION_COUNT, {"user_id": userId});
+        await postService(URL_NOTIFICATION_COUNT, {"user_id": USER_ID});
 
     if (response.isSuccess) {
       setState(() {
@@ -44,7 +44,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getList() async {
-    ApiResponse response = await getService(URL_PROBLEM_LIST);
+
+    ApiResponse response = await postService(URL_PROBLEM_LIST, {"user_id" : USER_ID});
 
     if (response.isSuccess) {
       setState(() {
@@ -130,9 +131,9 @@ class _ProblemScreenState extends State<ProblemScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                      builder: (context) => ProblemDetailScreen(
-                                        problem: _problemList[index], )  
-                                    ));
+                                    builder: (context) => ProblemDetailScreen(
+                                          problem: _problemList[index],
+                                        )));
                           },
                           container: Stack(
                             fit: StackFit.expand,
@@ -201,7 +202,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
                           description: _problemList[index]['description'],
                           onInfoPressed: () => showAlert(
                               context, "Info", _problemList[index].toString()),
-                          onAvatarPressed: () => showProfile(_problemList[index]['posted_by']),
+                          onAvatarPressed: () =>
+                              showProfile(_problemList[index]['posted_by']),
                         ),
                         addVerticalSpace(10)
                       ],
@@ -229,7 +231,11 @@ class _ProblemScreenState extends State<ProblemScreen> {
 
   showProfile(int id) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (builder) => AccountScreen(user_id: id,)));
+        context,
+        MaterialPageRoute(
+            builder: (builder) => AccountScreen(
+                  user_id: id,
+                )));
   }
 
   void openNotificationScreen() {

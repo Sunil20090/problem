@@ -23,24 +23,24 @@ const COLOR_BASE_SUCCESS = Color.fromARGB(255, 2, 117, 60);
 const COLOR_BASE_ERROR = Color.fromARGB(255, 136, 0, 0);
 const COLOR_RED = Color.fromARGB(255, 245, 109, 109);
 
-
 const EdgeInsets CONTENT_PADDING = EdgeInsets.all(8);
 
 const EdgeInsets SCREEN_PADDING =
-    EdgeInsets.symmetric(horizontal: 14, vertical: 8);
+    EdgeInsets.symmetric(horizontal: 8, vertical: 14);
 
 const double CONTENT_PADDING_VALUE = 8;
 
-getTransitionBuilder(){
+getTransitionBuilder() {
   return (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0);
-        const end = Offset.zero;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: Curves.ease));
-        return SlideTransition(position: animation.drive(tween), child: child);
-      };
+    const begin = Offset(1.0, 0.0);
+    const end = Offset.zero;
+    var tween =
+        Tween(begin: begin, end: end).chain(CurveTween(curve: Curves.ease));
+    return SlideTransition(position: animation.drive(tween), child: child);
+  };
 }
 
-TextTheme getTextTheme({Color color=COLOR_BLACK}) {
+TextTheme getTextTheme({Color color = COLOR_BLACK}) {
   return TextTheme(
     headlineLarge: TextStyle(
       fontSize: 32,
@@ -89,4 +89,3 @@ TextTheme getTextTheme({Color color=COLOR_BLACK}) {
     ),
   );
 }
-

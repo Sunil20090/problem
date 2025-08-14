@@ -24,8 +24,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   initNotificaitonList() async {
-    int userId = await getUserId();
-    var body = {"user_id": userId};
+   
+    var body = {"user_id": USER_ID};
 
     ApiResponse response = await postService(URL_USER_NOTIFICATION_LIST, body);
 

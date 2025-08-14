@@ -1,5 +1,6 @@
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/user/user_data.dart';
+import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class PlanScreen extends StatefulWidget {
@@ -16,7 +17,8 @@ class _PlanScreenState extends State<PlanScreen> {
       child: Column(
         children: [
 
-          Text('User: $USER_ID, USER TYPE $USER_TYPE'),
+          Text('User: $USER_ID', style: getTextTheme().headlineLarge,),
+          addVerticalSpace(),
           Text(
             'Plans screen',
             style: getTextTheme().headlineLarge,

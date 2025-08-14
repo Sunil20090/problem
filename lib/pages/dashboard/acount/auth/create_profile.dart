@@ -131,10 +131,9 @@ class _CreateProfileState extends State<CreateProfile> {
       return false;
     }
 
-    int user_id = await getUserId();
 
     var payload = {
-      "user_id": user_id,
+      "user_id": USER_ID,
       "name": _nameController.text,
       "description": _descriptionController.text,
       "mail_id": _emailController.text.toLowerCase(),
@@ -155,9 +154,8 @@ class _CreateProfileState extends State<CreateProfile> {
           onDismiss: () async {
         Navigator.pop(context);
         Navigator.pop(context);
-        int user_id = await getUserId();
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (builder) => AccountScreen(user_id: user_id,)));
+            context, MaterialPageRoute(builder: (builder) => AccountScreen(user_id: USER_ID,)));
       });
     } else {
       showAlert(context, 'Failed!', "The response is failed!");

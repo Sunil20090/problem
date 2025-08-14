@@ -16,3 +16,21 @@ alter table users auto_increment = 1; alter table problems auto_increment = 1;  
 
 flutter run -d chrome --web-browser-flag "--disable-web-security" --web-browser-flag "--user-data-dir=/tmp/flutter_cors"
 
+
+CREATE TABLE notifications_for_problems_tracking(
+    id int PRIMARY KEY auto_increment,
+    problem_id int,
+    tracked_by int,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (problem_id) references problems(id),
+    FOREIGN KEY (tracked_by) references users(id)
+);
+
+CREATE TABLE tracking_of_problems(
+    id int PRIMARY KEY auto_increment,
+    problem_id int,
+    tracked_by int,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (problem_id) references problems(id),
+    FOREIGN KEY (tracked_by) references users(id)
+);

@@ -173,9 +173,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       base64 = await fileToBase64(_localImageFile!);
     }
 
-    int user_id = await getUserId();
     var body = {
-      "user_id": user_id,
+      "user_id": USER_ID,
       "base64": base64,
       "name": _nameController.text,
       "description": _descriptionController.text

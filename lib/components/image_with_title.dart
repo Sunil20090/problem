@@ -48,7 +48,6 @@ class ImageWithTitle extends StatelessWidget {
                   child: ProfileThumbnail(
                     thumnail_url: avatarThumbnailUrl,
                     imageUrl: avatarUrl
-                    
                   )),
               addHorizontalSpace(20),
               Expanded(

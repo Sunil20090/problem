@@ -2,6 +2,7 @@ import 'package:Problem/api/data/sample_data.dart';
 import 'package:Problem/components/colored_button.dart';
 import 'package:Problem/components/comment_item.dart';
 import 'package:Problem/components/enter_text_box.dart';
+import 'package:Problem/components/progress_circular.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/components/scrollable_page_view.dart';
@@ -37,6 +38,8 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     viewportFraction: 0.9,
   );
 
+  bool isTrackLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -67,6 +70,30 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
       backButton: true,
       titleBar: ScreenActionBar(
         title: widget.problem['title'],
+        child: (widget.problem['posted_by'] != USER_ID)
+        ? Row(
+          children: [
+            ColoredButton(
+                onPressed: !isTrackLoading
+                    ? () {
+                        setState(() {
+                          trackProblem();
+                          // widget.problem['tracking'] = !widget.problem['tracking'];
+                          print(widget.problem['tracking']);
+                        });
+                      }
+                    : null,
+                backgroundColor: widget.problem['tracking'] == 1
+                    ? COLOR_BLACK
+                    : COLOR_PRIMARY,
+                child: !isTrackLoading
+                    ? Text(
+                        widget.problem['tracking'] == 1 ? 'Tracked' : 'Track',
+                        style: getTextTheme(color: COLOR_BASE).titleMedium,
+                      )
+                    : ProgressCircular())
+          ],
+        ) : null,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,5 +314,27 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
         MaterialPageRoute(
             builder: (builder) =>
                 ImageViewScreen(title: title, imageProvider: provider)));
+  }
+
+  void trackProblem() async {
+    var body = {"problem_id": widget.problem['id'], "user_id": USER_ID};
+
+    setState(() {
+      isTrackLoading = true;
+    });
+
+    ApiResponse response = await postService(URL_TRACK_PROBLEM, body);
+
+    setState(() {
+      isTrackLoading = false;
+    });
+
+    if (response.isSuccess) {
+      if (response.body['status'] == "OK") {
+        setState(() {
+          widget.problem['tracking'] = response.body['tracking'];
+        });
+      }
+    }
   }
 }
