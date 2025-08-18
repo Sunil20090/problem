@@ -34,3 +34,9 @@ CREATE TABLE tracking_of_problems(
     FOREIGN KEY (problem_id) references problems(id),
     FOREIGN KEY (tracked_by) references users(id)
 );
+
+CREATE TABLE search_queries(
+    id int PRIMARY KEY auto_increment,
+    content text,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

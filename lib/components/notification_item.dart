@@ -24,26 +24,26 @@ class _NotificationItemState extends State<NotificationItem> {
                   context,
                   MaterialPageRoute(
                       builder: (builder) => ImageViewScreen(
-                        tag: widget.notification['image_url'],
-                            imageProvider:
-                                NetworkImage(widget.notification['image_url']),
+                            imageProvider: FadeInImage(
+                              placeholder: NetworkImage(
+                                  widget.notification['thumbnail_url']),
+                              image: NetworkImage(
+                                  widget.notification['image_url']),
+                              fit: BoxFit.cover,
+                            ).image,
                             title: 'Image',
                           )));
             },
-            child: Hero(
-              tag: widget.notification['image_url'],
-              child: ClipRRect(
-                
-                borderRadius: BorderRadius.circular(8),
-                child: SizedBox(
-                  width: 80,
-                  height: 50,
-                  child: FadeInImage(
-                    placeholder:
-                        NetworkImage(widget.notification['thumbnail_url']),
-                    image: NetworkImage(widget.notification['image_url']),
-                    fit: BoxFit.cover,
-                  ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: SizedBox(
+                width: 80,
+                height: 50,
+                child: FadeInImage(
+                  placeholder:
+                      NetworkImage(widget.notification['thumbnail_url']),
+                  image: NetworkImage(widget.notification['image_url']),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

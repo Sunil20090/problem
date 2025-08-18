@@ -1,6 +1,3 @@
-import 'package:Problem/pages/dashboard/acount/auth/edit_profile_screen.dart';
-import 'package:Problem/pages/dashboard/acount/auth/login_page.dart';
-import 'package:Problem/pages/dashboard/dashboard_screen.dart';
 import 'package:Problem/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

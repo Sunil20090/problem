@@ -6,13 +6,14 @@ import 'package:Problem/pages/common_pages/notification/notification_screen.dart
 import 'package:Problem/pages/dashboard/acount/account_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/post_problem_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/problem_detail_screen.dart';
-import 'package:Problem/user/user_data.dart';
+import 'package:Problem/pages/search_screen.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class ProblemScreen extends StatefulWidget {
-  const ProblemScreen({super.key});
+  ProblemScreen({super.key});
 
   @override
   State<ProblemScreen> createState() => _ProblemScreenState();
@@ -21,6 +22,8 @@ class ProblemScreen extends StatefulWidget {
 class _ProblemScreenState extends State<ProblemScreen> {
   List<dynamic> _problemList = [];
   var _notificationCount = 0;
+
+  var _result;
 
   @override
   void initState() {
@@ -32,7 +35,6 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getNotificationCount() async {
-    
     ApiResponse response =
         await postService(URL_NOTIFICATION_COUNT, {"user_id": USER_ID});
 
@@ -44,8 +46,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getList() async {
-
-    ApiResponse response = await postService(URL_PROBLEM_LIST, {"user_id" : USER_ID});
+    var body = {"user_id": USER_ID, "search_by": _result};
+    ApiResponse response = await postService(URL_PROBLEM_LIST, body);
 
     if (response.isSuccess) {
       setState(() {
@@ -67,10 +69,15 @@ class _ProblemScreenState extends State<ProblemScreen> {
                 title: 'Problem',
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.search,
-                      size: getTextTheme().headlineLarge?.fontSize,
-                      color: COLOR_PRIMARY,
+                    InkWell(
+                      onTap: () {
+                        openSearchScreen();
+                      },
+                      child: Icon(
+                        Icons.search,
+                        size: getTextTheme().headlineLarge?.fontSize,
+                        color: COLOR_PRIMARY,
+                      ),
                     ),
                     InkWell(
                       onTap: () {
@@ -241,5 +248,15 @@ class _ProblemScreenState extends State<ProblemScreen> {
   void openNotificationScreen() {
     Navigator.push(
         context, MaterialPageRoute(builder: (builder) => NotificationScreen()));
+  }
+
+  void openSearchScreen() async {
+    _result = await Navigator.push(
+        context, MaterialPageRoute(builder: (builder) => SearchScreen()));
+
+    print('got the result $_result');
+    if (_result != null) {
+      getList();
+    }
   }
 }

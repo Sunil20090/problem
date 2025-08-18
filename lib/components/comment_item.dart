@@ -1,6 +1,6 @@
 import 'package:Problem/components/profile_thumbnail.dart';
 import 'package:Problem/constants/theme_constant.dart';
-import 'package:Problem/user/user_data.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +30,6 @@ class _CommentItemState extends State<CommentItem> {
     return Container(
         child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      
       children: [
         ProfileThumbnail(
             width: 40,
@@ -43,16 +42,13 @@ class _CommentItemState extends State<CommentItem> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Wrap(
-
                 children: [
-                  Text(
-                    "${widget.comment['username']}",
-                    style:
-                        getTextTheme(color: COLOR_PRIMARY).titleSmall),
+                  Text("${widget.comment['username']}",
+                      style: getTextTheme(color: COLOR_PRIMARY).titleSmall),
                   addHorizontalSpace(),
                   Text(
-                    "@${timeAgo(widget.comment['created_on'], timezoneOffset: Duration(hours: 5, minutes: 30))}",
-                    style:getTextTheme(color: COLOR_BLACK).bodySmall),
+                      "@${timeAgo(widget.comment['created_on'], timezoneOffset: Duration(hours: 5, minutes: 30))}",
+                      style: getTextTheme(color: COLOR_BLACK).bodySmall),
                 ],
               ),
               Text(
@@ -65,13 +61,11 @@ class _CommentItemState extends State<CommentItem> {
             ],
           ),
         ),
-        
         Column(
           children: [
             addVerticalSpace(20),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              
               children: [
                 InkWell(
                     onTap: widget.onLikedClicked,

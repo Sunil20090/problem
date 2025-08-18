@@ -6,11 +6,10 @@ import 'package:Problem/components/floating_label_edit_box.dart';
 import 'package:Problem/components/profile_thumbnail.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
-import 'package:Problem/constants/image_constant.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/common_pages/image_view_screen.dart';
-import 'package:Problem/user/user_data.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +90,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   ProfileThumbnail(
                     tag: widget.accountDetails['name'],
-                    onClicked: () {
+                    onClicked: widget.accountDetails['thumbnail_url'] != null ? () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -104,8 +103,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   : FileImage(_localImageFile!)
                                   )
                                   
-                                  ));
-                    },
+                                  )
+                                  );
+                    } : null,
                     width: 160,
                     height: 160,
                     radius: 80,

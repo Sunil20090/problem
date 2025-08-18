@@ -39,7 +39,7 @@ class ImageWithTitle extends StatelessWidget {
               ),
             ),
           ),
-          addVerticalSpace(),
+          addVerticalSpace(4),
           Row(
             children: [
               addHorizontalSpace(),

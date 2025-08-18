@@ -1,15 +1,16 @@
 import 'package:Problem/components/colored_button.dart';
-import 'package:Problem/components/enter_text_box.dart';
 import 'package:Problem/components/floating_label_edit_box.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
-import 'package:Problem/components/screen_template.dart';
+import 'package:Problem/constants/storage_constant.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/dashboard/acount/auth/create_profile.dart';
 import 'package:Problem/pages/dashboard/dashboard_screen.dart';
-import 'package:Problem/pages/form_create_page.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
+import 'package:Problem/utils/storage_service.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -83,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void moveToCreateFormPage() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (builder) => FormCreatePage()));
+        context, MaterialPageRoute(builder: (builder) => CreateProfile()));
   }
 
   void login() async {
@@ -93,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     var body = {
-      "username": _usernameController.text.toLowerCase(),
+      "username": _usernameController.text.toLowerCase().trim(),
       "password": _passwordController.text
     };
 
@@ -109,6 +110,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (response.isSuccess) {
       if (response.body['status'] == 'OK') {
+        await saveUserToLocal(response.body);
         moveToDashBoardPage();
       } else {
         showAlert(context, response.body['heading'], response.body['message']);
@@ -117,7 +119,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void moveToDashBoardPage() {
-    Navigator.push(
+    Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (builder) => DashboardScreen()));
+  }
+
+  saveUserToLocal(body) async {
+    await saveUser(body);
   }
 }

@@ -32,5 +32,7 @@ const URL_CREATE_OTP_VERIFICATION = '$_domain${_baseUrl}optVerification';
 const URL_NOTIFICATION_COUNT = '$_domain${_baseUrl}newNotificationCount';
 const URL_USER_NOTIFICATION_LIST = '$_domain${_baseUrl}getNotifications';
 
+const URL_PROBLEM_SEARCH_QUERY = '$_domain${_baseUrl}searchQuery';
+
 
 
