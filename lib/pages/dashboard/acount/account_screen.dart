@@ -33,6 +33,8 @@ class _AccountScreenState extends State<AccountScreen>
   ];
   var _achievements = [];
 
+  var _posts = [];
+
   bool _isSelfId = false;
 
   @override
@@ -44,6 +46,8 @@ class _AccountScreenState extends State<AccountScreen>
     initSkills();
 
     initHistory();
+
+    insertScreen(USER_ID, "account", _isSelfId ? 1 : 0);
   }
 
   initAccountDetails() async {
@@ -64,14 +68,15 @@ class _AccountScreenState extends State<AccountScreen>
     });
     if (response.isSuccess) {
       setState(() {
-        _accountDetails = response.body;
+        _accountDetails = response.body['profile'];
+        _posts = response.body['posts'];
       });
     }
   }
 
   initSkills() {}
 
-  initHistory() {}
+  initHistory() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -230,6 +235,33 @@ class _AccountScreenState extends State<AccountScreen>
                                 style: getTextTheme().titleSmall,
                               ),
                               addVerticalSpace(20),
+                              if (_posts.length > 0)
+                                SizedBox(
+                                  height: 500,
+                                  child: GridView(
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 4,
+                                            mainAxisSpacing: 1,
+                                            crossAxisSpacing: 1),
+                                    children: _posts.map((post) {
+                                      var fadeWidget = FadeInImage(
+                                        placeholder:
+                                            NetworkImage(post['thumbnail_url']),
+                                        image: NetworkImage(post['image_url']),
+                                        fit: BoxFit.cover,
+                                      );
+                                      return InkWell(
+                                          onTap: () {
+                                            openImageView(
+                                                fadeWidget.image, post);
+                                          },
+                                          child: Hero(
+                                            tag: post['image_url'],
+                                            child: fadeWidget));
+                                    }).toList(),
+                                  ),
+                                ),
                               InkWell(
                                 onTap: () {
                                   logoutUser();
@@ -324,5 +356,14 @@ class _AccountScreenState extends State<AccountScreen>
     await deleteUser();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (builder) => LoginPage()));
+  }
+
+  void openImageView(provider, post) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (builder) => ImageViewScreen(
+              tag: post['image_url'],
+                title: post['title'], imageProvider: provider)));
   }
 }

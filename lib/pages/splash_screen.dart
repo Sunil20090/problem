@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
   initUser() async {
     var user = await loadUser();
 
-    if (user == null) {
+    if (user == null || user['id'] == null) {
       ApiResponse response = await getService(URL_GUEST_USER);
       print(response.body);
       if (response.isSuccess) {
@@ -34,7 +34,12 @@ class _SplashScreenState extends State<SplashScreen> {
         user = response.body;
       }
     } else {
-      ApiResponse response = await getService(URL_USER_LOGIN);
+      ApiResponse response =
+          await postService(URL_USER_DETAIL, {"id": USER_ID});
+      if (response.isSuccess) {
+        await saveUser(response.body);
+        user = response.body;
+      }
     }
 
     return user;

@@ -10,9 +10,31 @@ select * from requirements_of_problems;
 select * from notifications_for_comments;
 
 
-delete from requirements_of_problems;delete from likes_of_comments; delete from notifications_for_comments; delete from profiles_of_users;delete from images_of_problems;delete from comments;delete from problems;
+delete from search_queries; 
+delete from screen_report;
+delete from tracking_of_problems;
+delete from notifications_for_problems_tracking; 
+delete from requirements_of_problems;
+delete from likes_of_comments; 
+delete from notifications_for_comments; 
+delete from profiles_of_users;
+delete from images_of_problems;
+delete from comments;
+delete from problems;
 
-alter table users auto_increment = 1; alter table problems auto_increment = 1;  alter table profiles_of_users auto_increment = 1; alter table likes_of_comments auto_increment = 1;alter table comments auto_increment = 1; alter table notifications_for_comments auto_increment = 1;alter table users auto_increment = 1;
+
+
+alter table users auto_increment = 1;
+alter table problems auto_increment = 1; 
+alter table profiles_of_users auto_increment = 1;
+alter table likes_of_comments auto_increment = 1;
+alter table comments auto_increment = 1; 
+alter table notifications_for_comments auto_increment = 1;
+alter table users auto_increment = 1;
+alter table search_queries auto_increment = 1;
+alter table screen_report auto_increment = 1;
+alter table tracking_of_problems auto_increment = 1;
+alter table notifications_for_problems_tracking auto_increment = 1;
 
 flutter run -d chrome --web-browser-flag "--disable-web-security" --web-browser-flag "--user-data-dir=/tmp/flutter_cors"
 
@@ -40,3 +62,23 @@ CREATE TABLE search_queries(
     content text,
     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE screen_report(
+    id int PRIMARY KEY auto_increment,
+    user_id int,
+    reference_id int,
+    screen varchar(50),
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) references users(id)
+);
+
+
+CREATE TABLE notifications_for_problems_tracking(
+    id int PRIMARY KEY auto_increment,
+    problem_id int,
+    tracked_by int,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (problem_id) references problems(id),
+    FOREIGN KEY (tracked_by) references users(id)
+);
+

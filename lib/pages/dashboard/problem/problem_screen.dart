@@ -32,6 +32,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
     getList();
 
     getNotificationCount();
+
+    insertScreen(USER_ID, "problem_list", 0);
   }
 
   getNotificationCount() async {
@@ -65,68 +67,95 @@ class _ProblemScreenState extends State<ProblemScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              ScreenActionBar(
-                title: 'Problem',
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        openSearchScreen();
-                      },
-                      child: Icon(
-                        Icons.search,
-                        size: getTextTheme().headlineLarge?.fontSize,
-                        color: COLOR_PRIMARY,
+              if (_result == null)
+                ScreenActionBar(
+                  title: 'Problem',
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          openSearchScreen();
+                        },
+                        child: Icon(
+                          Icons.search,
+                          size: getTextTheme().headlineLarge?.fontSize,
+                          color: COLOR_PRIMARY,
+                        ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        openNotificationScreen();
-                      },
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Icon(
-                            Icons.notifications_outlined,
-                            size: getTextTheme().headlineLarge?.fontSize,
-                            color: COLOR_PRIMARY,
-                          ),
-                          Positioned(
-                            top: -1,
-                            right: -1,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: (_notificationCount != 0)
-                                  ? Container(
-                                      height: 22,
-                                      width: 22,
-                                      alignment: Alignment.center,
-                                      color: Colors.red,
-                                      child: Text(
-                                        '${formatNumber(_notificationCount)}',
-                                        style: TextStyle(color: COLOR_BASE),
-                                      ),
-                                    )
-                                  : null,
+                      InkWell(
+                        onTap: () {
+                          openNotificationScreen();
+                        },
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Icon(
+                              Icons.notifications_outlined,
+                              size: getTextTheme().headlineLarge?.fontSize,
+                              color: COLOR_PRIMARY,
                             ),
+                            Positioned(
+                              top: -1,
+                              right: -1,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: (_notificationCount != 0)
+                                    ? Container(
+                                        height: 22,
+                                        width: 22,
+                                        alignment: Alignment.center,
+                                        color: Colors.red,
+                                        child: Text(
+                                          '${formatNumber(_notificationCount)}',
+                                          style: TextStyle(color: COLOR_BASE),
+                                        ),
+                                      )
+                                    : null,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      addHorizontalSpace(6),
+                      InkWell(
+                        onTap: () {
+                          getList();
+                        },
+                        child: Icon(
+                          Icons.mail_outline,
+                          size: getTextTheme().headlineLarge?.fontSize,
+                          color: COLOR_PRIMARY,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        _result,
+                        style: getTextTheme().titleSmall,
+                      ),
+                      addHorizontalSpace(),
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              _result = null;
+                              getList();
+                            });
+                          },
+                          child: Icon(
+                            Icons.close,
+                            size: getTextTheme().titleMedium?.fontSize,
+                          )
                           ),
-                        ],
-                      ),
-                    ),
-                    addHorizontalSpace(6),
-                    InkWell(
-                      onTap: () {
-                        getList();
-                      },
-                      child: Icon(
-                        Icons.mail_outline,
-                        size: getTextTheme().headlineLarge?.fontSize,
-                        color: COLOR_PRIMARY,
-                      ),
-                    ),
-                  ],
+                          addHorizontalSpace()
+                    ],
+                  ),
                 ),
-              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: _problemList.length,
@@ -193,6 +222,21 @@ class _ProblemScreenState extends State<ProblemScreen> {
                                         addHorizontalSpace(2),
                                         Text(
                                           "${formatNumber(_problemList[index]['solution_count'])}",
+                                          style:
+                                              getTextTheme(color: COLOR_WHITE)
+                                                  .titleSmall,
+                                        ),
+                                        addHorizontalSpace(),
+                                        Icon(
+                                          Icons.remove_red_eye,
+                                          color: COLOR_WHITE,
+                                          size: getTextTheme()
+                                              .titleSmall
+                                              ?.fontSize,
+                                        ),
+                                        addHorizontalSpace(2),
+                                        Text(
+                                          "${formatNumber(_problemList[index]['views'])}",
                                           style:
                                               getTextTheme(color: COLOR_WHITE)
                                                   .titleSmall,

@@ -15,6 +15,7 @@ const URL_GET_PROFILE = '$_domain${_baseUrl}getProfile';
 
 
 const URL_USER_LOGIN = '$_domain${_baseUrl}userLogin';
+const URL_USER_DETAIL = '$_domain${_baseUrl}getUserDetail';
 
 const URL_GUEST_USER = '$_domain${_baseUrl}createGuestUser';
 const URL_PROBLEM_LIST = '$_domain${_baseUrl}getProblems';
@@ -22,10 +23,10 @@ const URL_POST_PROBLEM = '$_domain${_baseUrl}createProblem';
 const URL_IMAGES_OF_PROBLEM = '$_domain${_baseUrl}getImagesOfProblem';
 const URL_TRACK_PROBLEM = '$_domain${_baseUrl}trackProblem';
 
-
 const URL_CREATE_DATA_PROFILE = '$_domain${_baseUrl}createProfile';
 const URL_CREATE_IMAGE_PROFILE = '$_domain${_baseUrl}createImageProfile';
 const URL_EDIT_PROFILE = '$_domain${_baseUrl}editProfile';
+const URL_GET_USER_POST = '$_domain${_baseUrl}userPosts';
 
 const URL_CREATE_OTP_VERIFICATION = '$_domain${_baseUrl}optVerification';
 
@@ -33,6 +34,9 @@ const URL_NOTIFICATION_COUNT = '$_domain${_baseUrl}newNotificationCount';
 const URL_USER_NOTIFICATION_LIST = '$_domain${_baseUrl}getNotifications';
 
 const URL_PROBLEM_SEARCH_QUERY = '$_domain${_baseUrl}searchQuery';
+const URL_ADD_TO_QUERY = '$_domain${_baseUrl}addQuery';
+
+const URL_SCREEN_RECORD = '$_domain${_baseUrl}screenReport';
 
 
 

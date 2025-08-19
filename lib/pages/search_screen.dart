@@ -68,38 +68,33 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search'),
+        title: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _searchController,
+                style: getTextTheme().titleSmall,
+                decoration: InputDecoration(
+                  hintText: 'Search problems...',
+                ),
+              ),
+            ),
+            ColoredButton(
+                onPressed: () {
+                  searchQuery(_searchController.text, 'button');
+                },
+                child: Icon(
+                  Icons.search,
+                  color: COLOR_BASE,
+                  size: getTextTheme().headlineMedium?.fontSize,
+                ))
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search items...',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4)),
-                      prefixIcon: Icon(Icons.search),
-                    ),
-                  ),
-                ),
-                addHorizontalSpace(),
-                ColoredButton(
-                    onPressed: () {
-                      searchQuery(_searchController.text);
-                    },
-                    child: Icon(
-                      Icons.search,
-                      color: COLOR_BASE,
-                      size: getTextTheme().headlineMedium?.fontSize,
-                    ))
-              ],
-            ),
-            const SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
                 itemCount: _filteredItems.length,
@@ -107,7 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   return ListTile(
                     title: Text(_filteredItems[index]),
                     onTap: () {
-                      searchQuery(_filteredItems[index]);
+                      searchQuery(_filteredItems[index], 'suggestion');
                     },
                   );
                 },
@@ -119,7 +114,9 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  void searchQuery(String data) {
+  void searchQuery(String data, String source) {
+    if (data.isEmpty) return;
     Navigator.pop(context, data);
+    postService(URL_ADD_TO_QUERY, {"query": data, "source" : source});
   }
 }

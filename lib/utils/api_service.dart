@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:Problem/constants/url_constant.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
@@ -74,4 +75,9 @@ postWithProgress(
   } catch (e) {
     throw Exception('Failed to post data: $e');
   }
+}
+
+insertScreen(int user_id, String screenName, int reference_id) async {
+  var body = {"user_id": user_id, "screen": screenName, "reference_id" : reference_id};
+  await postService(URL_SCREEN_RECORD, body);
 }

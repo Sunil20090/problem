@@ -49,21 +49,23 @@ class _NotificationItemState extends State<NotificationItem> {
             ),
           ),
           addHorizontalSpace(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                  '@${timeAgo(widget.notification['created_at'], timezoneOffset: Duration(hours: 5, minutes: 30))}'),
-              Text(
-                widget.notification['content'],
-                softWrap: true,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text('#${widget.notification['problem_title']}',
-                  style: getTextTheme(color: COLOR_PRIMARY).titleSmall),
-              addVerticalSpace(20)
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                    '@${timeAgo(widget.notification['created_at'], timezoneOffset: Duration(hours: 5, minutes: 30))}'),
+                Text(
+                  widget.notification['content'],
+                  softWrap: true,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text('#${widget.notification['problem_title']}',
+                    style: getTextTheme(color: COLOR_PRIMARY).titleSmall),
+                addVerticalSpace(20)
+              ],
+            ),
           ),
         ],
       ),

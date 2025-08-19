@@ -46,6 +46,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     initCommentList(widget.problem['id']);
     initRequirementList(widget.problem['id']);
     initImageList(widget.problem['id']);
+    insertScreen(USER_ID, "problem_detail", widget.problem['id']);
   }
 
   initRequirementList(int id) {
