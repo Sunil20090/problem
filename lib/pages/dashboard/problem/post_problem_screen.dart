@@ -44,6 +44,12 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    insertScreen(USER_ID, "post_problem", 0);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
@@ -176,7 +182,7 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
           child: InkWell(
             onTap: () {
               setState(() {
-                if(_imageList.length > 1){
+                if (_imageList.length > 1) {
                   _imageList.removeAt(index);
                 }
               });

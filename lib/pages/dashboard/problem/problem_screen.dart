@@ -150,9 +150,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
                           child: Icon(
                             Icons.close,
                             size: getTextTheme().titleMedium?.fontSize,
-                          )
-                          ),
-                          addHorizontalSpace()
+                          )),
+                      addHorizontalSpace()
                     ],
                   ),
                 ),
@@ -175,7 +174,6 @@ class _ProblemScreenState extends State<ProblemScreen> {
                             fit: StackFit.expand,
                             children: [
                               FadeInImage(
-                                
                                 image: Image.network(
                                   _problemList[index]['image_url'],
                                 ).image,
@@ -247,7 +245,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
                                   )),
                             ],
                           ),
-                          timeStamp: '@${timeAgo(_problemList[index]['created_on'], timezoneOffset: Duration(hours: 5, minutes: 30))}',
+                          timeStamp:
+                              '@${timeAgo(_problemList[index]['created_on'], timezoneOffset: Duration(hours: 5, minutes: 30))}',
                           avatarUrl: _problemList[index]['user_thumbnail_url'],
                           avatarThumbnailUrl: _problemList[index]
                               ['user_thumbnail_url'],
@@ -288,6 +287,11 @@ class _ProblemScreenState extends State<ProblemScreen> {
         MaterialPageRoute(
             builder: (builder) => AccountScreen(
                   user_id: id,
+                  onChanged: () {
+                    setState(() {
+                      
+                    });
+                  },
                 )));
   }
 

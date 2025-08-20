@@ -1,4 +1,5 @@
 import 'package:Problem/components/profile_thumbnail.dart';
+import 'package:Problem/components/rounded_rect_image.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/constants/theme_constant.dart';
@@ -7,6 +8,7 @@ import 'package:Problem/pages/common_pages/image_view_screen.dart';
 import 'package:Problem/pages/dashboard/acount/auth/create_profile.dart';
 import 'package:Problem/pages/dashboard/acount/auth/edit_profile_screen.dart';
 import 'package:Problem/pages/dashboard/acount/auth/login_page.dart';
+import 'package:Problem/pages/dashboard/problem/edit_problem_screen.dart';
 import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
@@ -237,48 +239,47 @@ class _AccountScreenState extends State<AccountScreen>
                               addVerticalSpace(20),
                               Column(
                                   children: _posts.map((post) {
-                                return Container(
-                                  padding: EdgeInsets.all(4),
-                                  child: Row(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: SizedBox(
-                                          width: 80,
-                                          height: 50,
-                                          child: FadeInImage(
-                                            placeholder: NetworkImage(
-                                                post['thumbnail_url']),
-                                            image:
-                                                NetworkImage(post['image_url']),
-                                            fit: BoxFit.cover,
+                                return InkWell(
+                                  onTap: () {
+                                    openProblemEditing(post['id']);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(4),
+                                    child: Row(
+                                      children: [
+                                        RoundedRectImage(
+                                          image_url: post['image_url'],
+                                          thumbnail_url: post['thumbnail_url'],
+                                        ),
+                                        addHorizontalSpace(8),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                post['title'],
+                                                style:
+                                                    getTextTheme().titleSmall,
+                                              ),
+                                              Text(
+                                                post['description'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                      addHorizontalSpace(4),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              post['title'],
-                                              style: getTextTheme().titleSmall,
-                                            ),
-                                            Text(
-                                              post['description'],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.edit,
-                                        color: COLOR_PRIMARY,
-                                      )
-                                    ],
+                                        Icon(
+                                          Icons.edit,
+                                          color: COLOR_PRIMARY,
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 );
                               }).toList()),
+                              addVerticalSpace(DEFAULT_LARGE_SPACE),
                               InkWell(
                                 onTap: () {
                                   logoutUser();
@@ -360,7 +361,7 @@ class _AccountScreenState extends State<AccountScreen>
         context,
         MaterialPageRoute(
             builder: (builder) => EditProfileScreen(
-              onChange: widget.onChanged,
+                  onChange: widget.onChanged,
                   accountDetails: accountDetails,
                 )));
   }
@@ -384,5 +385,10 @@ class _AccountScreenState extends State<AccountScreen>
                 tag: post['image_url'],
                 title: post['title'],
                 imageProvider: provider)));
+  }
+
+  void openProblemEditing(int problem_id) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (builder) => EditProblemScreen(problem_id:  problem_id)));
   }
 }

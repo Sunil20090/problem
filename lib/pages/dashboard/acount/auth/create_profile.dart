@@ -154,12 +154,14 @@ class _CreateProfileState extends State<CreateProfile> {
       showAlert(context, response.body['heading'], response.body['message'],
           onDismiss: () async {
         Navigator.pop(context);
-        Navigator.pop(context);
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (builder) => AccountScreen(
                       user_id: USER_ID,
+                      onChanged:() => setState(() {
+                        
+                      })
                     )));
       });
     } else {

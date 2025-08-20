@@ -22,6 +22,7 @@ const URL_PROBLEM_LIST = '$_domain${_baseUrl}getProblems';
 const URL_POST_PROBLEM = '$_domain${_baseUrl}createProblem';
 const URL_IMAGES_OF_PROBLEM = '$_domain${_baseUrl}getImagesOfProblem';
 const URL_TRACK_PROBLEM = '$_domain${_baseUrl}trackProblem';
+const URL_GET_PROBLEM = '$_domain${_baseUrl}getProblem';
 
 const URL_CREATE_DATA_PROFILE = '$_domain${_baseUrl}createProfile';
 const URL_CREATE_IMAGE_PROFILE = '$_domain${_baseUrl}createImageProfile';
