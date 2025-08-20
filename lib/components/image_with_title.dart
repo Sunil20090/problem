@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class ImageWithTitle extends StatelessWidget {
   final Widget container;
   final String? avatarUrl, avatarThumbnailUrl;
-  final String title, description, tag;
+  final String title, description, tag, timeStamp;
   final int solutionCount = 0, ideaCount = 0;
   final VoidCallback? onImagePressed, onAvatarPressed, onInfoPressed;
 
@@ -17,6 +17,7 @@ class ImageWithTitle extends StatelessWidget {
       required this.avatarThumbnailUrl,
       required this.title,
       required this.description,
+      required this.timeStamp,
       this.onImagePressed,
       this.onAvatarPressed,
       this.tag = 'image_with_title',
@@ -56,13 +57,16 @@ class ImageWithTitle extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: getTextTheme().headlineSmall,
+                      style: getTextTheme().titleSmall,
                     ),
                     Text(
                       description,
                       softWrap: true,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      timeStamp, style: getTextTheme().bodySmall,
                     )
                   ],
                 ),

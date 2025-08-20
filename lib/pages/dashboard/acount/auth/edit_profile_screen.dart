@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:Problem/components/colored_button.dart';
@@ -17,7 +16,8 @@ import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   dynamic accountDetails;
-  EditProfileScreen({super.key, required this.accountDetails});
+  VoidCallback onChange;
+  EditProfileScreen({super.key, required this.accountDetails, required this.onChange});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -90,22 +90,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   ProfileThumbnail(
                     tag: widget.accountDetails['name'],
-                    onClicked: widget.accountDetails['thumbnail_url'] != null ? () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (builder) => ImageViewScreen(
-                                tag: widget.accountDetails['name'],
-                                  title: widget.accountDetails['name'],
-                                  imageProvider: 
-                                  widget.accountDetails['image_url'] != null 
-                                  ? NetworkImage(widget.accountDetails['image_url'],) 
-                                  : FileImage(_localImageFile!)
-                                  )
-                                  
-                                  )
-                                  );
-                    } : null,
+                    onClicked: widget.accountDetails['thumbnail_url'] != null
+                        ? () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => ImageViewScreen(
+                                        tag: widget.accountDetails['name'],
+                                        title: widget.accountDetails['name'],
+                                        imageProvider: widget.accountDetails[
+                                                    'image_url'] !=
+                                                null
+                                            ? NetworkImage(
+                                                widget.accountDetails[
+                                                    'image_url'],
+                                              )
+                                            : FileImage(_localImageFile!))));
+                          }
+                        : null,
                     width: 160,
                     height: 160,
                     radius: 80,
@@ -196,6 +198,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             widget.accountDetails['thumbnail_url'] =
                 response.body['thumbnail_url'];
             widget.accountDetails['image_url'] = response.body['image_url'];
+            
+            widget.onChange();
           }
         });
       }

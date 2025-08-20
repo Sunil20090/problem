@@ -99,7 +99,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
               )
             : null,
       ),
-      body: Column(
+      body:  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(

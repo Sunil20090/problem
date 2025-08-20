@@ -1,7 +1,6 @@
 import 'package:Problem/components/profile_thumbnail.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
-import 'package:Problem/constants/storage_constant.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/common_pages/image_view_screen.dart';
@@ -11,12 +10,13 @@ import 'package:Problem/pages/dashboard/acount/auth/login_page.dart';
 import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
-import 'package:Problem/utils/storage_service.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatefulWidget {
   int user_id;
-  AccountScreen({super.key, this.user_id = 0});
+
+  VoidCallback onChanged;
+  AccountScreen({super.key, this.user_id = 0, required this.onChanged});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -235,33 +235,50 @@ class _AccountScreenState extends State<AccountScreen>
                                 style: getTextTheme().titleSmall,
                               ),
                               addVerticalSpace(20),
-                              if (_posts.length > 0)
-                                SizedBox(
-                                  height: 500,
-                                  child: GridView(
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 4,
-                                            mainAxisSpacing: 1,
-                                            crossAxisSpacing: 1),
-                                    children: _posts.map((post) {
-                                      var fadeWidget = FadeInImage(
-                                        placeholder:
-                                            NetworkImage(post['thumbnail_url']),
-                                        image: NetworkImage(post['image_url']),
-                                        fit: BoxFit.cover,
-                                      );
-                                      return InkWell(
-                                          onTap: () {
-                                            openImageView(
-                                                fadeWidget.image, post);
-                                          },
-                                          child: Hero(
-                                            tag: post['image_url'],
-                                            child: fadeWidget));
-                                    }).toList(),
+                              Column(
+                                  children: _posts.map((post) {
+                                return Container(
+                                  padding: EdgeInsets.all(4),
+                                  child: Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: SizedBox(
+                                          width: 80,
+                                          height: 50,
+                                          child: FadeInImage(
+                                            placeholder: NetworkImage(
+                                                post['thumbnail_url']),
+                                            image:
+                                                NetworkImage(post['image_url']),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      addHorizontalSpace(4),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              post['title'],
+                                              style: getTextTheme().titleSmall,
+                                            ),
+                                            Text(
+                                              post['description'],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.edit,
+                                        color: COLOR_PRIMARY,
+                                      )
+                                    ],
                                   ),
-                                ),
+                                );
+                              }).toList()),
                               InkWell(
                                 onTap: () {
                                   logoutUser();
@@ -343,6 +360,7 @@ class _AccountScreenState extends State<AccountScreen>
         context,
         MaterialPageRoute(
             builder: (builder) => EditProfileScreen(
+              onChange: widget.onChanged,
                   accountDetails: accountDetails,
                 )));
   }
@@ -363,7 +381,8 @@ class _AccountScreenState extends State<AccountScreen>
         context,
         MaterialPageRoute(
             builder: (builder) => ImageViewScreen(
-              tag: post['image_url'],
-                title: post['title'], imageProvider: provider)));
+                tag: post['image_url'],
+                title: post['title'],
+                imageProvider: provider)));
   }
 }

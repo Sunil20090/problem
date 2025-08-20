@@ -27,7 +27,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ),
     IdeaScreen(),
     PlanScreen(),
-    AccountScreen()
+    AccountScreen(
+      onChanged: () => setState(() {})
+    )
   ];
   }
 

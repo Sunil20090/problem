@@ -175,13 +175,14 @@ class _ProblemScreenState extends State<ProblemScreen> {
                             fit: StackFit.expand,
                             children: [
                               FadeInImage(
+                                
                                 image: Image.network(
                                   _problemList[index]['image_url'],
                                 ).image,
                                 placeholder: Image.network(
                                   _problemList[index]['thumbnail_url'],
                                 ).image,
-                                fadeInDuration: Duration(milliseconds: 20),
+                                fadeInDuration: Duration(milliseconds: 2),
                                 fit: BoxFit.cover,
                               ),
                               Positioned(
@@ -246,6 +247,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                                   )),
                             ],
                           ),
+                          timeStamp: '@${timeAgo(_problemList[index]['created_on'], timezoneOffset: Duration(hours: 5, minutes: 30))}',
                           avatarUrl: _problemList[index]['user_thumbnail_url'],
                           avatarThumbnailUrl: _problemList[index]
                               ['user_thumbnail_url'],
