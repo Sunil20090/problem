@@ -1,5 +1,6 @@
 import 'package:Problem/components/colored_button.dart';
 import 'package:Problem/components/floating_label_edit_box.dart';
+import 'package:Problem/components/progress_circular.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/constants/storage_constant.dart';
@@ -68,13 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: 32,
-                          height: 32,
-                          child: CircularProgressIndicator(
-                            color: COLOR_BASE,
-                          ),
-                        )
+                        ProgressCircular()
                       ],
                     ))
         ],

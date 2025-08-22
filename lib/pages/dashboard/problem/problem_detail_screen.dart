@@ -44,13 +44,21 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     super.initState();
     _images.add(widget.problem);
     initCommentList(widget.problem['id']);
-    initRequirementList(widget.problem['id']);
+    initRequirementList();
     initImageList(widget.problem['id']);
     insertScreen(USER_ID, "problem_detail", widget.problem['id']);
   }
 
-  initRequirementList(int id) {
-    _requirement_list = DATA_PROBLEM_REQUIREMENT;
+  initRequirementList() async {
+    // _requirement_list = DATA_PROBLEM_REQUIREMENT;
+    var body = {"problem_id": widget.problem['id']};
+    ApiResponse response = await postService(URL_GET_SKILL_OF_PROBLEM, body);
+
+    if (response.isSuccess) {
+      setState(() {
+        _requirement_list = response.body;
+      });
+    }
   }
 
   initImageList(int id) async {
@@ -67,8 +75,8 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenFrame(
-      backButton: true,
       titleBar: ScreenActionBar(
+        backButtonEnabled: true,
         title: widget.problem['title'],
         child: (widget.problem['posted_by'] != USER_ID)
             ? Row(
@@ -99,7 +107,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
               )
             : null,
       ),
-      body:  Column(
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(

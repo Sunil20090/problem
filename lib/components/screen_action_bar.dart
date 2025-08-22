@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 class ScreenActionBar extends StatelessWidget {
   final String title;
   final Widget? child;
-  ScreenActionBar({super.key, required this.title, this.child});
+  bool backButtonEnabled;
+  ScreenActionBar(
+      {super.key,
+      required this.title,
+      this.child,
+      this.backButtonEnabled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +25,19 @@ class ScreenActionBar extends StatelessWidget {
           children: [
             Row(
               children: [
+                if (backButtonEnabled)
+                  Row(
+                    children: [
+                      InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: COLOR_PRIMARY,
+                            size: getTextTheme().headlineMedium?.fontSize,
+                          )),
+                      addHorizontalSpace()
+                    ],
+                  ),
                 Text(
                   title,
                   style: getTextTheme(color: COLOR_PRIMARY).headlineMedium,

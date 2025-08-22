@@ -221,22 +221,14 @@ class _AccountScreenState extends State<AccountScreen>
                                 ),
                               ),
                               addVerticalSpace(),
+                              
+                              
                               Text(
-                                'Skills:',
+                                'My Problems:',
                                 style: getTextTheme().titleSmall,
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: _skills.map((skill) {
-                                  return Text('${skill['name']}');
-                                }).toList(),
-                              ),
-                              addVerticalSpace(),
-                              Text(
-                                'Posts:',
-                                style: getTextTheme().titleSmall,
-                              ),
-                              addVerticalSpace(20),
+                              addVerticalSpace(4),
+                              
                               Column(
                                   children: _posts.map((post) {
                                 return InkWell(
@@ -270,16 +262,14 @@ class _AccountScreenState extends State<AccountScreen>
                                             ],
                                           ),
                                         ),
-                                        Icon(
-                                          Icons.edit,
-                                          color: COLOR_PRIMARY,
-                                        )
+                                        
                                       ],
                                     ),
                                   ),
                                 );
                               }).toList()),
-                              addVerticalSpace(DEFAULT_LARGE_SPACE),
+
+                              addVerticalSpace(),
                               InkWell(
                                 onTap: () {
                                   logoutUser();

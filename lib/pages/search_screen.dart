@@ -1,4 +1,5 @@
 import 'package:Problem/components/colored_button.dart';
+import 'package:Problem/constants/local_constant.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/utils/api_service.dart';
@@ -15,20 +16,19 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
 
-  int SEARCH_TIME_SECONDS = 2;
   bool isCalling = false;
   var _allItems = [];
 
   var _filteredItems = [];
 
-  var _lastQuery = '';
+  var _lastQuery = null;
 
   @override
   void initState() {
     super.initState();
-    _filterList();
     _filteredItems = _allItems;
     _searchController.addListener(_filterList);
+    _filterList();
   }
 
   void _filterList() async {
@@ -100,7 +100,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 itemCount: _filteredItems.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(_filteredItems[index]),
+                    title: Row(
+                      children: [
+                        Icon(Icons.search),
+                        addHorizontalSpace(4),
+                        Text(_filteredItems[index]),
+                      ],
+                    ),
                     onTap: () {
                       searchQuery(_filteredItems[index], 'suggestion');
                     },
@@ -117,6 +123,6 @@ class _SearchScreenState extends State<SearchScreen> {
   void searchQuery(String data, String source) {
     if (data.isEmpty) return;
     Navigator.pop(context, data);
-    postService(URL_ADD_TO_QUERY, {"query": data, "source" : source});
+    postService(URL_ADD_TO_QUERY, {"query": data, "source": source});
   }
 }

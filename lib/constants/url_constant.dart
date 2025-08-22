@@ -39,5 +39,13 @@ const URL_ADD_TO_QUERY = '$_domain${_baseUrl}addQuery';
 
 const URL_SCREEN_RECORD = '$_domain${_baseUrl}screenReport';
 
+const URL_REQUIREMENT_SEARCH_QUERY = '$_domain${_baseUrl}skillRequirementQuery';
+
+const URL_ADD_SKILL_TO_PROBLEM = '$_domain${_baseUrl}problem/addSkill';
+const URL_REMOVE_SKILL_FROM_PROBLEM = '$_domain${_baseUrl}problem/deleteSkill';
+const URL_GET_SKILL_OF_PROBLEM = '$_domain${_baseUrl}problem/getSkill';
+
+
+  
 
 

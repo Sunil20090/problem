@@ -43,7 +43,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         padding: SCREEN_PADDING,
         child: Column(
           children: [
-            ScreenActionBar(title: 'Notificaton'),
+            ScreenActionBar(title: 'Notificaton', backButtonEnabled: true,),
             addVerticalSpace(),
             Expanded(
               child: ListView.builder(

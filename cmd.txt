@@ -82,3 +82,9 @@ CREATE TABLE notifications_for_problems_tracking(
     FOREIGN KEY (tracked_by) references users(id)
 );
 
+CREATE TABLE skill_requirement_master(
+    id int PRIMARY KEY auto_increment,
+    content text,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
