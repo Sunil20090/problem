@@ -6,13 +6,14 @@ import 'package:Problem/pages/common_pages/notification/notification_screen.dart
 import 'package:Problem/pages/dashboard/acount/account_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/post_problem_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/problem_detail_screen.dart';
-import 'package:Problem/user/user_data.dart';
+import 'package:Problem/pages/search_screen.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class ProblemScreen extends StatefulWidget {
-  const ProblemScreen({super.key});
+  ProblemScreen({super.key});
 
   @override
   State<ProblemScreen> createState() => _ProblemScreenState();
@@ -22,6 +23,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
   List<dynamic> _problemList = [];
   var _notificationCount = 0;
 
+  var _result;
+
   @override
   void initState() {
     super.initState();
@@ -29,10 +32,11 @@ class _ProblemScreenState extends State<ProblemScreen> {
     getList();
 
     getNotificationCount();
+
+    insertScreen(USER_ID, "problem_list", 0);
   }
 
   getNotificationCount() async {
-    
     ApiResponse response =
         await postService(URL_NOTIFICATION_COUNT, {"user_id": USER_ID});
 
@@ -44,8 +48,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getList() async {
-
-    ApiResponse response = await postService(URL_PROBLEM_LIST, {"user_id" : USER_ID});
+    var body = {"user_id": USER_ID, "search_by": _result};
+    ApiResponse response = await postService(URL_PROBLEM_LIST, body);
 
     if (response.isSuccess) {
       setState(() {
@@ -63,63 +67,94 @@ class _ProblemScreenState extends State<ProblemScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              ScreenActionBar(
-                title: 'Problem',
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.search,
-                      size: getTextTheme().headlineLarge?.fontSize,
-                      color: COLOR_PRIMARY,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        openNotificationScreen();
-                      },
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Icon(
-                            Icons.notifications_outlined,
-                            size: getTextTheme().headlineLarge?.fontSize,
-                            color: COLOR_PRIMARY,
-                          ),
-                          Positioned(
-                            top: -1,
-                            right: -1,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: (_notificationCount != 0)
-                                  ? Container(
-                                      height: 22,
-                                      width: 22,
-                                      alignment: Alignment.center,
-                                      color: Colors.red,
-                                      child: Text(
-                                        '${formatNumber(_notificationCount)}',
-                                        style: TextStyle(color: COLOR_BASE),
-                                      ),
-                                    )
-                                  : null,
+              if (_result == null)
+                ScreenActionBar(
+                  title: 'Problem',
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          openSearchScreen();
+                        },
+                        child: Icon(
+                          Icons.search,
+                          size: getTextTheme().headlineLarge?.fontSize,
+                          color: COLOR_PRIMARY,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          openNotificationScreen();
+                        },
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Icon(
+                              Icons.notifications_outlined,
+                              size: getTextTheme().headlineLarge?.fontSize,
+                              color: COLOR_PRIMARY,
                             ),
-                          ),
-                        ],
+                            Positioned(
+                              top: -1,
+                              right: -1,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: (_notificationCount != 0)
+                                    ? Container(
+                                        height: 22,
+                                        width: 22,
+                                        alignment: Alignment.center,
+                                        color: Colors.red,
+                                        child: Text(
+                                          '${formatNumber(_notificationCount)}',
+                                          style: TextStyle(color: COLOR_BASE),
+                                        ),
+                                      )
+                                    : null,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    addHorizontalSpace(6),
-                    InkWell(
-                      onTap: () {
-                        getList();
-                      },
-                      child: Icon(
-                        Icons.mail_outline,
-                        size: getTextTheme().headlineLarge?.fontSize,
-                        color: COLOR_PRIMARY,
+                      addHorizontalSpace(6),
+                      InkWell(
+                        onTap: () {
+                          getList();
+                        },
+                        child: Icon(
+                          Icons.mail_outline,
+                          size: getTextTheme().headlineLarge?.fontSize,
+                          color: COLOR_PRIMARY,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        _result,
+                        style: getTextTheme().titleSmall,
+                      ),
+                      addHorizontalSpace(),
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              _result = null;
+                              getList();
+                            });
+                          },
+                          child: Icon(
+                            Icons.close,
+                            size: getTextTheme().titleMedium?.fontSize,
+                          )),
+                      addHorizontalSpace()
+                    ],
+                  ),
                 ),
-              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: _problemList.length,
@@ -145,7 +180,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                                 placeholder: Image.network(
                                   _problemList[index]['thumbnail_url'],
                                 ).image,
-                                fadeInDuration: Duration(milliseconds: 20),
+                                fadeInDuration: Duration(milliseconds: 2),
                                 fit: BoxFit.cover,
                               ),
                               Positioned(
@@ -189,12 +224,29 @@ class _ProblemScreenState extends State<ProblemScreen> {
                                           style:
                                               getTextTheme(color: COLOR_WHITE)
                                                   .titleSmall,
+                                        ),
+                                        addHorizontalSpace(),
+                                        Icon(
+                                          Icons.remove_red_eye,
+                                          color: COLOR_WHITE,
+                                          size: getTextTheme()
+                                              .titleSmall
+                                              ?.fontSize,
+                                        ),
+                                        addHorizontalSpace(2),
+                                        Text(
+                                          "${formatNumber(_problemList[index]['views'])}",
+                                          style:
+                                              getTextTheme(color: COLOR_WHITE)
+                                                  .titleSmall,
                                         )
                                       ],
                                     ),
                                   )),
                             ],
                           ),
+                          timeStamp:
+                              '@${timeAgo(_problemList[index]['created_on'], timezoneOffset: Duration(hours: 5, minutes: 30))}',
                           avatarUrl: _problemList[index]['user_thumbnail_url'],
                           avatarThumbnailUrl: _problemList[index]
                               ['user_thumbnail_url'],
@@ -235,11 +287,26 @@ class _ProblemScreenState extends State<ProblemScreen> {
         MaterialPageRoute(
             builder: (builder) => AccountScreen(
                   user_id: id,
+                  onChanged: () {
+                    setState(() {
+                      
+                    });
+                  },
                 )));
   }
 
   void openNotificationScreen() {
     Navigator.push(
         context, MaterialPageRoute(builder: (builder) => NotificationScreen()));
+  }
+
+  void openSearchScreen() async {
+    _result = await Navigator.push(
+        context, MaterialPageRoute(builder: (builder) => SearchScreen()));
+
+    print('got the result $_result');
+    if (_result != null) {
+      getList();
+    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:Problem/components/profile_thumbnail.dart';
+import 'package:Problem/components/rounded_rect_image.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/constants/theme_constant.dart';
@@ -7,14 +8,17 @@ import 'package:Problem/pages/common_pages/image_view_screen.dart';
 import 'package:Problem/pages/dashboard/acount/auth/create_profile.dart';
 import 'package:Problem/pages/dashboard/acount/auth/edit_profile_screen.dart';
 import 'package:Problem/pages/dashboard/acount/auth/login_page.dart';
-import 'package:Problem/user/user_data.dart';
+import 'package:Problem/pages/dashboard/problem/edit_problem_screen.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatefulWidget {
   int user_id;
-  AccountScreen({super.key, this.user_id = 0});
+
+  VoidCallback onChanged;
+  AccountScreen({super.key, this.user_id = 0, required this.onChanged});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -31,6 +35,8 @@ class _AccountScreenState extends State<AccountScreen>
   ];
   var _achievements = [];
 
+  var _posts = [];
+
   bool _isSelfId = false;
 
   @override
@@ -42,6 +48,8 @@ class _AccountScreenState extends State<AccountScreen>
     initSkills();
 
     initHistory();
+
+    insertScreen(USER_ID, "account", _isSelfId ? 1 : 0);
   }
 
   initAccountDetails() async {
@@ -50,7 +58,7 @@ class _AccountScreenState extends State<AccountScreen>
     }
 
     _isSelfId = USER_ID == widget.user_id;
-    
+
     setState(() {
       isLoading = true;
     });
@@ -62,14 +70,15 @@ class _AccountScreenState extends State<AccountScreen>
     });
     if (response.isSuccess) {
       setState(() {
-        _accountDetails = response.body;
+        _accountDetails = response.body['profile'];
+        _posts = response.body['posts'];
       });
     }
   }
 
   initSkills() {}
 
-  initHistory() {}
+  initHistory() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +87,11 @@ class _AccountScreenState extends State<AccountScreen>
           title: 'Account',
           child: (_accountDetails != null)
               ? InkWell(
-                  onTap:_isSelfId ? () {
-                    openEditingProfileScreen(_accountDetails);
-                  } : null,
+                  onTap: _isSelfId
+                      ? () {
+                          openEditingProfileScreen(_accountDetails);
+                        }
+                      : null,
                   child: Row(
                     children: [
                       if (_isSelfId)
@@ -210,22 +221,74 @@ class _AccountScreenState extends State<AccountScreen>
                                 ),
                               ),
                               addVerticalSpace(),
+                              
+                              
                               Text(
-                                'Skills:',
+                                'My Problems:',
                                 style: getTextTheme().titleSmall,
                               ),
+                              addVerticalSpace(4),
+                              
                               Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: _skills.map((skill) {
-                                  return Text('${skill['name']}');
-                                }).toList(),
-                              ),
+                                  children: _posts.map((post) {
+                                return InkWell(
+                                  onTap: () {
+                                    openProblemEditing(post['id']);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(4),
+                                    child: Row(
+                                      children: [
+                                        RoundedRectImage(
+                                          image_url: post['image_url'],
+                                          thumbnail_url: post['thumbnail_url'],
+                                        ),
+                                        addHorizontalSpace(8),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                post['title'],
+                                                style:
+                                                    getTextTheme().titleSmall,
+                                              ),
+                                              Text(
+                                                post['description'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList()),
+
                               addVerticalSpace(),
-                              Text(
-                                'Posts:',
-                                style: getTextTheme().titleSmall,
-                              ),
+                              InkWell(
+                                onTap: () {
+                                  logoutUser();
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  color: COLOR_BASE,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Logout',
+                                        style: getTextTheme(color: COLOR_RED)
+                                            .titleMedium,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         )
@@ -288,6 +351,7 @@ class _AccountScreenState extends State<AccountScreen>
         context,
         MaterialPageRoute(
             builder: (builder) => EditProfileScreen(
+                  onChange: widget.onChanged,
                   accountDetails: accountDetails,
                 )));
   }
@@ -295,5 +359,26 @@ class _AccountScreenState extends State<AccountScreen>
   void moveToLoginPage() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (builder) => LoginPage()));
+  }
+
+  void logoutUser() async {
+    await deleteUser();
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (builder) => LoginPage()));
+  }
+
+  void openImageView(provider, post) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (builder) => ImageViewScreen(
+                tag: post['image_url'],
+                title: post['title'],
+                imageProvider: provider)));
+  }
+
+  void openProblemEditing(int problem_id) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (builder) => EditProblemScreen(problem_id:  problem_id)));
   }
 }

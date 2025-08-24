@@ -4,7 +4,7 @@ import 'package:Problem/pages/dashboard/acount/account_screen.dart';
 import 'package:Problem/pages/dashboard/idea_screen.dart';
 import 'package:Problem/pages/dashboard/plan_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/problem_screen.dart';
-
+import 'package:Problem/user/user_service.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -16,19 +16,25 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _pageIndex = 0;
-  
-  final List<Widget> _pages = [
-    ProblemScreen(),
+
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+   _pages = [
+    ProblemScreen(
+    ),
     IdeaScreen(),
     PlanScreen(),
     AccountScreen(
-      
+      onChanged: () => setState(() {})
     )
   ];
+  }
 
   @override
   Widget build(BuildContext context) {
-    
     return SafeArea(
       child: Scaffold(
         body: _pages[_pageIndex],
@@ -43,7 +49,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           },
           items: [
             BottomNavigationBarItem(
-
                 label: 'Problems', icon: Icon(Icons.work_outline_rounded)),
             BottomNavigationBarItem(label: 'Ideas', icon: Icon(Icons.light)),
             BottomNavigationBarItem(
@@ -53,6 +58,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 icon: ProfileThumbnail(
                   width: 32,
                   height: 32,
+                  thumnail_url: USER_AVATAR_THUMBNAIL_URL,
+                  imageUrl: USER_AVATAR_URL,
                 )),
           ],
         ),

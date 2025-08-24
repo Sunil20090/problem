@@ -1,5 +1,5 @@
 import 'package:Problem/constants/theme_constant.dart';
-import 'package:Problem/user/user_data.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +16,10 @@ class _PlanScreenState extends State<PlanScreen> {
     return Container(
       child: Column(
         children: [
-
-          Text('User: $USER_ID', style: getTextTheme().headlineLarge,),
+          Text(
+            'User: $USER_ID',
+            style: getTextTheme().headlineLarge,
+          ),
           addVerticalSpace(),
           Text(
             'Plans screen',

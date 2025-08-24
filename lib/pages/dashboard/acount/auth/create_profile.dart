@@ -6,7 +6,7 @@ import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/dashboard/acount/account_screen.dart';
 import 'package:Problem/pages/dashboard/acount/auth/otp_verification.dart';
-import 'package:Problem/user/user_data.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +67,9 @@ class _CreateProfileState extends State<CreateProfile> {
                     child: SizedBox(
                         width: 25,
                         height: 25,
-                        child: CircularProgressIndicator(color: COLOR_BASE,))),
+                        child: CircularProgressIndicator(
+                          color: COLOR_BASE,
+                        ))),
           ],
         ),
       ),
@@ -131,7 +133,6 @@ class _CreateProfileState extends State<CreateProfile> {
       return false;
     }
 
-
     var payload = {
       "user_id": USER_ID,
       "name": _nameController.text,
@@ -153,9 +154,15 @@ class _CreateProfileState extends State<CreateProfile> {
       showAlert(context, response.body['heading'], response.body['message'],
           onDismiss: () async {
         Navigator.pop(context);
-        Navigator.pop(context);
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (builder) => AccountScreen(user_id: USER_ID,)));
+            context,
+            MaterialPageRoute(
+                builder: (builder) => AccountScreen(
+                      user_id: USER_ID,
+                      onChanged:() => setState(() {
+                        
+                      })
+                    )));
       });
     } else {
       showAlert(context, 'Failed!', "The response is failed!");

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:Problem/components/colored_button.dart';
@@ -6,11 +5,10 @@ import 'package:Problem/components/floating_label_edit_box.dart';
 import 'package:Problem/components/profile_thumbnail.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
-import 'package:Problem/constants/image_constant.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/common_pages/image_view_screen.dart';
-import 'package:Problem/user/user_data.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +16,8 @@ import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   dynamic accountDetails;
-  EditProfileScreen({super.key, required this.accountDetails});
+  VoidCallback onChange;
+  EditProfileScreen({super.key, required this.accountDetails, required this.onChange});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -91,21 +90,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   ProfileThumbnail(
                     tag: widget.accountDetails['name'],
-                    onClicked: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (builder) => ImageViewScreen(
-                                tag: widget.accountDetails['name'],
-                                  title: widget.accountDetails['name'],
-                                  imageProvider: 
-                                  widget.accountDetails['image_url'] != null 
-                                  ? NetworkImage(widget.accountDetails['image_url'],) 
-                                  : FileImage(_localImageFile!)
-                                  )
-                                  
-                                  ));
-                    },
+                    onClicked: widget.accountDetails['thumbnail_url'] != null
+                        ? () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => ImageViewScreen(
+                                        tag: widget.accountDetails['name'],
+                                        title: widget.accountDetails['name'],
+                                        imageProvider: widget.accountDetails[
+                                                    'image_url'] !=
+                                                null
+                                            ? NetworkImage(
+                                                widget.accountDetails[
+                                                    'image_url'],
+                                              )
+                                            : FileImage(_localImageFile!))));
+                          }
+                        : null,
                     width: 160,
                     height: 160,
                     radius: 80,
@@ -196,6 +198,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             widget.accountDetails['thumbnail_url'] =
                 response.body['thumbnail_url'];
             widget.accountDetails['image_url'] = response.body['image_url'];
+            
+            widget.onChange();
           }
         });
       }

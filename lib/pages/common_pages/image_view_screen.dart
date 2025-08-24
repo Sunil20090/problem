@@ -28,7 +28,7 @@ class ImageViewScreen extends StatelessWidget {
                     backgroundDecoration: BoxDecoration(color: Colors.white),
                     minScale: PhotoViewComputedScale.contained * 1,
                     maxScale: PhotoViewComputedScale.covered * 3,
-                    enableRotation: true,
+                    enableRotation: false,
                   ),
                 ),
               ),

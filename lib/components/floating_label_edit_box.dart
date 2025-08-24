@@ -9,7 +9,7 @@ class FloatingLabelEditBox extends StatefulWidget {
   final int maxLines;
   final bool hideText;
   final TextInputType? textInputType;
-
+  final Widget? prefix;
   FloatingLabelEditBox(
       {super.key,
       this.controller,
@@ -17,6 +17,7 @@ class FloatingLabelEditBox extends StatefulWidget {
       this.maxLines = 1,
       this.hideText = false,
       this.hint,
+      this.prefix,
       this.inputFormatters,
       this.textInputType});
 
@@ -33,10 +34,14 @@ class _FloatingLabelEditBoxState extends State<FloatingLabelEditBox> {
       obscureText: widget.hideText,
       keyboardType: widget.textInputType,
       inputFormatters: widget.inputFormatters,
+      
       decoration: InputDecoration(
-          hintText: widget.hint,
+        
+        prefixIcon: widget.prefix,
+          hintText: widget.hint,  
           label: Text(widget.labelText),
           border: OutlineInputBorder(
+            
             borderRadius: BorderRadius.circular(10),
           )),
     );

@@ -9,7 +9,7 @@ import 'package:Problem/components/scrollable_page_view.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/common_pages/image_view_screen.dart';
-import 'package:Problem/user/user_data.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,6 @@ class ProblemDetailScreen extends StatefulWidget {
 
 class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   var _commentList = [];
-  bool _showSolutionRemark = true;
   bool _isCommentSubmitting = false;
   var _requirement_list = [];
 
@@ -45,12 +44,21 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     super.initState();
     _images.add(widget.problem);
     initCommentList(widget.problem['id']);
-    initRequirementList(widget.problem['id']);
+    initRequirementList();
     initImageList(widget.problem['id']);
+    insertScreen(USER_ID, "problem_detail", widget.problem['id']);
   }
 
-  initRequirementList(int id) {
-    _requirement_list = DATA_PROBLEM_REQUIREMENT;
+  initRequirementList() async {
+    // _requirement_list = DATA_PROBLEM_REQUIREMENT;
+    var body = {"problem_id": widget.problem['id']};
+    ApiResponse response = await postService(URL_GET_SKILL_OF_PROBLEM, body);
+
+    if (response.isSuccess) {
+      setState(() {
+        _requirement_list = response.body;
+      });
+    }
   }
 
   initImageList(int id) async {
@@ -67,33 +75,37 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenFrame(
-      backButton: true,
       titleBar: ScreenActionBar(
+        backButtonEnabled: true,
         title: widget.problem['title'],
         child: (widget.problem['posted_by'] != USER_ID)
-        ? Row(
-          children: [
-            ColoredButton(
-                onPressed: !isTrackLoading
-                    ? () {
-                        setState(() {
-                          trackProblem();
-                          // widget.problem['tracking'] = !widget.problem['tracking'];
-                          print(widget.problem['tracking']);
-                        });
-                      }
-                    : null,
-                backgroundColor: widget.problem['tracking'] == 1
-                    ? COLOR_BLACK
-                    : COLOR_PRIMARY,
-                child: !isTrackLoading
-                    ? Text(
-                        widget.problem['tracking'] == 1 ? 'Tracked' : 'Track',
-                        style: getTextTheme(color: COLOR_BASE).titleMedium,
-                      )
-                    : ProgressCircular())
-          ],
-        ) : null,
+            ? Row(
+                children: [
+                  ColoredButton(
+                      onPressed: !isTrackLoading
+                          ? () {
+                              setState(() {
+                                trackProblem();
+                                // widget.problem['tracking'] = !widget.problem['tracking'];
+                                print(widget.problem['tracking']);
+                              });
+                            }
+                          : null,
+                      backgroundColor: widget.problem['tracking'] == 1
+                          ? COLOR_BLACK
+                          : COLOR_PRIMARY,
+                      child: !isTrackLoading
+                          ? Text(
+                              widget.problem['tracking'] == 1
+                                  ? 'Tracked'
+                                  : 'Track',
+                              style:
+                                  getTextTheme(color: COLOR_BASE).titleMedium,
+                            )
+                          : ProgressCircular())
+                ],
+              )
+            : null,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,69 +175,40 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                       'Solutions:',
                       style: getTextTheme().headlineMedium,
                     ),
+                    Spacer(),
                     ColoredButton(
-                      onPressed: () {
-                        setState(() {
-                          _showSolutionRemark = !_showSolutionRemark;
-                        });
+                      onPressed: () async {
+                        await submitComment();
                       },
-                      child: _showSolutionRemark
-                          ? Icon(
-                              Icons.remove,
-                              color: COLOR_BASE,
-                              size: getTextTheme().headlineMedium?.fontSize,
-                            )
-                          : Row(
-                              children: [
-                                Text(
-                                  'Post Solution',
-                                  style: TextStyle(
-                                      color: COLOR_BASE,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down,
+                      child: !_isCommentSubmitting
+                          ? Text(
+                              'Post',
+                              style: TextStyle(
                                   color: COLOR_BASE,
-                                  size: getTextTheme().headlineMedium?.fontSize,
-                                ),
-                              ],
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          : SizedBox(
+                              width: 20,
+                              height: 20,
+                              child:
+                                  CircularProgressIndicator(color: COLOR_BASE),
                             ),
                     ),
+                    addHorizontalSpace(),
                   ],
                 ),
                 addVerticalSpace(),
-                if (_showSolutionRemark)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      EnterTextBox(
-                        controller: _controllerComment,
-                        hintText: 'write a solution...',
-                        maxLines: 2,
-                      ),
-                      addVerticalSpace(),
-                      ColoredButton(
-                        onPressed: () async {
-                          await submitComment();
-                        },
-                        child: !_isCommentSubmitting
-                            ? Text(
-                                'Post',
-                                style: TextStyle(
-                                    color: COLOR_BASE,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              )
-                            : SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                    color: COLOR_BASE),
-                              ),
-                      )
-                    ],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    EnterTextBox(
+                      controller: _controllerComment,
+                      hintText: 'write a solution...',
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
                 addVerticalSpace(20),
                 Column(
                   children: _commentList.map((comment) {
