@@ -46,6 +46,11 @@ const URL_REMOVE_SKILL_FROM_PROBLEM = '$_domain${_baseUrl}problem/deleteSkill';
 const URL_GET_SKILL_OF_PROBLEM = '$_domain${_baseUrl}problem/getSkill';
 
 
+const URL_APPLY_FOR_REQUIREMENT = '$_domain${_baseUrl}problem/applyForRequirement';
+
+
+
+
   
 
 

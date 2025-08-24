@@ -51,7 +51,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
 
   initRequirementList() async {
     // _requirement_list = DATA_PROBLEM_REQUIREMENT;
-    var body = {"problem_id": widget.problem['id']};
+    var body = {"problem_id": widget.problem['id'], "user_id": USER_ID};
     ApiResponse response = await postService(URL_GET_SKILL_OF_PROBLEM, body);
 
     if (response.isSuccess) {
@@ -147,6 +147,16 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                           children: [
                             Text(skill['name']),
                             Spacer(),
+                            ColoredButton(
+                                onPressed: () {
+                                  applyForRequirement(skill);
+                                },
+                                child: Text(
+                                  'Apply',
+                                  style: getTextTheme(color: COLOR_BASE)
+                                      .titleSmall,
+                                )),
+                            addHorizontalSpace(),
                             Container(
                               // margin: EdgeInsets.all(1),
                               padding: EdgeInsets.symmetric(horizontal: 6),
@@ -318,6 +328,40 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
           widget.problem['tracking'] = response.body['tracking'];
         });
       }
+    }
+  }
+
+  void applyForRequirement(skill) async {
+    var body = {
+      "skill_id": skill['id'],
+      "user_id": USER_ID,
+      "problem_id": widget.problem['id']
+    };
+
+    late StateSetter dialogSetState;
+
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return StatefulBuilder(builder: (builder, state) {
+            dialogSetState = state;
+            return AlertDialog(
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ProgressCircular(
+                    color: COLOR_BLACK,
+                  ),
+                ],
+              ),
+            );
+          });
+        });
+
+    ApiResponse response = await postService(URL_APPLY_FOR_REQUIREMENT, body);
+
+    if (response.isSuccess) {
+      Navigator.pop(context);
     }
   }
 }

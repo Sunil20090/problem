@@ -239,8 +239,6 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
 
     late StateSetter dialogSetState;
 
-    // final ApiResponse response = await postService(URL_POST_PROBLEM, payload);
-
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -285,7 +283,6 @@ class _PostProblemScreenState extends State<PostProblemScreen> {
           dialogSetState(() {
             _uploadTotal = total;
             _uploadCount = count;
-            // print('PRogress: $uploadCount/$uploadTotal');
           });
         },
         onComplete: (reponse) {

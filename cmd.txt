@@ -88,3 +88,12 @@ CREATE TABLE skill_requirement_master(
     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE applications_for_problem(
+    id int PRIMARY KEY auto_increment,
+    applied_by int,
+    problem_id int,
+    FOREIGN KEY (problem_id) references problems(id),
+    FOREIGN KEY (applied_by) references users(id),
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
