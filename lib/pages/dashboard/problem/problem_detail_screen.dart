@@ -139,23 +139,32 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                   ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _requirement_list.map((skill) {
+                  children: _requirement_list.map((requirement) {
                     return Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(skill['name']),
+                            Text(requirement['name']),
                             Spacer(),
                             ColoredButton(
+                                backgroundColor: requirement['isApplied'] == 0
+                                ? COLOR_PRIMARY
+                                : COLOR_BLACK,
                                 onPressed: () {
-                                  applyForRequirement(skill);
+                                  applyForRequirement(requirement);
                                 },
-                                child: Text(
-                                  'Apply',
-                                  style: getTextTheme(color: COLOR_BASE)
-                                      .titleSmall,
-                                )),
+                                child: requirement['isApplied'] == 0
+                                    ? Text(
+                                        'Apply',
+                                        style: getTextTheme(color: COLOR_BASE)
+                                            .titleSmall,
+                                      )
+                                    : Text(
+                                        'Applied',
+                                        style: getTextTheme(color: COLOR_BASE)
+                                            .titleSmall,
+                                      )),
                             addHorizontalSpace(),
                             Container(
                               // margin: EdgeInsets.all(1),
@@ -164,7 +173,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                   borderRadius: BorderRadius.circular(4),
                                   color: Colors.green),
                               child: Text(
-                                skill['status'],
+                                requirement['status'],
                                 style: TextStyle(color: COLOR_BASE),
                               ),
                             ),
@@ -331,37 +340,29 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     }
   }
 
-  void applyForRequirement(skill) async {
-    var body = {
-      "skill_id": skill['id'],
-      "user_id": USER_ID,
-      "problem_id": widget.problem['id']
-    };
-
-    late StateSetter dialogSetState;
+  void applyForRequirement(requirement) async {
+    var body = {"requirement_id": requirement['id'], "user_id": USER_ID};
 
     showDialog(
         context: context,
         builder: (builder) {
-          return StatefulBuilder(builder: (builder, state) {
-            dialogSetState = state;
-            return AlertDialog(
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ProgressCircular(
-                    color: COLOR_BLACK,
-                  ),
-                ],
-              ),
-            );
-          });
+          return AlertDialog(
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ProgressCircular(
+                  color: COLOR_BLACK,
+                ),
+              ],
+            ),
+          );
         });
 
     ApiResponse response = await postService(URL_APPLY_FOR_REQUIREMENT, body);
 
     if (response.isSuccess) {
       Navigator.pop(context);
+      initRequirementList();
     }
   }
 }

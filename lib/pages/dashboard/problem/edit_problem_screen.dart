@@ -1,5 +1,4 @@
 import 'package:Problem/components/colored_button.dart';
-import 'package:Problem/components/floating_label_edit_box.dart';
 import 'package:Problem/components/progress_circular.dart';
 import 'package:Problem/components/rounded_rect_image.dart';
 import 'package:Problem/components/screen_action_bar.dart';
@@ -7,6 +6,7 @@ import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/dashboard/problem/add_requirement_screen.dart';
+import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,10 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenFrame(
-      titleBar: ScreenActionBar(title: 'Editing problem', backButtonEnabled: true,),
+      titleBar: ScreenActionBar(
+        title: 'Editing problem',
+        backButtonEnabled: true,
+      ),
       body: _problem != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,25 +72,38 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                 ),
                 ..._skillRequirements.map((skill) {
                   return ListTile(
+                    onTap: () {
+                      moveToApplicationList(skill);
+                    },
                     title: Row(
                       children: [
                         Icon(Icons.school),
                         addHorizontalSpace(),
                         Text(skill['name']),
+                        addHorizontalSpace(),
                         Spacer(),
                         !_deleteLoading
-                            ? InkWell(
-                                onTap: () {
-                                  deleteRequirement(
-                                      skill['id'], widget.problem_id);
-                                },
-                                child: Icon(
-                                  Icons.delete,
-                                  color:
-                                      const Color.fromARGB(255, 235, 129, 121),
-                                ),
-                              )
+                            ? (skill['application_count'] == 0)
+                                ? InkWell(
+                                    onTap: () {
+                                      deleteRequirement(
+                                          skill['id'], widget.problem_id);
+                                    },
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: const Color.fromARGB(
+                                          255, 235, 129, 121),
+                                    ),
+                                  )
+                                : Container()
                             : ProgressCircular(),
+                        Container(
+                            padding: EdgeInsets.all(4),
+                            color: COLOR_BASE_SUCCESS,
+                            child: Text(
+                              '${formatNumber(skill['application_count'])}',
+                              style: getTextTheme(color: COLOR_BASE).titleSmall,
+                            )),
                         addHorizontalSpace()
                       ],
                     ),
@@ -153,13 +169,17 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
   }
 
   initSkills() async {
-    var body = {"problem_id": widget.problem_id};
-    ApiResponse response = await postService(URL_GET_SKILL_OF_PROBLEM, body);
+    var body = {"problem_id": widget.problem_id, "user_id": USER_ID};
+    ApiResponse response = await postService(URL_GET_SKILL_DETAILS, body);
 
     if (response.isSuccess) {
       setState(() {
         _skillRequirements = response.body;
       });
     }
+  }
+
+  void moveToApplicationList(skill) {
+    print('working......................');
   }
 }

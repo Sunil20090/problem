@@ -41,7 +41,6 @@ class _AddRequirementScreenState extends State<AddRequirementScreen> {
 
     Future.delayed(Duration(seconds: SEARCH_TIME_SECONDS), () {
       isCalling = false;
-
       _filterList();
     });
 
@@ -77,16 +76,16 @@ class _AddRequirementScreenState extends State<AddRequirementScreen> {
             controller: _searchController,
             prefix: Icon(Icons.search_rounded),
           ),
-          ..._requirements.map((requirement) {
+          ..._requirements.map((skill) {
             return ListTile(
               onTap: () {
-                setResult(requirement['id']);
+                setResult(skill['id']);
               },
               title: Row(
                 children: [
                   Icon(Icons.search),
                   addHorizontalSpace(),
-                  Text('${requirement['name']}')
+                  Text('${skill['name']}')
                 ],
               ),
             );
