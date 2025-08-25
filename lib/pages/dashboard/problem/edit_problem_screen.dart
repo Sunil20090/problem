@@ -70,24 +70,24 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                         ))
                   ],
                 ),
-                ..._skillRequirements.map((skill) {
+                ..._skillRequirements.map((requirement) {
                   return ListTile(
                     onTap: () {
-                      moveToApplicationList(skill);
+                      moveToApplicationList(requirement);
                     },
                     title: Row(
                       children: [
                         Icon(Icons.school),
                         addHorizontalSpace(),
-                        Text(skill['name']),
+                        Text(requirement['skill']),
                         addHorizontalSpace(),
                         Spacer(),
                         !_deleteLoading
-                            ? (skill['application_count'] == 0)
+                            ? (requirement['application_count'] == 0)
                                 ? InkWell(
                                     onTap: () {
                                       deleteRequirement(
-                                          skill['id'], widget.problem_id);
+                                          requirement['id'], widget.problem_id);
                                     },
                                     child: Icon(
                                       Icons.delete,
@@ -101,7 +101,7 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                             padding: EdgeInsets.all(4),
                             color: COLOR_BASE_SUCCESS,
                             child: Text(
-                              '${formatNumber(skill['application_count'])}',
+                              '${formatNumber(requirement['application_count'])}',
                               style: getTextTheme(color: COLOR_BASE).titleSmall,
                             )),
                         addHorizontalSpace()
@@ -164,12 +164,16 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
     ApiResponse response = await postService(URL_ADD_SKILL_TO_PROBLEM, body);
 
     if (response.isSuccess) {
-      initSkills();
+      if(response.body['status'] == 'OK'){
+          initSkills();
+      }else if(response.body['status'] == 'NOT OK'){
+        showAlert(context, response.body['heading'], response.body['message']);
+      }
     }
   }
 
   initSkills() async {
-    var body = {"problem_id": widget.problem_id, "user_id": USER_ID};
+    var body = {"problem_id": widget.problem_id};
     ApiResponse response = await postService(URL_GET_SKILL_DETAILS, body);
 
     if (response.isSuccess) {
