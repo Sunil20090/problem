@@ -4,7 +4,7 @@ import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class NotificationItem extends StatefulWidget {
-  dynamic notification;
+  final dynamic notification;
   NotificationItem({super.key, required this.notification});
 
   @override

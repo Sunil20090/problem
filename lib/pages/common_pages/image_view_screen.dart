@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImageViewScreen extends StatelessWidget {
-  ImageProvider imageProvider;
-  String title;
-  String tag;
+  final ImageProvider imageProvider;
+  final String title;
+  final String tag;
   ImageViewScreen(
       {super.key, required this.title, required this.imageProvider, this.tag = 'image_tag'});
 

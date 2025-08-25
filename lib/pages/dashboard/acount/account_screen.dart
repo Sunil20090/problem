@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 class AccountScreen extends StatefulWidget {
   int user_id;
 
-  VoidCallback onChanged;
+  final VoidCallback onChanged;
   AccountScreen({super.key, this.user_id = 0, required this.onChanged});
 
   @override

@@ -1,4 +1,3 @@
-import 'package:Problem/api/data/sample_data.dart';
 import 'package:Problem/components/colored_button.dart';
 import 'package:Problem/components/comment_item.dart';
 import 'package:Problem/components/enter_text_box.dart';
@@ -33,9 +32,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   List<dynamic> _images = [];
 
   final _controllerComment = TextEditingController();
-  final _pageController = PageController(
-    viewportFraction: 0.9,
-  );
+
 
   bool isTrackLoading = false;
 

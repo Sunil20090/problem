@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RoundIt extends StatelessWidget {
-  Widget? child;
+  final Widget? child;
   RoundIt({super.key, required this.child});
 
   @override
