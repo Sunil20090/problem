@@ -6,7 +6,6 @@ import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/dashboard/problem/add_requirement_screen.dart';
-import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,7 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
   dynamic _problem;
 
   List<dynamic> _skillRequirements = [];
-  bool _deleteLoading = false;
+  bool _fetchingRequirement = false;
 
   @override
   void initState() {
@@ -55,9 +54,17 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                     thumbnail_url: _problem['thumbnail_url']),
                 addVerticalSpace(),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text('Add Requirements:'),
+                    addHorizontalSpace(4),
+                    if (_fetchingRequirement)
+                      ProgressCircular(
+                        color: COLOR_BLACK,
+                        width: 12,
+                        height: 12,
+                      ),
+                    Spacer(),
                     ColoredButton(
                         onPressed: () {
                           setState(() {
@@ -82,24 +89,23 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                         Text(requirement['skill']),
                         addHorizontalSpace(),
                         Spacer(),
-                        !_deleteLoading
-                            ? (requirement['application_count'] == 0)
-                                ? InkWell(
-                                    onTap: () {
-                                      deleteRequirement(
-                                          requirement['id'], widget.problem_id);
-                                    },
-                                    child: Icon(
-                                      Icons.delete,
-                                      color: const Color.fromARGB(
-                                          255, 235, 129, 121),
-                                    ),
-                                  )
-                                : Container()
-                            : ProgressCircular(),
+                        (requirement['application_count'] == 0)
+                            ? InkWell(
+                                onTap: () {
+                                  deleteRequirement(requirement['id']);
+                                },
+                                child: Icon(
+                                  Icons.delete,
+                                  color:
+                                      const Color.fromARGB(255, 235, 129, 121),
+                                ),
+                              )
+                            : Container(),
                         Container(
                             padding: EdgeInsets.all(4),
-                            color: COLOR_BASE_SUCCESS,
+                            decoration: BoxDecoration(
+                                color: COLOR_BASE_SUCCESS,
+                                borderRadius: BorderRadius.circular(4)),
                             child: Text(
                               '${formatNumber(requirement['application_count'])}',
                               style: getTextTheme(color: COLOR_BASE).titleSmall,
@@ -148,13 +154,19 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
     }
   }
 
-  deleteRequirement(skill_id, problem_id) async {
-    var body = {"skill_id": skill_id, "problem_id": problem_id};
+  deleteRequirement(requirement_id) async {
+    var body = {"requirement_id": requirement_id};
+
+    setState(() {
+      _fetchingRequirement = true;
+    });
 
     ApiResponse response =
         await postService(URL_REMOVE_SKILL_FROM_PROBLEM, body);
-
-    if (response.isSuccess) {}
+      _fetchingRequirement = true;
+    if (response.isSuccess) {
+      initSkills();
+    }
   }
 
   addRequirement(int skill_id) async {
@@ -164,9 +176,9 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
     ApiResponse response = await postService(URL_ADD_SKILL_TO_PROBLEM, body);
 
     if (response.isSuccess) {
-      if(response.body['status'] == 'OK'){
-          initSkills();
-      }else if(response.body['status'] == 'NOT OK'){
+      if (response.body['status'] == 'OK') {
+        initSkills();
+      } else if (response.body['status'] == 'NOT OK') {
         showAlert(context, response.body['heading'], response.body['message']);
       }
     }
@@ -174,7 +186,16 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
 
   initSkills() async {
     var body = {"problem_id": widget.problem_id};
+
+    setState(() {
+      _fetchingRequirement = true;
+    });
+
     ApiResponse response = await postService(URL_GET_SKILL_DETAILS, body);
+
+    setState(() {
+      _fetchingRequirement = false;
+    });
 
     if (response.isSuccess) {
       setState(() {

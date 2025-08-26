@@ -51,6 +51,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return ScreenFrame(
         titleBar: ScreenActionBar(
+          backButtonEnabled: true,
           title: 'Edit Profile',
           child: Row(
             children: [

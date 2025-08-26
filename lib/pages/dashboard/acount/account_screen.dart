@@ -176,7 +176,7 @@ class _AccountScreenState extends State<AccountScreen>
                                     ),
                                     addHorizontalSpace(16),
                                     Icon(
-                                      Icons.check_circle_outline,
+                                      Icons.error_outline,
                                       color: COLOR_PRIMARY,
                                     ),
                                     Text(
@@ -187,11 +187,12 @@ class _AccountScreenState extends State<AccountScreen>
                                     ),
                                     addHorizontalSpace(16),
                                     Icon(
-                                      Icons.extension,
+                                      Icons.account_tree,
                                       color: COLOR_PRIMARY,
                                     ),
                                     Text(
-                                      formatNumber(34),
+                                      formatNumber(_accountDetails[
+                                          'tracking_count']),
                                       style: getTextTheme(color: COLOR_BLACK)
                                           .titleSmall,
                                     ),
@@ -216,7 +217,7 @@ class _AccountScreenState extends State<AccountScreen>
                                 child: Text(
                                   _accountDetails['description'],
                                   softWrap: true,
-                                  maxLines: 3,
+                                  maxLines: 10,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
