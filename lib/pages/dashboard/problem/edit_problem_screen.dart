@@ -61,8 +61,8 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                     if (_fetchingRequirement)
                       ProgressCircular(
                         color: COLOR_BLACK,
-                        width: 12,
-                        height: 12,
+                        width: 22,
+                        height: 22,
                       ),
                     Spacer(),
                     ColoredButton(
@@ -170,7 +170,6 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
   }
 
   addRequirement(int skill_id) async {
-    // initRequirements();
 
     var body = {"skill_id": skill_id, "problem_id": widget.problem_id};
     ApiResponse response = await postService(URL_ADD_SKILL_TO_PROBLEM, body);

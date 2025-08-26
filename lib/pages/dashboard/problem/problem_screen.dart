@@ -49,7 +49,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent &&
+              _scrollController.position.maxScrollExtent - 300 &&
           !_fetchingList) {
         getList();
         print('end of the list');
@@ -295,18 +295,18 @@ class _ProblemScreenState extends State<ProblemScreen> {
                   },
                 ),
               ),
-              if (_fetchingList)
-                Container(
-                  height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ProgressCircular(
-                        color: COLOR_BLACK,
-                      ),
-                    ],
-                  ),
-                )
+              // if (_fetchingList)
+              //   Container(
+              //     height: 40,
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         ProgressCircular(
+              //           color: COLOR_BLACK,
+              //         ),
+              //       ],
+              //     ),
+              //   )
             ],
           ),
         ),

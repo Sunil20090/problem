@@ -72,38 +72,39 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenFrame(
-      titleBar: ScreenActionBar(
-        backButtonEnabled: true,
-        title: widget.problem['title'],
-        child: (widget.problem['posted_by'] != USER_ID)
-            ? Row(
-                children: [
-                  ColoredButton(
-                      onPressed: !isTrackLoading
-                          ? () {
-                              setState(() {
-                                trackProblem();
-                                // widget.problem['tracking'] = !widget.problem['tracking'];
-                                print(widget.problem['tracking']);
-                              });
-                            }
-                          : null,
-                      backgroundColor: widget.problem['tracking'] == 1
-                          ? COLOR_BLACK
-                          : COLOR_PRIMARY,
-                      child: !isTrackLoading
-                          ? Text(
-                              widget.problem['tracking'] == 1
-                                  ? 'Tracked'
-                                  : 'Track',
-                              style:
-                                  getTextTheme(color: COLOR_BASE).titleMedium,
-                            )
-                          : ProgressCircular())
-                ],
-              )
-            : null,
-      ),
+      titleBar: Container(),
+      //  ScreenActionBar(
+      //   backButtonEnabled: true,
+      //   title: widget.problem['title'],
+      //   child: (widget.problem['posted_by'] != USER_ID)
+      //       ? Row(
+      //           children: [
+      //             ColoredButton(
+      //                 onPressed: !isTrackLoading
+      //                     ? () {
+      //                         setState(() {
+      //                           trackProblem();
+      //                           // widget.problem['tracking'] = !widget.problem['tracking'];
+      //                           print(widget.problem['tracking']);
+      //                         });
+      //                       }
+      //                     : null,
+      //                 backgroundColor: widget.problem['tracking'] == 1
+      //                     ? COLOR_BLACK
+      //                     : COLOR_PRIMARY,
+      //                 child: !isTrackLoading
+      //                     ? Text(
+      //                         widget.problem['tracking'] == 1
+      //                             ? 'Tracked'
+      //                             : 'Track',
+      //                         style:
+      //                             getTextTheme(color: COLOR_BASE).titleMedium,
+      //                       )
+      //                     : ProgressCircular())
+      //           ],
+      //         )
+      //       : null,
+      // ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -118,17 +119,15 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  softWrap: true,
-                  'Details:',
-                  style: getTextTheme().titleSmall,
-                ),
+                Text(widget.problem['title'], style: getTextTheme().titleMedium,),
+               
+
                 Text(
                   softWrap: true,
                   widget.problem['description'],
                   style: getTextTheme().bodySmall,
                 ),
-                addVerticalSpace(10),
+                addVerticalSpace(DEFAULT_LARGE_SPACE),
                 if (_requirement_list.length > 0)
                   Text(
                     'Requirements:',
