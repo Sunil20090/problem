@@ -11,6 +11,7 @@ class ProgressCircular extends StatelessWidget {
     return Container(
       width: width,
       height: height,
+      padding: EdgeInsets.all(4),
       child: CircularProgressIndicator(color: color,),
     );
   }

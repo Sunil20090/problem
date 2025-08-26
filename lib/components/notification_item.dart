@@ -1,3 +1,4 @@
+import 'package:Problem/components/rounded_rect_image.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/pages/common_pages/image_view_screen.dart';
 import 'package:Problem/utils/common_function.dart';
@@ -34,19 +35,13 @@ class _NotificationItemState extends State<NotificationItem> {
                             title: 'Image',
                           )));
             },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: SizedBox(
-                width: 80,
+
+            child:RoundedRectImage(
+              width: 80,
                 height: 50,
-                child: FadeInImage(
-                  placeholder:
-                      NetworkImage(widget.notification['thumbnail_url']),
-                  image: NetworkImage(widget.notification['image_url']),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+              image_url: widget.notification['image_url'], 
+              thumbnail_url: widget.notification['thumbnail_url'])
+            
           ),
           addHorizontalSpace(),
           Expanded(

@@ -62,8 +62,8 @@ class _AccountScreenState extends State<AccountScreen>
     setState(() {
       isLoading = true;
     });
-    var response =
-        await postService(URL_GET_PROFILE, {"user_id": widget.user_id});
+    var response = await postService(URL_GET_PROFILE,
+        {"user_id": widget.user_id, "device_user_id": USER_ID});
 
     setState(() {
       isLoading = false;
@@ -191,8 +191,8 @@ class _AccountScreenState extends State<AccountScreen>
                                       color: COLOR_PRIMARY,
                                     ),
                                     Text(
-                                      formatNumber(_accountDetails[
-                                          'tracking_count']),
+                                      formatNumber(
+                                          _accountDetails['tracking_count']),
                                       style: getTextTheme(color: COLOR_BLACK)
                                           .titleSmall,
                                     ),
@@ -222,14 +222,11 @@ class _AccountScreenState extends State<AccountScreen>
                                 ),
                               ),
                               addVerticalSpace(),
-                              
-                              
                               Text(
                                 'My Problems:',
                                 style: getTextTheme().titleSmall,
                               ),
                               addVerticalSpace(4),
-                              
                               Column(
                                   children: _posts.map((post) {
                                 return InkWell(
@@ -263,13 +260,11 @@ class _AccountScreenState extends State<AccountScreen>
                                             ],
                                           ),
                                         ),
-                                        
                                       ],
                                     ),
                                   ),
                                 );
                               }).toList()),
-
                               addVerticalSpace(),
                               InkWell(
                                 onTap: () {
@@ -380,6 +375,8 @@ class _AccountScreenState extends State<AccountScreen>
 
   void openProblemEditing(int problem_id) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (builder) => EditProblemScreen(problem_id:  problem_id)));
+        context,
+        MaterialPageRoute(
+            builder: (builder) => EditProblemScreen(problem_id: problem_id)));
   }
 }

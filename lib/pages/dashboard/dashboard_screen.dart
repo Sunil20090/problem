@@ -37,7 +37,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: _pages[_pageIndex],
+        body: IndexedStack(
+          children: _pages,
+          index: _pageIndex,
+        ) ,
         bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: COLOR_PRIMARY,
           unselectedItemColor: COLOR_BASE_DARKER,

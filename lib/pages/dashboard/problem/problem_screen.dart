@@ -1,4 +1,5 @@
 import 'package:Problem/components/image_with_title.dart';
+import 'package:Problem/components/progress_circular.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
@@ -22,8 +23,19 @@ class ProblemScreen extends StatefulWidget {
 class _ProblemScreenState extends State<ProblemScreen> {
   List<dynamic> _problemList = [];
   var _notificationCount = 0;
+  bool _fetchingList = false;
 
   var _result;
+
+  int _offset = 0;
+
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -34,6 +46,15 @@ class _ProblemScreenState extends State<ProblemScreen> {
     getNotificationCount();
 
     insertScreen(USER_ID, "problem_list", 0);
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent &&
+          !_fetchingList) {
+        getList();
+        print('end of the list');
+      }
+    });
   }
 
   getNotificationCount() async {
@@ -48,12 +69,22 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getList() async {
-    var body = {"user_id": USER_ID, "search_by": _result};
+    var body = {"user_id": USER_ID, "search_by": _result, "offset": _offset};
+    setState(() {
+      _fetchingList = true;
+    });
     ApiResponse response = await postService(URL_PROBLEM_LIST, body);
+
+    setState(() {
+      _fetchingList = false;
+    });
 
     if (response.isSuccess) {
       setState(() {
-        _problemList = response.body;
+        _problemList.addAll(response.body);
+        if (response.body.length > 0) {
+          _offset += 1;
+        }
       });
     }
   }
@@ -157,6 +188,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                 ),
               Expanded(
                 child: ListView.builder(
+                  controller: _scrollController,
                   itemCount: _problemList.length,
                   itemBuilder: (context, index) {
                     return Column(
@@ -262,7 +294,19 @@ class _ProblemScreenState extends State<ProblemScreen> {
                     );
                   },
                 ),
-              )
+              ),
+              if (_fetchingList)
+                Container(
+                  height: 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ProgressCircular(
+                        color: COLOR_BLACK,
+                      ),
+                    ],
+                  ),
+                )
             ],
           ),
         ),
@@ -288,9 +332,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
             builder: (builder) => AccountScreen(
                   user_id: id,
                   onChanged: () {
-                    setState(() {
-                      
-                    });
+                    setState(() {});
                   },
                 )));
   }

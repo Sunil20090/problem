@@ -1,3 +1,4 @@
+import 'package:Problem/constants/theme_constant.dart';
 import 'package:flutter/material.dart';
 
 class RoundedRectImage extends StatefulWidget {
@@ -11,15 +12,22 @@ class RoundedRectImage extends StatefulWidget {
 class _RoundedRectImageState extends State<RoundedRectImage> {
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: SizedBox(
-        width: widget.width,
-        height: widget.height,
-        child: FadeInImage(
-          placeholder: NetworkImage(widget.thumbnail_url),
-          image: NetworkImage(widget.image_url),
-          fit: BoxFit.cover,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: COLOR_BASE_DARKER, width: 1),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        
+        child: SizedBox(
+          width: widget.width,
+          height: widget.height,
+          child: FadeInImage(
+            placeholder: NetworkImage(widget.thumbnail_url),
+            image: NetworkImage(widget.image_url),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
