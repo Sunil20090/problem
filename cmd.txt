@@ -97,3 +97,12 @@ CREATE TABLE applications_for_problem(
     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
+CREATE TABLE skills_of_users(
+    id int PRIMARY KEY auto_increment,
+    skill_id int,
+    user_id int,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (skill_id) references skill_requirement_master(id),
+    FOREIGN KEY (user_id) references users(id)
+);

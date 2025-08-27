@@ -29,6 +29,10 @@ const URL_CREATE_IMAGE_PROFILE = '$_domain${_baseUrl}createImageProfile';
 const URL_EDIT_PROFILE = '$_domain${_baseUrl}editProfile';
 const URL_GET_USER_POST = '$_domain${_baseUrl}userPosts';
 
+const URL_ADD_SKILL_TO_USER = '$_domain${_baseUrl}user/addSkill';
+const URL_GET_SKILL_OF_USER = '$_domain${_baseUrl}user/getSkill';
+
+
 const URL_CREATE_OTP_VERIFICATION = '$_domain${_baseUrl}optVerification';
 
 const URL_NOTIFICATION_COUNT = '$_domain${_baseUrl}newNotificationCount';

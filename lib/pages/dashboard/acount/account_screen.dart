@@ -1,4 +1,6 @@
+import 'package:Problem/components/colored_button.dart';
 import 'package:Problem/components/profile_thumbnail.dart';
+import 'package:Problem/components/progress_circular.dart';
 import 'package:Problem/components/rounded_rect_image.dart';
 import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
@@ -8,6 +10,7 @@ import 'package:Problem/pages/common_pages/image_view_screen.dart';
 import 'package:Problem/pages/dashboard/acount/auth/create_profile.dart';
 import 'package:Problem/pages/dashboard/acount/auth/edit_profile_screen.dart';
 import 'package:Problem/pages/dashboard/acount/auth/login_page.dart';
+import 'package:Problem/pages/dashboard/problem/add_requirement_screen.dart';
 import 'package:Problem/pages/dashboard/problem/edit_problem_screen.dart';
 import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
@@ -29,25 +32,19 @@ class _AccountScreenState extends State<AccountScreen>
   var _accountDetails;
 
   bool isLoading = false;
-  var _skills = [
-    {"name": "JAVA", "value": 9},
-    {"name": "Android", "value": 9}
-  ];
+  var _skills = [];
   var _achievements = [];
 
   var _posts = [];
 
   bool _isSelfId = false;
+  bool _fetchingSkill = false;
 
   @override
   void initState() {
     super.initState();
 
     initAccountDetails();
-
-    initSkills();
-
-    initHistory();
 
     insertScreen(USER_ID, "account", _isSelfId ? 1 : 0);
   }
@@ -72,13 +69,10 @@ class _AccountScreenState extends State<AccountScreen>
       setState(() {
         _accountDetails = response.body['profile'];
         _posts = response.body['posts'];
+        _skills = response.body['skills'];
       });
     }
   }
-
-  initSkills() {}
-
-  initHistory() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -222,8 +216,65 @@ class _AccountScreenState extends State<AccountScreen>
                                 ),
                               ),
                               addVerticalSpace(),
+                              Divider(),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Skills:',
+                                      style: getTextTheme().titleSmall,
+                                    ),
+                                    if (_fetchingSkill)
+                                      ProgressCircular(
+                                        color: COLOR_BLACK,
+                                      ),
+                                    Spacer(),
+                                    if (_isSelfId)
+                                      ColoredButton(
+                                        radius: 12,
+                                        onPressed: () {
+                                          addSkill();
+                                        },
+                                        child: Icon(
+                                          Icons.add,
+                                          color: COLOR_BASE,
+                                          size: 16,
+                                        ),
+                                      )
+                                  ],
+                                ),
+
+                              addVerticalSpace(),
+                              Column(
+                                children: _skills.map((skill) {
+                                  return Container(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          skill['name'],
+                                          style: getTextTheme().bodySmall,
+                                        ),
+                                        Spacer(),
+                                        if (_isSelfId) InkWell(
+                                          onTap: () {
+                                            deleteSkill(skill['id']);
+                                          },
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: const Color.fromARGB(
+                                                255, 235, 129, 121),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                              addVerticalSpace(DEFAULT_LARGE_SPACE),
+                              Divider(),
                               Text(
-                                'My Problems:',
+                                'Problems:',
                                 style: getTextTheme().titleSmall,
                               ),
                               addVerticalSpace(4),
@@ -378,5 +429,52 @@ class _AccountScreenState extends State<AccountScreen>
         context,
         MaterialPageRoute(
             builder: (builder) => EditProblemScreen(problem_id: problem_id)));
+  }
+
+  addSkill() async {
+    var skill_id = await Navigator.push(context,
+        MaterialPageRoute(builder: (builder) => AddRequirementScreen()));
+
+    if (skill_id != null) {
+      setState(() {
+        addSkillToUser(skill_id);
+      });
+    }
+  }
+
+  void addSkillToUser(skill_id) async {
+    var body = {"skill_id": skill_id, "user_id": USER_ID};
+
+    ApiResponse response = await postService(URL_ADD_SKILL_TO_USER, body);
+
+    if (response.isSuccess) {
+      if (response.body['status'] == 'OK') {
+        initSkills();
+      } else if (response.body['status'] == 'NOT OK') {
+        showAlert(context, response.body['heading'], response.body['message']);
+      }
+    }
+  }
+
+  void initSkills() async {
+    var body = {"user_id": USER_ID};
+
+    setState(() {
+      _fetchingSkill = true;
+    });
+
+    ApiResponse response = await postService(URL_GET_SKILL_OF_USER, body);
+
+    setState(() {
+      _fetchingSkill = false;
+    });
+
+    if (response.isSuccess) {
+      _skills = response.body;
+    }
+  }
+
+  void deleteSkill(int skill_id) {
+    print('Skill Id: ${skill_id}');
   }
 }

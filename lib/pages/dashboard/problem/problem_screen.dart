@@ -25,7 +25,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
   var _notificationCount = 0;
   bool _fetchingList = false;
 
-  var _result;
+  String? _result;
 
   int _offset = 0;
 
@@ -49,7 +49,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent - 300 &&
+              _scrollController.position.maxScrollExtent &&
           !_fetchingList) {
         getList();
         print('end of the list');
@@ -69,7 +69,11 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getList() async {
-    var body = {"user_id": USER_ID, "search_by": _result, "offset": _offset};
+    var body = {
+      "user_id": USER_ID,
+      "search_by": _result,
+      "offset": (_result != null) ? _offset : 0
+    };
     setState(() {
       _fetchingList = true;
     });
@@ -167,7 +171,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                   child: Row(
                     children: [
                       Text(
-                        _result,
+                        _result!,
                         style: getTextTheme().titleSmall,
                       ),
                       addHorizontalSpace(),
@@ -175,6 +179,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                           onTap: () {
                             setState(() {
                               _result = null;
+                              _problemList = [];
                               getList();
                             });
                           },
@@ -295,18 +300,18 @@ class _ProblemScreenState extends State<ProblemScreen> {
                   },
                 ),
               ),
-              // if (_fetchingList)
-              //   Container(
-              //     height: 40,
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         ProgressCircular(
-              //           color: COLOR_BLACK,
-              //         ),
-              //       ],
-              //     ),
-              //   )
+              if (_fetchingList)
+                Container(
+                  height: 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ProgressCircular(
+                        color: COLOR_BLACK,
+                      ),
+                    ],
+                  ),
+                )
             ],
           ),
         ),
@@ -348,6 +353,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
 
     print('got the result $_result');
     if (_result != null) {
+      _result = _result!.toLowerCase();
+      _problemList = [];
       getList();
     }
   }
