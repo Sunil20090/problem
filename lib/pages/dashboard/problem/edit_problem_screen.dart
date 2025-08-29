@@ -6,6 +6,7 @@ import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/dashboard/problem/add_requirement_screen.dart';
+import 'package:Problem/pages/requirement_application_list.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,7 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                 ..._skillRequirements.map((requirement) {
                   return ListTile(
                     onTap: () {
-                      moveToApplicationList(requirement);
+                      moveToApplicationList(requirement['id'], requirement['skill']);
                     },
                     title: Row(
                       children: [
@@ -163,14 +164,13 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
 
     ApiResponse response =
         await postService(URL_REMOVE_SKILL_FROM_PROBLEM, body);
-      _fetchingRequirement = true;
+    _fetchingRequirement = true;
     if (response.isSuccess) {
       initSkills();
     }
   }
 
   addRequirement(int skill_id) async {
-
     var body = {"skill_id": skill_id, "problem_id": widget.problem_id};
     ApiResponse response = await postService(URL_ADD_SKILL_TO_PROBLEM, body);
 
@@ -203,7 +203,11 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
     }
   }
 
-  void moveToApplicationList(skill) {
-    print('working......................');
+  void moveToApplicationList(int requirement_id, String skill_name) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (builder) =>
+                RequirementApplicationList(requirement_id: requirement_id, skill_name: skill_name,)));
   }
 }

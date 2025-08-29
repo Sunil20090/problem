@@ -31,6 +31,7 @@ const URL_GET_USER_POST = '$_domain${_baseUrl}userPosts';
 
 const URL_ADD_SKILL_TO_USER = '$_domain${_baseUrl}user/addSkill';
 const URL_GET_SKILL_OF_USER = '$_domain${_baseUrl}user/getSkill';
+const URL_DELETE_SKILL_OF_USER = '$_domain${_baseUrl}user/deleteSkill';
 
 
 const URL_CREATE_OTP_VERIFICATION = '$_domain${_baseUrl}optVerification';
@@ -52,6 +53,8 @@ const URL_GET_SKILL_DETAILS = '$_domain${_baseUrl}problem/getSkillDetails';
 
 
 const URL_APPLY_FOR_REQUIREMENT = '$_domain${_baseUrl}problem/applyForRequirement';
+const URL_APPLED_USERS_FOR_REQUIREMENT =
+    '$_domain${_baseUrl}problem/getAppliedUsers';
 
 
 

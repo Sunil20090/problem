@@ -34,7 +34,7 @@ class _ProfileThumbnailState extends State<ProfileThumbnail> {
         child: CircleAvatar(
             radius: widget.radius,
             child: ClipOval(
-                child: widget.imageUrl == null
+                child: widget.imageUrl == null && widget.thumnail_url == null
                     ? (widget.file == null)
                         ? Image.asset(IMAGE_PROFILE,
                             width: widget.width,
@@ -44,7 +44,7 @@ class _ProfileThumbnailState extends State<ProfileThumbnail> {
                             width: widget.width,
                             height: widget.height,
                             fit: BoxFit.cover)
-                    : FadeInImage(
+                    : (widget.imageUrl != null && widget.thumnail_url != null) ? FadeInImage(
                         placeholder: Image.network(
                           width: widget.width,
                           height: widget.height,
@@ -58,7 +58,14 @@ class _ProfileThumbnailState extends State<ProfileThumbnail> {
                         width: widget.width,
                         height: widget.height,
                         fit: BoxFit.cover,
-                      ))),
+                      ): Image.network(
+                            widget.thumnail_url!,
+                            width: widget.width,
+                            height: widget.height,
+                            fit: BoxFit.cover,
+                          )
+                      )
+                      ),
       ),
     );
   }

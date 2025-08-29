@@ -69,11 +69,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
   }
 
   getList() async {
-    var body = {
-      "user_id": USER_ID,
-      "search_by": _result,
-      "offset": (_result != null) ? _offset : 0
-    };
+    var body = {"user_id": USER_ID, "search_by": _result, "offset": _offset};
     setState(() {
       _fetchingList = true;
     });
@@ -355,6 +351,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
     if (_result != null) {
       _result = _result!.toLowerCase();
       _problemList = [];
+      _offset = 0;
       getList();
     }
   }

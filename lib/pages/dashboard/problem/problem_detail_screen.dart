@@ -2,7 +2,6 @@ import 'package:Problem/components/colored_button.dart';
 import 'package:Problem/components/comment_item.dart';
 import 'package:Problem/components/enter_text_box.dart';
 import 'package:Problem/components/progress_circular.dart';
-import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/components/scrollable_page_view.dart';
 import 'package:Problem/constants/theme_constant.dart';
@@ -110,8 +109,42 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
         children: [
           Container(
             height: UI_IMAGE_HEIGHT,
-            child: ScrollablePageView(
-              images: _images,
+            child: Stack(
+              children: [
+                ScrollablePageView(
+                  images: _images,
+                ),
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: Row(
+                      children: [
+                        ColoredButton(
+                            onPressed: !isTrackLoading
+                                ? () {
+                                    setState(() {
+                                      trackProblem();
+                                      // widget.problem['tracking'] = !widget.problem['tracking'];
+                                      print(widget.problem['tracking']);
+                                    });
+                                  }
+                                : null,
+                            backgroundColor: widget.problem['tracking'] == 1
+                                ? COLOR_BLACK
+                                : COLOR_PRIMARY,
+                            child: !isTrackLoading
+                                ? Text(
+                                    widget.problem['tracking'] == 1
+                                        ? 'Tracked'
+                                        : 'Track',
+                                    style: getTextTheme(color: COLOR_BASE)
+                                        .titleMedium,
+                                  )
+                                : ProgressCircular())
+                      ],
+                    )
+                  )
+              ],
             ),
           ),
           Container(

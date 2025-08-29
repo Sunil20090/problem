@@ -217,32 +217,31 @@ class _AccountScreenState extends State<AccountScreen>
                               ),
                               addVerticalSpace(),
                               Divider(),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Skills:',
-                                      style: getTextTheme().titleSmall,
+                              Row(
+                                children: [
+                                  Text(
+                                    'Skills:',
+                                    style: getTextTheme().titleSmall,
+                                  ),
+                                  if (_fetchingSkill)
+                                    ProgressCircular(
+                                      color: COLOR_BLACK,
                                     ),
-                                    if (_fetchingSkill)
-                                      ProgressCircular(
-                                        color: COLOR_BLACK,
+                                  Spacer(),
+                                  if (_isSelfId)
+                                    ColoredButton(
+                                      radius: 12,
+                                      onPressed: () {
+                                        addSkill();
+                                      },
+                                      child: Icon(
+                                        Icons.add,
+                                        color: COLOR_BASE,
+                                        size: 16,
                                       ),
-                                    Spacer(),
-                                    if (_isSelfId)
-                                      ColoredButton(
-                                        radius: 12,
-                                        onPressed: () {
-                                          addSkill();
-                                        },
-                                        child: Icon(
-                                          Icons.add,
-                                          color: COLOR_BASE,
-                                          size: 16,
-                                        ),
-                                      )
-                                  ],
-                                ),
-
+                                    )
+                                ],
+                              ),
                               addVerticalSpace(),
                               Column(
                                 children: _skills.map((skill) {
@@ -256,16 +255,17 @@ class _AccountScreenState extends State<AccountScreen>
                                           style: getTextTheme().bodySmall,
                                         ),
                                         Spacer(),
-                                        if (_isSelfId) InkWell(
-                                          onTap: () {
-                                            deleteSkill(skill['id']);
-                                          },
-                                          child: Icon(
-                                            Icons.delete,
-                                            color: const Color.fromARGB(
-                                                255, 235, 129, 121),
-                                          ),
-                                        )
+                                        if (_isSelfId)
+                                          InkWell(
+                                            onTap: () {
+                                              deleteSkill(skill['id']);
+                                            },
+                                            child: Icon(
+                                              Icons.delete,
+                                              color: const Color.fromARGB(
+                                                  255, 235, 129, 121),
+                                            ),
+                                          )
                                       ],
                                     ),
                                   );
@@ -474,7 +474,25 @@ class _AccountScreenState extends State<AccountScreen>
     }
   }
 
-  void deleteSkill(int skill_id) {
-    print('Skill Id: ${skill_id}');
+  void deleteSkill(int skill_id) async {
+    var body = {"skill_id": skill_id};
+
+     setState(() {
+      _fetchingSkill = true;
+    });
+
+    ApiResponse response = await postService(URL_DELETE_SKILL_OF_USER, body);
+
+    setState(() {
+      _fetchingSkill = false;
+    });
+
+    if (response.isSuccess) {
+      setState(() {
+        initSkills();
+      });
+    }
+
+
   }
 }
