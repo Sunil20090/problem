@@ -47,8 +47,10 @@ class ImageWithTitle extends StatelessWidget {
               InkWell(
                   onTap: onAvatarPressed,
                   child: ProfileThumbnail(
+                    radius: 20,
+                    width: 40,
+                    height: 40,
                     thumnail_url: avatarThumbnailUrl,
-                    imageUrl: avatarUrl
                   )),
               addHorizontalSpace(20),
               Expanded(

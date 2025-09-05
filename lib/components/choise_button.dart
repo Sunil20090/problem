@@ -3,8 +3,8 @@ import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class ChoiseButton extends StatefulWidget {
-  Widget child;
-  VoidCallback? onDeleteClicked;
+  final Widget child;
+  final VoidCallback? onDeleteClicked;
 
   ChoiseButton({super.key, required this.child, this.onDeleteClicked});
 

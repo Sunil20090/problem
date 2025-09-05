@@ -3,8 +3,8 @@ import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class ScreenFrame extends StatelessWidget {
-  Widget titleBar;
-  Widget? body;
+  final Widget titleBar;
+  final Widget? body;
   ScreenFrame({super.key, required this.titleBar, this.body});
 
   @override

@@ -34,8 +34,8 @@ class _CommentItemState extends State<CommentItem> {
         ProfileThumbnail(
             width: 40,
             height: 40,
-            thumnail_url: widget.comment['thumbnail_url'],
-            imageUrl: widget.comment['image_url']),
+            thumnail_url: widget.comment['thumbnail_url']
+            ),
         addHorizontalSpace(),
         Expanded(
           child: Column(

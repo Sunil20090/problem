@@ -3,7 +3,7 @@ import 'package:Problem/pages/common_pages/image_view_screen.dart';
 import 'package:flutter/material.dart';
 
 class ScrollablePageView extends StatefulWidget {
-  List<dynamic> images;
+  final List<dynamic> images;
   ScrollablePageView({super.key, required this.images});
 
   @override

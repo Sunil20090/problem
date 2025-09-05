@@ -62,7 +62,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   width: 32,
                   height: 32,
                   thumnail_url: USER_AVATAR_THUMBNAIL_URL,
-                  imageUrl: USER_AVATAR_URL,
                 )),
           ],
         ),

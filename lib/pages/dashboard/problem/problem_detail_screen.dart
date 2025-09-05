@@ -32,7 +32,6 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
 
   final _controllerComment = TextEditingController();
 
-
   bool isTrackLoading = false;
 
   @override
@@ -72,38 +71,6 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   Widget build(BuildContext context) {
     return ScreenFrame(
       titleBar: Container(),
-      //  ScreenActionBar(
-      //   backButtonEnabled: true,
-      //   title: widget.problem['title'],
-      //   child: (widget.problem['posted_by'] != USER_ID)
-      //       ? Row(
-      //           children: [
-      //             ColoredButton(
-      //                 onPressed: !isTrackLoading
-      //                     ? () {
-      //                         setState(() {
-      //                           trackProblem();
-      //                           // widget.problem['tracking'] = !widget.problem['tracking'];
-      //                           print(widget.problem['tracking']);
-      //                         });
-      //                       }
-      //                     : null,
-      //                 backgroundColor: widget.problem['tracking'] == 1
-      //                     ? COLOR_BLACK
-      //                     : COLOR_PRIMARY,
-      //                 child: !isTrackLoading
-      //                     ? Text(
-      //                         widget.problem['tracking'] == 1
-      //                             ? 'Tracked'
-      //                             : 'Track',
-      //                         style:
-      //                             getTextTheme(color: COLOR_BASE).titleMedium,
-      //                       )
-      //                     : ProgressCircular())
-      //           ],
-      //         )
-      //       : null,
-      // ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -115,35 +82,45 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                   images: _images,
                 ),
                 Positioned(
-                  right: 10,
-                  bottom: 10,
-                  child: Row(
-                      children: [
-                        ColoredButton(
-                            onPressed: !isTrackLoading
-                                ? () {
-                                    setState(() {
-                                      trackProblem();
-                                      // widget.problem['tracking'] = !widget.problem['tracking'];
-                                      print(widget.problem['tracking']);
-                                    });
-                                  }
-                                : null,
-                            backgroundColor: widget.problem['tracking'] == 1
-                                ? COLOR_BLACK
-                                : COLOR_PRIMARY,
-                            child: !isTrackLoading
-                                ? Text(
-                                    widget.problem['tracking'] == 1
-                                        ? 'Tracked'
-                                        : 'Track',
-                                    style: getTextTheme(color: COLOR_BASE)
-                                        .titleMedium,
-                                  )
-                                : ProgressCircular())
-                      ],
-                    )
-                  )
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      color: COLOR_TRANSLUSCENT_BLACK,
+                      child: Row(
+                        children: [
+                          addHorizontalSpace(4),
+                          Text(
+                            '${widget.problem['title']}',
+                            style: getTextTheme(color: COLOR_WHITE).titleSmall,
+                          ),
+                          Spacer(),
+                          ColoredButton(
+                              onPressed: !isTrackLoading
+                                  ? () {
+                                      setState(() {
+                                        trackProblem();
+                                        // widget.problem['tracking'] = !widget.problem['tracking'];
+                                        print(widget.problem['tracking']);
+                                      });
+                                    }
+                                  : null,
+                              backgroundColor: widget.problem['tracking'] == 1
+                                  ? COLOR_BLACK
+                                  : COLOR_PRIMARY,
+                              child: !isTrackLoading
+                                  ? Text(
+                                      widget.problem['tracking'] == 1
+                                          ? 'Tracked'
+                                          : 'Track',
+                                      style: getTextTheme(color: COLOR_BASE)
+                                          .titleMedium,
+                                    )
+                                  : ProgressCircular())
+                        ],
+                      ),
+                    ))
               ],
             ),
           ),
@@ -152,9 +129,6 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.problem['title'], style: getTextTheme().titleMedium,),
-               
-
                 Text(
                   softWrap: true,
                   widget.problem['description'],
@@ -178,8 +152,8 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                             Spacer(),
                             ColoredButton(
                                 backgroundColor: requirement['isApplied'] == 0
-                                ? COLOR_PRIMARY
-                                : COLOR_BLACK,
+                                    ? COLOR_PRIMARY
+                                    : COLOR_BLACK,
                                 onPressed: () {
                                   applyForRequirement(requirement);
                                 },
@@ -328,15 +302,23 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
       "problem_id": widget.problem['id']
     };
 
-    postService(URL_LIKE_A_COMMENT, body).then((response) {
-      if (response.isSuccess) {
-        setState(() {
-          initCommentList(widget.problem['id']);
-        });
+    setState(() {
+      if (comment['isLiked'] == 0) {
+        comment['isLiked'] = 1;
+        comment['likeCount']++;
+      }else{
+         comment['isLiked'] = 0;
+        comment['likeCount']--;
       }
     });
 
-    // showAboutDialog(context: context);R
+    postService(URL_LIKE_A_COMMENT, body).then((response) {
+      if (response.isSuccess) {
+        setState(() {
+         // initCommentList(widget.problem['id']);
+        });
+      }
+    });
   }
 
   void openImageView(title, provider) {
