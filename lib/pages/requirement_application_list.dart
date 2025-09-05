@@ -59,7 +59,13 @@ class _RequirementApplicationListState
                                 thumnail_url: user['thumbnail'],
                               ),
                               addHorizontalSpace(),
-                              Text('${user['username']}')
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('${user['username']}'),
+                                  Text('${user['remark']}')
+                                ],
+                              )
                             ],
                           ));
                     }).toList(),

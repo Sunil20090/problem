@@ -6,6 +6,7 @@ import 'package:Problem/components/screen_frame.dart';
 import 'package:Problem/components/scrollable_page_view.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
+import 'package:Problem/pages/apply_for_requirement_screen.dart';
 import 'package:Problem/pages/common_pages/image_view_screen.dart';
 import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
@@ -72,38 +73,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   Widget build(BuildContext context) {
     return ScreenFrame(
       titleBar: Container(),
-      //  ScreenActionBar(
-      //   backButtonEnabled: true,
-      //   title: widget.problem['title'],
-      //   child: (widget.problem['posted_by'] != USER_ID)
-      //       ? Row(
-      //           children: [
-      //             ColoredButton(
-      //                 onPressed: !isTrackLoading
-      //                     ? () {
-      //                         setState(() {
-      //                           trackProblem();
-      //                           // widget.problem['tracking'] = !widget.problem['tracking'];
-      //                           print(widget.problem['tracking']);
-      //                         });
-      //                       }
-      //                     : null,
-      //                 backgroundColor: widget.problem['tracking'] == 1
-      //                     ? COLOR_BLACK
-      //                     : COLOR_PRIMARY,
-      //                 child: !isTrackLoading
-      //                     ? Text(
-      //                         widget.problem['tracking'] == 1
-      //                             ? 'Tracked'
-      //                             : 'Track',
-      //                         style:
-      //                             getTextTheme(color: COLOR_BASE).titleMedium,
-      //                       )
-      //                     : ProgressCircular())
-      //           ],
-      //         )
-      //       : null,
-      // ),
+     
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -176,6 +146,20 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                           children: [
                             Text(requirement['name']),
                             Spacer(),
+                            
+                            Container(
+                              // margin: EdgeInsets.all(1),
+                              padding: EdgeInsets.symmetric(horizontal: 6),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  color: Colors.green),
+                              child: Text(
+                                requirement['status'],
+                                style: TextStyle(color: COLOR_BASE),
+                              ),
+                            ),
+                            addHorizontalSpace(),
+
                             ColoredButton(
                                 backgroundColor: requirement['isApplied'] == 0
                                 ? COLOR_PRIMARY
@@ -194,18 +178,6 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                         style: getTextTheme(color: COLOR_BASE)
                                             .titleSmall,
                                       )),
-                            addHorizontalSpace(),
-                            Container(
-                              // margin: EdgeInsets.all(1),
-                              padding: EdgeInsets.symmetric(horizontal: 6),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: Colors.green),
-                              child: Text(
-                                requirement['status'],
-                                style: TextStyle(color: COLOR_BASE),
-                              ),
-                            ),
                           ],
                         ),
                         addVerticalSpace(4),
@@ -336,7 +308,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
       }
     });
 
-    // showAboutDialog(context: context);R
+    // showAboutDialog(context: context);
   }
 
   void openImageView(title, provider) {
@@ -370,7 +342,12 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   }
 
   void applyForRequirement(requirement) async {
-    var body = {"requirement_id": requirement['id'], "user_id": USER_ID};
+
+    var result = await Navigator.push(context, MaterialPageRoute(builder: (builder) => ApplyForRequirementScreen()));
+    if(result == null){
+      return;
+    }
+    var body = {"requirement_id": requirement['id'], "user_id": USER_ID, "remark" : result['remark']};
 
     showDialog(
         context: context,
@@ -393,5 +370,9 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
       Navigator.pop(context);
       initRequirementList();
     }
+  }
+
+  openApplyScreen(){
+
   }
 }
