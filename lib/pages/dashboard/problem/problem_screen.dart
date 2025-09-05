@@ -7,6 +7,7 @@ import 'package:Problem/pages/common_pages/notification/notification_screen.dart
 import 'package:Problem/pages/dashboard/acount/account_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/post_problem_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/problem_detail_screen.dart';
+import 'package:Problem/pages/dashboard/acount/other_account_screen.dart';
 import 'package:Problem/pages/search_screen.dart';
 import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
@@ -330,11 +331,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (builder) => AccountScreen(
-                  user_id: id,
-                  onChanged: () {
-                    setState(() {});
-                  },
+            builder: (builder) => OtherAccountScreen(
+                  profile_id: id,
                 )));
   }
 

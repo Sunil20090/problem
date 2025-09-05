@@ -30,7 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     AccountScreen(
       onChanged: () => setState(() {})
     )
-  ];
+    ];
   }
 
   @override
