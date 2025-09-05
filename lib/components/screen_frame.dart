@@ -9,17 +9,19 @@ class ScreenFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-            padding: SCREEN_PADDING,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  titleBar,
-                  addVerticalSpace(2),
-                  (body != null)
-                      ? Expanded(child: SingleChildScrollView(child: body!))
-                      : Container()
-                ])));
+    return SafeArea(
+      child: Scaffold(
+          body: Container(
+              padding: SCREEN_PADDING,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    titleBar,
+                    addVerticalSpace(2),
+                    (body != null)
+                        ? Expanded(child: SingleChildScrollView(child: body!))
+                        : Container()
+                  ]))),
+    );
   }
 }
