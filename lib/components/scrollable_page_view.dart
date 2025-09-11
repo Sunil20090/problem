@@ -79,10 +79,10 @@ class _ScrollablePageViewState extends State<ScrollablePageView> {
               child: FadeInImage(
                   fit: BoxFit.contain,
                   placeholder:
-                      Image.network(widget.images[index]['thumbnail_url'])
-                          .image,
+                      Image.network(widget.images[index]['thumbnail_url']).image,
                   image:
-                      Image.network(widget.images[index]['image_url']).image),
+                      Image.network(widget.images[index]['image_url']).image
+                      ),
             ),
           );
         },

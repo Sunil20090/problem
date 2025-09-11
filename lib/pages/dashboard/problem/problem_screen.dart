@@ -195,13 +195,16 @@ class _ProblemScreenState extends State<ProblemScreen> {
                     return Column(
                       children: [
                         ImageWithTitle(
-                          onImagePressed: () {
-                            Navigator.push(
+                          onImagePressed: () async {
+                           await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ProblemDetailScreen(
                                           problem: _problemList[index],
                                         )));
+                                        setState(() {
+                                          
+                                        });
                           },
                           container: Stack(
                             fit: StackFit.expand,

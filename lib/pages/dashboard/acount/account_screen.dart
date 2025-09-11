@@ -393,14 +393,17 @@ class _AccountScreenState extends State<AccountScreen>
         context, MaterialPageRoute(builder: (builder) => CreateProfile()));
   }
 
-  void openEditingProfileScreen(accountDetails) {
-    Navigator.push(
+  openEditingProfileScreen(accountDetails) async {
+    await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (builder) => EditProfileScreen(
                   onChange: widget.onChanged,
                   accountDetails: accountDetails,
                 )));
+                setState(() {
+                  
+                });
   }
 
   void moveToLoginPage() {
@@ -414,7 +417,7 @@ class _AccountScreenState extends State<AccountScreen>
         context, MaterialPageRoute(builder: (builder) => LoginPage()));
   }
 
-  void openImageView(provider, post) {
+  openImageView(provider, post) async {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -422,6 +425,7 @@ class _AccountScreenState extends State<AccountScreen>
                 tag: post['image_url'],
                 title: post['title'],
                 imageProvider: provider)));
+              
   }
 
   void openProblemEditing(int problem_id) {

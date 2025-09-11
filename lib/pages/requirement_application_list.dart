@@ -1,3 +1,5 @@
+import 'package:Problem/components/colored_button.dart';
+import 'package:Problem/components/counter.dart';
 import 'package:Problem/components/profile_thumbnail.dart';
 import 'package:Problem/components/progress_circular.dart';
 import 'package:Problem/components/screen_action_bar.dart';
@@ -10,10 +12,9 @@ import 'package:Problem/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class RequirementApplicationList extends StatefulWidget {
-  final int requirement_id;
-  final String skill_name;
+  final dynamic requirement;
   RequirementApplicationList(
-      {super.key, required this.requirement_id, required this.skill_name});
+      {super.key, required this.requirement});
 
   @override
   State<RequirementApplicationList> createState() =>
@@ -44,27 +45,60 @@ class _RequirementApplicationListState
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'For: ${widget.skill_name}',
-                      style: getTextTheme(color: COLOR_PRIMARY).titleMedium,
+                    Row(
+                      children: [
+                        Text(
+                          'For: ${widget.requirement['skill']}',
+                          style: getTextTheme(color: COLOR_PRIMARY).titleMedium,
+                        ),
+                        Spacer(),
+                        Counter(
+                          counter: widget.requirement['max_limit'],
+                          onChange: (value) {
+                            setState(() {
+                              widget.requirement['max_limit'] = value;
+                              updateCounter(value);
+                            });
+                          },
+                        ),
+                        addHorizontalSpace(),
+                      ],
                     ),
+                    addVerticalSpace(DEFAULT_LARGE_SPACE),
                     ..._appliedUsers.map((user) {
                       return ListTile(
                           onTap: () {
                             openAccountScreen(user['user_id']);
                           },
-                          title: Row(
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ProfileThumbnail(
-                                thumnail_url: user['thumbnail'],
-                              ),
-                              addHorizontalSpace(),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              Row(
                                 children: [
-                                  Text('${user['username']}'),
-                                  Text('${user['remark']}')
+                                  ProfileThumbnail(
+                                    thumnail_url: user['thumbnail'],
+                                  ),
+                                  addHorizontalSpace(),
+                                  Text(
+                                    '${user['username']}',
+                                    softWrap: true,
+                                    style: getTextTheme(color: COLOR_PRIMARY)
+                                        .titleSmall,
+                                  ),
+                                  Spacer(),
+                                  ColoredButton(
+                                      backgroundColor: COLOR_BASE_SUCCESS,
+                                      child: Text(
+                                        'Approve',
+                                        style: getTextTheme(color: COLOR_BASE)
+                                            .titleSmall,
+                                      ))
                                 ],
+                              ),
+                              addVerticalSpace(),
+                              Text(
+                                '${user['remark']}',
+                                softWrap: true,
                               )
                             ],
                           ));
@@ -83,7 +117,7 @@ class _RequirementApplicationListState
   }
 
   void initUserList() async {
-    var body = {"requirement_id": widget.requirement_id};
+    var body = {"requirement_id": widget.requirement['id']};
 
     setState(() {
       _fetchingUsers = true;
@@ -102,7 +136,7 @@ class _RequirementApplicationListState
       });
     }
   }
-  
+
   void openAccountScreen(int id) {
     Navigator.push(
         context,
@@ -113,5 +147,12 @@ class _RequirementApplicationListState
                     setState(() {});
                   },
                 )));
+  }
+
+  void updateCounter(int value) async {
+    var body = {"requirement_id": widget.requirement['id'], "limit" : value};
+
+    ApiResponse response = await postService(URL_SET_REQUIREMENT_LIMIT, body);
+    
   }
 }

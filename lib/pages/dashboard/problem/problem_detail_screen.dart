@@ -92,33 +92,45 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                       child: Row(
                         children: [
                           addHorizontalSpace(4),
-                          Text(
-                            '${widget.problem['title']}',
-                            style: getTextTheme(color: COLOR_WHITE).titleSmall,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${widget.problem['title']}',
+                                style:
+                                    getTextTheme(color: COLOR_WHITE).titleSmall,
+                              ),
+                              Text(
+                                'By: ${widget.problem['name']}',
+                                style:
+                                    getTextTheme(color: COLOR_WHITE).bodySmall,
+                              ),
+                            ],
                           ),
                           Spacer(),
-                          ColoredButton(
-                              onPressed: !isTrackLoading
-                                  ? () {
-                                      setState(() {
-                                        trackProblem();
-                                        // widget.problem['tracking'] = !widget.problem['tracking'];
-                                        print(widget.problem['tracking']);
-                                      });
-                                    }
-                                  : null,
-                              backgroundColor: widget.problem['tracking'] == 1
-                                  ? COLOR_BLACK
-                                  : COLOR_PRIMARY,
-                              child: !isTrackLoading
-                                  ? Text(
-                                      widget.problem['tracking'] == 1
-                                          ? 'Tracked'
-                                          : 'Track',
-                                      style: getTextTheme(color: COLOR_BASE)
-                                          .titleMedium,
-                                    )
-                                  : ProgressCircular())
+                          if (widget.problem['posted_by'] != USER_ID)
+                            ColoredButton(
+                                onPressed: !isTrackLoading
+                                    ? () {
+                                        setState(() {
+                                          trackProblem();
+                                          // widget.problem['tracking'] = !widget.problem['tracking'];
+                                          print(widget.problem['tracking']);
+                                        });
+                                      }
+                                    : null,
+                                backgroundColor: widget.problem['tracking'] == 1
+                                    ? COLOR_BLACK
+                                    : COLOR_PRIMARY,
+                                child: !isTrackLoading
+                                    ? Text(
+                                        widget.problem['tracking'] == 1
+                                            ? 'Tracked'
+                                            : 'Track',
+                                        style: getTextTheme(color: COLOR_BASE)
+                                            .titleMedium,
+                                      )
+                                    : ProgressCircular())
                         ],
                       ),
                     ))
@@ -151,7 +163,6 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                           children: [
                             Text(requirement['name']),
                             Spacer(),
-                            
                             Container(
                               // margin: EdgeInsets.all(1),
                               padding: EdgeInsets.symmetric(horizontal: 6),
@@ -164,7 +175,6 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                               ),
                             ),
                             addHorizontalSpace(),
-
                             ColoredButton(
                                 backgroundColor: requirement['isApplied'] == 0
                                     ? COLOR_PRIMARY
@@ -309,8 +319,8 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
       if (comment['isLiked'] == 0) {
         comment['isLiked'] = 1;
         comment['likeCount']++;
-      }else{
-         comment['isLiked'] = 0;
+      } else {
+        comment['isLiked'] = 0;
         comment['likeCount']--;
       }
     });
@@ -318,7 +328,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     postService(URL_LIKE_A_COMMENT, body).then((response) {
       if (response.isSuccess) {
         setState(() {
-         // initCommentList(widget.problem['id']);
+          // initCommentList(widget.problem['id']);
         });
       }
     });
@@ -357,12 +367,16 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   }
 
   void applyForRequirement(requirement) async {
-
-    var result = await Navigator.push(context, MaterialPageRoute(builder: (builder) => ApplyForRequirementScreen()));
-    if(result == null){
+    var result = await Navigator.push(context,
+        MaterialPageRoute(builder: (builder) => ApplyForRequirementScreen()));
+    if (result == null) {
       return;
     }
-    var body = {"requirement_id": requirement['id'], "user_id": USER_ID, "remark" : result['remark']};
+    var body = {
+      "requirement_id": requirement['id'],
+      "user_id": USER_ID,
+      "remark": result['remark']
+    };
 
     showDialog(
         context: context,
@@ -387,7 +401,5 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     }
   }
 
-  openApplyScreen(){
-
-  }
+  openApplyScreen() {}
 }

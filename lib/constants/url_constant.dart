@@ -53,6 +53,8 @@ const URL_GET_SKILL_DETAILS = '$_domain${_baseUrl}problem/getSkillDetails';
 
 
 const URL_APPLY_FOR_REQUIREMENT = '$_domain${_baseUrl}problem/applyForRequirement';
+const URL_SET_REQUIREMENT_LIMIT = '$_domain${_baseUrl}problem/setRequirementLimit';
+
 const URL_APPLED_USERS_FOR_REQUIREMENT =
     '$_domain${_baseUrl}problem/getAppliedUsers';
 

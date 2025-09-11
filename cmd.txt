@@ -106,3 +106,28 @@ CREATE TABLE skills_of_users(
     FOREIGN KEY (skill_id) references skill_requirement_master(id),
     FOREIGN KEY (user_id) references users(id)
 );
+
+
+ Tables_in_Sunil20090$gov            |
++-------------------------------------+
+| applications_for_problem            |
+| comments                            |
+| election_choices                    |
+| election_forms                      |
+| election_nominations                |
+| election_users                      |
+| election_votings                    |
+| images_of_problems                  |
+| likes_of_comments                   |
+| notifications_for_comments          |
+| notifications_for_problems_tracking |
+| otp_codes                           |
+| problems                            |
+| profiles_of_users                   |
+| requirements_of_problems            |
+| screen_report                       |
+| search_queries                      |
+| skill_requirement_master            |
+| skills_of_users                     |
+| tracking_of_problems                |
+| users            

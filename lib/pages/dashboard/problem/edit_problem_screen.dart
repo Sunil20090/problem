@@ -81,7 +81,7 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                 ..._skillRequirements.map((requirement) {
                   return ListTile(
                     onTap: () {
-                      moveToApplicationList(requirement['id'], requirement['skill']);
+                      moveToApplicationList(requirement, requirement['skill']);
                     },
                     title: Row(
                       children: [
@@ -108,7 +108,7 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                                 color: COLOR_BASE_SUCCESS,
                                 borderRadius: BorderRadius.circular(4)),
                             child: Text(
-                              '${formatNumber(requirement['application_count'])}',
+                              '${formatNumber(requirement['application_count'])} / ${requirement['max_limit']}',
                               style: getTextTheme(color: COLOR_BASE).titleSmall,
                             )),
                         addHorizontalSpace()
@@ -203,11 +203,12 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
     }
   }
 
-  void moveToApplicationList(int requirement_id, String skill_name) {
-    Navigator.push(
+  moveToApplicationList(requirement, String skill_name) async {
+    await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (builder) =>
-                RequirementApplicationList(requirement_id: requirement_id, skill_name: skill_name,)));
+                RequirementApplicationList(requirement: requirement)));
+                setState(() {});
   }
 }

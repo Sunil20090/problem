@@ -49,7 +49,7 @@ class _AddRequirementScreenState extends State<AddRequirementScreen> {
     postService(URL_REQUIREMENT_SEARCH_QUERY, body).then((response) {
       if (response.isSuccess) {
         setState(() {
-          print('get query list ${response.body}');
+          //print('get query list ${response.body}');
           _requirements = response.body;
         });
       }
