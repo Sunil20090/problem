@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 
 class CommentItem extends StatefulWidget {
   dynamic comment;
-  VoidCallback? onLikedClicked;
+  VoidCallback? onLikedClicked, onAvatarPressed;
 
-  CommentItem({super.key, required this.comment, this.onLikedClicked});
+
+  CommentItem({super.key, required this.comment, this.onLikedClicked, this.onAvatarPressed});
 
   @override
   State<CommentItem> createState() => _CommentItemState();

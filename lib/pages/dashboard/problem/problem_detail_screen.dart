@@ -8,6 +8,7 @@ import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/apply_for_requirement_screen.dart';
 import 'package:Problem/pages/common_pages/image_view_screen.dart';
+import 'package:Problem/pages/dashboard/acount/other_account_screen.dart';
 import 'package:Problem/user/user_service.dart';
 import 'package:Problem/utils/api_service.dart';
 import 'package:Problem/utils/common_function.dart';
@@ -253,6 +254,9 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                           comment: comment,
                           onLikedClicked: () {
                             updateLike(comment);
+                          },
+                          onAvatarPressed: (){
+                            openOtherAccount(comment);
                           },
                         ),
                         addVerticalSpace(15),
