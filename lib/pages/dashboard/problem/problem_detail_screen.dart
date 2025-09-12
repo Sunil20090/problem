@@ -405,5 +405,15 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     }
   }
 
+<<<<<<< HEAD
   openApplyScreen() {}
+=======
+  openApplyScreen(){
+
+  }
+  
+  void openOtherAccount(comment) {
+    Navigator.push(context, MaterialPageRoute(builder: (builder) => OtherAccountScreen(profile_id: 0)));
+  }
+>>>>>>> 8fb0241cb54d39ad849f9d95c168daf64df2ba6f
 }
