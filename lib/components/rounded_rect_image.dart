@@ -26,8 +26,8 @@ class _RoundedRectImageState extends State<RoundedRectImage> {
           width: widget.width,
           height: widget.height,
           child: (widget.image_url != null)
-          ? FadeInImage(placeholder: Image.network(widget.thumbnail_url).image, image: Image.network(widget.image_url!).image)
-          : FadeInImage(placeholder: Image.asset(IMAGE_PROFILE).image, image: Image.network(widget.thumbnail_url).image)
+          ? FadeInImage(placeholder: Image.network(widget.thumbnail_url).image, image: Image.network(widget.image_url!).image, fit: BoxFit.cover,)
+          : FadeInImage(placeholder: Image.asset(IMAGE_PROFILE).image, image: Image.network(widget.thumbnail_url).image, fit: BoxFit.cover)
         ),
       ),
     );

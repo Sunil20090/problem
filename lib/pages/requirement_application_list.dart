@@ -13,8 +13,7 @@ import 'package:flutter/material.dart';
 
 class RequirementApplicationList extends StatefulWidget {
   final dynamic requirement;
-  RequirementApplicationList(
-      {super.key, required this.requirement});
+  RequirementApplicationList({super.key, required this.requirement});
 
   @override
   State<RequirementApplicationList> createState() =>
@@ -87,12 +86,27 @@ class _RequirementApplicationListState
                                   ),
                                   Spacer(),
                                   ColoredButton(
-                                      backgroundColor: COLOR_BASE_SUCCESS,
-                                      child: Text(
-                                        'Approve',
-                                        style: getTextTheme(color: COLOR_BASE)
-                                            .titleSmall,
-                                      ))
+                                      onPressed: user['isApproved'] == 0
+                                          ? () {
+                                              approveUserForJob(user);
+                                            }
+                                          : null,
+                                      backgroundColor: user['isApproved'] == 0
+                                          ? COLOR_BASE_SUCCESS
+                                          : COLOR_GREY,
+                                      child: user['isApproved'] == 0
+                                          ? Text(
+                                              'Approve',
+                                              style: getTextTheme(
+                                                      color: COLOR_BASE)
+                                                  .titleSmall,
+                                            )
+                                          : Text(
+                                              'Approved',
+                                              style: getTextTheme(
+                                                      color: COLOR_BASE)
+                                                  .titleSmall,
+                                            ))
                                 ],
                               ),
                               addVerticalSpace(),
@@ -150,9 +164,24 @@ class _RequirementApplicationListState
   }
 
   void updateCounter(int value) async {
-    var body = {"requirement_id": widget.requirement['id'], "limit" : value};
+    var body = {"requirement_id": widget.requirement['id'], "limit": value};
 
     ApiResponse response = await postService(URL_SET_REQUIREMENT_LIMIT, body);
-    
+  }
+
+  approveUserForJob(dynamic user) async {
+    var body = {
+      "user_id": user['user_id'],
+      "requirement_id": widget.requirement['id'],
+      "problem_id": widget.requirement['problem_id']
+    };
+
+    ApiResponse response = await postService(URL_APPROVE_FOR_REQUIREMENT, body);
+
+    if (response.isSuccess) {
+      setState(() {
+        user['isApproved'] = 1;
+      });
+    }
   }
 }

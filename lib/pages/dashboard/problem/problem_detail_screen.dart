@@ -65,7 +65,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
     if (response.isSuccess) {
       setState(() {
         _images = response.body;
-      });
+      }); 
     }
   }
 

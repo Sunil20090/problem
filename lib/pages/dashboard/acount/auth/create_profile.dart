@@ -44,34 +44,6 @@ class _CreateProfileState extends State<CreateProfile> {
     return ScreenFrame(
       titleBar: ScreenActionBar(
         title: 'Create Profile',
-        child: Row(
-          children: [
-            !isLoading
-                ? ColoredButton(
-                    radius: 18,
-                    onPressed: () {
-                      postProfile();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Create',
-                            style: getTextTheme(color: COLOR_BASE).titleSmall),
-                        Icon(
-                          Icons.update_disabled_outlined,
-                          color: COLOR_BASE,
-                        ),
-                      ],
-                    ))
-                : ColoredButton(
-                    child: SizedBox(
-                        width: 25,
-                        height: 25,
-                        child: CircularProgressIndicator(
-                          color: COLOR_BASE,
-                        ))),
-          ],
-        ),
       ),
       body: Column(
         children: [
@@ -105,6 +77,32 @@ class _CreateProfileState extends State<CreateProfile> {
                 controller: _confirmPasswordController,
               ),
               addVerticalSpace(DEFAULT_LARGE_SPACE),
+              !isLoading
+                  ? ColoredButton(
+                      radius: 8,
+                      onPressed: () {
+                        postProfile();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Create',
+                              style: getTextTheme(color: COLOR_BASE)
+                                  .titleSmall),
+                                  addHorizontalSpace(2),
+                          Icon(
+                            Icons.check,
+                            color: COLOR_BASE,
+                          ),
+                        ],
+                      ))
+                  : ColoredButton(
+                      child: SizedBox(
+                          width: 25,
+                          height: 25,
+                          child: CircularProgressIndicator(
+                            color: COLOR_BASE,
+                          ))),
             ],
           )
         ],

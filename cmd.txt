@@ -108,6 +108,19 @@ CREATE TABLE skills_of_users(
 );
 
 
+
+CREATE TABLE employees_of_problems(
+    id int PRIMARY KEY auto_increment,
+    requirement_id int,
+    user_id int,
+    problem_id int,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (requirement_id) references requirements_of_problems(id),
+    FOREIGN KEY (user_id) references users(id),
+    FOREIGN KEY (problem_id) references problems(id)
+);
+
+
  Tables_in_Sunil20090$gov            |
 +-------------------------------------+
 | applications_for_problem            |
@@ -130,4 +143,5 @@ CREATE TABLE skills_of_users(
 | skill_requirement_master            |
 | skills_of_users                     |
 | tracking_of_problems                |
-| users            
+| users                               |
+| employees_of_problems               |     

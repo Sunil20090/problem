@@ -4,7 +4,6 @@ import 'package:Problem/components/screen_action_bar.dart';
 import 'package:Problem/constants/theme_constant.dart';
 import 'package:Problem/constants/url_constant.dart';
 import 'package:Problem/pages/common_pages/notification/notification_screen.dart';
-import 'package:Problem/pages/dashboard/acount/account_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/post_problem_screen.dart';
 import 'package:Problem/pages/dashboard/Problem/problem_detail_screen.dart';
 import 'package:Problem/pages/dashboard/acount/other_account_screen.dart';
