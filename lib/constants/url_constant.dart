@@ -50,6 +50,8 @@ const URL_ADD_SKILL_TO_PROBLEM = '$_domain${_baseUrl}problem/addSkill';
 const URL_REMOVE_SKILL_FROM_PROBLEM = '$_domain${_baseUrl}problem/deleteSkill';
 const URL_GET_SKILL_OF_PROBLEM = '$_domain${_baseUrl}problem/getSkill';
 const URL_GET_SKILL_DETAILS = '$_domain${_baseUrl}problem/getSkillDetails';
+const URL_TEAM_MEMBER_OF_PROBLEM = '$_domain${_baseUrl}problem/getTeamMembers';
+
 
 
 const URL_APPLY_FOR_REQUIREMENT = '$_domain${_baseUrl}problem/applyForRequirement';

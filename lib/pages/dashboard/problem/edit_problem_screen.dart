@@ -1,4 +1,5 @@
 import 'package:Problem/components/colored_button.dart';
+import 'package:Problem/components/profile_thumbnail.dart';
 import 'package:Problem/components/progress_circular.dart';
 import 'package:Problem/components/rounded_rect_image.dart';
 import 'package:Problem/components/screen_action_bar.dart';
@@ -23,13 +24,36 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
   dynamic _problem;
 
   List<dynamic> _skillRequirements = [];
+
+  List<dynamic> _teamMember = [];
   bool _fetchingRequirement = false;
+  bool _fetchingTeam = false;
 
   @override
   void initState() {
     super.initState();
     getProblem();
     initSkills();
+    initTeam();
+  }
+
+  initTeam() async {
+    var body = {"problem_id": widget.problem_id};
+
+    setState(() {
+      _fetchingTeam = true;
+    });
+
+    ApiResponse response = await postService(URL_TEAM_MEMBER_OF_PROBLEM, body);
+
+    setState(() {
+      _fetchingTeam = false;
+    });
+    if (response.isSuccess) {
+      setState(() {
+        _teamMember = response.body;
+      });
+    }
   }
 
   @override
@@ -57,7 +81,10 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('Add Requirements:'),
+                    Text(
+                      'Add Requirements:',
+                      style: getTextTheme().titleSmall,
+                    ),
                     addHorizontalSpace(4),
                     if (_fetchingRequirement)
                       ProgressCircular(
@@ -115,7 +142,44 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
                       ],
                     ),
                   );
-                }).toList()
+                }).toList(),
+                addVerticalSpace(DEFAULT_LARGE_SPACE),
+                Row(
+                  children: [
+                    Text(
+                      'Team  (${_teamMember.length})',
+                      style: getTextTheme().titleSmall,
+                    ),
+                    addHorizontalSpace(SPACE_SMALL),
+                    if (_fetchingTeam)
+                      ProgressCircular(
+                        color: COLOR_BLACK,
+                        width: 22,
+                        height: 22,
+                      ),
+                  ],
+                ),
+
+                addVerticalSpace(),
+
+                ..._teamMember.map((member){
+                  return ListTile(
+                    title: Row(
+                    children: [
+                      ProfileThumbnail(
+                        width: 32,
+                        height: 32,
+                        radius: 16,
+                        thumnail_url: member['thumbnail'],
+                      ),
+                      addHorizontalSpace(),
+                      Text('${member['name']}', style: getTextTheme().titleSmall)
+                      
+                    ],
+                                    ),
+                  );
+                })
+                
               ],
             )
           : Row(
@@ -209,6 +273,6 @@ class _EditProblemScreenState extends State<EditProblemScreen> {
         MaterialPageRoute(
             builder: (builder) =>
                 RequirementApplicationList(requirement: requirement)));
-                setState(() {});
+    setState(() {});
   }
 }

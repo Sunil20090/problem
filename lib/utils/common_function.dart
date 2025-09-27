@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 const double DEFAULT_SPACE = 12;
 const double DEFAULT_LARGE_SPACE = 20;
+const double SPACE_SMALL = 4;
 
 SizedBox addHorizontalSpace([double width = DEFAULT_SPACE]) {
   return SizedBox(width: width);
